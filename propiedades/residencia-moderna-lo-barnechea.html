@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Residencia Moderna Lo Barnechea | PropInvest</title>
+  <meta name="description" content="Descubre la Residencia Moderna en Lo Barnechea: 5 dormitorios, 6 baños, 480 m² de lujo y diseño. Vive la exclusividad con PropInvest." />
+  <link rel="stylesheet" href="/assets/css/style.css">
+  <link rel="icon" href="/assets/images/logo-luxe-properties.png" type="image/png">
+  <!-- Datos estructurados JSON-LD para RealEstateListing -->
+  <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "RealEstateListing",
+      "name": "Residencia Moderna Lo Barnechea",
+      "description": "Residencia de lujo con 5 dormitorios, 6 baños y 480 m² en Lo Barnechea, Santiago.",
+      "url": "https://propinvest.cl/propiedades/residencia-moderna-lo-barnechea.html",
+      "address": {
+        "@type": "PostalAddress",
+        "streetAddress": "Camino Real 12345",
+        "addressLocality": "Lo Barnechea",
+        "addressRegion": "RM",
+        "addressCountry": "CL"
+      },
+      "image": [
+        "/assets/images/propiedad-1.jpg"
+      ],
+      "offers": {
+        "@type": "Offer",
+        "price": "25000",
+        "priceCurrency": "UF"
+      },
+      "numberOfRooms": 5,
+      "floorSize": {
+        "@type": "QuantitativeValue",
+        "value": 480,
+        "unitCode": "MTK"
+      }
+    }
+  </script>
+</head>
+<body>
+  <!-- Header inyectado dinámicamente -->
+  <main>
+    <section class="container" style="margin-top:3rem;">
+      <div class="section-title">Residencia Moderna Lo Barnechea</div>
+      <div class="section-subtitle">Lo Barnechea, Santiago</div>
+      <!-- Galería de imágenes -->
+      <div class="property-gallery" id="gallery">
+        <div class="gallery-main">
+          <button class="gallery-arrow left" aria-label="Anterior">&#8592;</button>
+          <img src="/assets/images/propiedad-1.jpg" alt="Residencia Moderna Lo Barnechea - Imagen 1" id="main-image">
+          <button class="gallery-arrow right" aria-label="Siguiente">&#8594;</button>
+        </div>
+        <div class="gallery-thumbnails">
+          <img src="/assets/images/propiedad-1.jpg" alt="Thumbnail 1" class="active">
+          <img src="/assets/images/propiedad-2.jpg" alt="Thumbnail 2">
+          <img src="/assets/images/propiedad-3.jpg" alt="Thumbnail 3">
+        </div>
+      </div>
+      <!-- Modal Lightbox -->
+      <div class="lightbox-modal" id="lightbox-modal">
+        <button class="lightbox-close" aria-label="Cerrar">&times;</button>
+        <img src="" alt="Imagen ampliada" id="lightbox-img">
+      </div>
+      <!-- Descripción y datos clave -->
+      <div style="margin-top:2.5rem; display:flex; flex-wrap:wrap; gap:2.5rem; align-items:flex-start;">
+        <div style="flex:2; min-width:300px;">
+          <h2 class="property-title" style="font-size:1.5rem;">UF 25.000</h2>
+          <div class="property-features" style="margin-bottom:1.2rem;">
+            <span>🛏 5 Dormitorios</span>
+            <span>🛁 6 Baños</span>
+            <span>🏡 480 m²</span>
+          </div>
+          <p style="font-family:var(--font-secondary); color:var(--color-text-secondary);">Esta residencia moderna destaca por su arquitectura de vanguardia, amplios espacios y terminaciones de lujo. Cuenta con living y comedor separados, cocina equipada, sala de estar, quincho, piscina y un jardín con vista panorámica a la cordillera. Seguridad 24/7 en exclusivo condominio.</p>
+          <a id="whatsapp-link" href="#" class="cta" target="_blank" rel="noopener">Contactar por esta propiedad</a>
+        </div>
+        <div style="flex:1; min-width:280px;">
+          <div class="info-box">
+            <div class="info-icon">📍</div>
+            <div class="info-content">
+              <div class="info-title">Ubicación</div>
+              <div class="info-text">Camino Real 12345, Lo Barnechea, Santiago</div>
+            </div>
+          </div>
+          <iframe src="https://www.google.com/maps?q=-33.3541,-70.5042&z=15&output=embed" width="100%" height="220" style="border:0; border-radius:12px; box-shadow:0 2px 8px var(--color-shadow);" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+        </div>
+      </div>
+    </section>
+  </main>
+  <!-- Footer inyectado dinámicamente -->
+  <script src="/assets/js/main.js" defer></script>
+  <!-- Script galería y WhatsApp dinámico -->
+  <script>
+    // Galería de imágenes con thumbnails y lightbox
+    document.addEventListener('DOMContentLoaded', function() {
+      const images = [
+        '/assets/images/propiedad-1.jpg',
+        '/assets/images/propiedad-2.jpg',
+        '/assets/images/propiedad-3.jpg'
+      ];
+      let current = 0;
+      const mainImg = document.getElementById('main-image');
+      const thumbs = document.querySelectorAll('.gallery-thumbnails img');
+      const left = document.querySelector('.gallery-arrow.left');
+      const right = document.querySelector('.gallery-arrow.right');
+      const lightbox = document.getElementById('lightbox-modal');
+      const lightboxImg = document.getElementById('lightbox-img');
+      const closeLightbox = document.querySelector('.lightbox-close');
+
+      function showImage(idx) {
+        current = idx;
+        mainImg.src = images[current];
+        thumbs.forEach((t, i) => t.classList.toggle('active', i === current));
+      }
+      left.addEventListener('click', () => showImage((current - 1 + images.length) % images.length));
+      right.addEventListener('click', () => showImage((current + 1) % images.length));
+      thumbs.forEach((thumb, i) => {
+        thumb.addEventListener('click', () => showImage(i));
+      });
+      // Lightbox
+      mainImg.addEventListener('click', () => {
+        lightbox.classList.add('active');
+        lightboxImg.src = images[current];
+      });
+      thumbs.forEach((thumb, i) => {
+        thumb.addEventListener('dblclick', () => {
+          lightbox.classList.add('active');
+          lightboxImg.src = images[i];
+        });
+      });
+      closeLightbox.addEventListener('click', () => {
+        lightbox.classList.remove('active');
+        lightboxImg.src = '';
+      });
+      lightbox.addEventListener('click', (e) => {
+        if (e.target === lightbox) {
+          lightbox.classList.remove('active');
+          lightboxImg.src = '';
+        }
+      });
+      // Inicializar
+      showImage(0);
+    });
+    // Botón WhatsApp dinámico
+    document.addEventListener('DOMContentLoaded', function() {
+      const nombreProp = 'Residencia Moderna Lo Barnechea';
+      const link = `https://wa.me/56912345678?text=Hola,%20me%20interesa%20la%20propiedad%20${encodeURIComponent(nombreProp)}%20que%20vi%20en%20su%20sitio%20web.`;
+      document.getElementById('whatsapp-link').href = link;
+    });
+  </script>
+</body>
+</html> 

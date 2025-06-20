@@ -1,0 +1,700 @@
+/* =============================
+   Importación de Google Fonts
+============================= */
+@import url('https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,700;1,400&family=Montserrat:wght@400;600;700&display=swap');
+
+/* =============================
+   Variables de Color y Tipografía
+============================= */
+:root {
+  --color-background: #FDFDFD;
+  --color-text-primary: #1a1a1a;
+  --color-text-secondary: #555;
+  --color-primary-accent: #B99767;
+  --color-accent-light: #f5e9d7;
+  --color-border: #ececec;
+  --color-shadow: rgba(185, 151, 103, 0.08);
+  --font-primary: 'Montserrat', sans-serif;
+  --font-secondary: 'Lora', serif;
+}
+
+/* =============================
+   Reset y Estilos Globales
+============================= */
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+html {
+  scroll-behavior: smooth;
+}
+body {
+  margin: 0;
+  padding: 0;
+  background: var(--color-background);
+  color: var(--color-text-primary);
+  font-family: var(--font-primary);
+  font-size: 18px;
+  line-height: 1.6;
+  min-height: 100vh;
+}
+img {
+  max-width: 100%;
+  display: block;
+}
+a {
+  color: var(--color-primary-accent);
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+a:hover, a:focus {
+  color: #8c6b3b;
+}
+.container {
+  width: 90%;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+/* =============================
+   Header y Navegación
+============================= */
+.main-header {
+  background: var(--color-background);
+  box-shadow: 0 2px 8px var(--color-shadow);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+.navbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-height: 80px;
+  position: relative;
+}
+.nav-list {
+  display: flex;
+  gap: 2rem;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+.nav-left {
+  flex: 1;
+  justify-content: flex-start;
+}
+.nav-right {
+  flex: 1;
+  justify-content: flex-end;
+}
+.logo-link {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 auto;
+}
+.logo {
+  height: 48px;
+  width: auto;
+  transition: filter 0.3s;
+}
+
+/* Menú hamburguesa (móvil) */
+.nav-toggle {
+  display: none;
+  background: none;
+  border: none;
+  cursor: pointer;
+  flex-direction: column;
+  gap: 5px;
+  margin-left: 1rem;
+}
+.hamburger {
+  width: 28px;
+  height: 3px;
+  background: var(--color-primary-accent);
+  border-radius: 2px;
+  transition: all 0.3s;
+  display: block;
+}
+
+/* Menú móvil (más angosto, sin botón X) */
+.mobile-nav-overlay {
+  display: none;
+  position: fixed;
+  top: 0; left: 0; bottom: 0; right: 0;
+  background: transparent;
+  z-index: 200;
+  flex-direction: row;
+  padding: 0;
+  transition: opacity 0.3s;
+  transform: none;
+  opacity: 0;
+}
+.mobile-nav-overlay.active {
+  display: flex;
+  opacity: 1;
+}
+.mobile-nav-overlay::before {
+  content: '';
+  display: block;
+  width: 65vw;
+  max-width: 320px;
+  height: 100vh;
+  background: #fff;
+  box-shadow: 2px 0 16px rgba(0,0,0,0.08);
+}
+.mobile-nav-content {
+  position: absolute;
+  top: 0; left: 0;
+  width: 65vw;
+  max-width: 320px;
+  height: 100vh;
+  background: #fff;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: 2rem 1.2rem 1.2rem 1.2rem;
+  z-index: 201;
+}
+.mobile-nav-overlay.active .mobile-nav-content {
+  display: flex;
+}
+.mobile-nav-list {
+  text-align: left;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+.mobile-nav-list li a {
+  color: var(--color-primary-accent);
+  font-size: 1.2rem;
+  font-family: var(--font-primary);
+  font-weight: 600;
+  transition: color 0.3s;
+}
+.mobile-nav-list li a:hover {
+  color: #8c6b3b;
+}
+.close-mobile-nav {
+  display: none !important;
+}
+
+/* =============================
+   Footer
+============================= */
+.main-footer {
+  background: var(--color-background);
+  border-top: 1px solid var(--color-border);
+  padding: 2.5rem 0 1rem 0;
+  color: var(--color-text-secondary);
+}
+.footer-content {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 2rem;
+}
+.footer-branding {
+  flex: 1 1 220px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.5rem;
+}
+.footer-logo {
+  height: 40px;
+  margin-bottom: 0.5rem;
+}
+.footer-nav ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.7rem;
+}
+.footer-social {
+  display: flex;
+  gap: 1.2rem;
+  align-items: center;
+}
+.footer-bottom {
+  text-align: center;
+  font-size: 0.95rem;
+  margin-top: 2rem;
+  color: var(--color-text-secondary);
+}
+
+/* =============================
+   Botones y CTA
+============================= */
+.btn, .cta {
+  display: inline-block;
+  background: var(--color-primary-accent);
+  color: #fff;
+  font-family: var(--font-primary);
+  font-weight: 600;
+  padding: 0.85em 2em;
+  border: none;
+  border-radius: 30px;
+  box-shadow: 0 2px 8px var(--color-shadow);
+  cursor: pointer;
+  transition: all 0.3s;
+  font-size: 1.1rem;
+  letter-spacing: 0.02em;
+}
+.btn:hover, .cta:hover {
+  background: #8c6b3b;
+  color: #fff;
+  transform: translateY(-2px) scale(1.03);
+  box-shadow: 0 6px 24px var(--color-shadow);
+}
+
+/* =============================
+   Tarjetas de Propiedades
+============================= */
+.property-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 2.5rem;
+  margin: 3rem 0;
+}
+.property-card {
+  background: #fff;
+  border-radius: 18px;
+  box-shadow: 0 4px 24px var(--color-shadow);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  transition: box-shadow 0.3s;
+}
+.property-card:hover {
+  box-shadow: 0 8px 32px var(--color-shadow);
+}
+.property-card img {
+  width: 100%;
+  height: 220px;
+  object-fit: cover;
+}
+.property-card-content {
+  padding: 1.5rem;
+  flex: 1 1 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+.property-title {
+  font-family: var(--font-primary);
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: var(--color-text-primary);
+  margin: 0 0 0.3rem 0;
+}
+.property-location {
+  font-family: var(--font-secondary);
+  color: var(--color-primary-accent);
+  font-size: 1.05rem;
+  margin-bottom: 0.5rem;
+}
+.property-price {
+  font-size: 1.15rem;
+  color: var(--color-text-secondary);
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+}
+.property-features {
+  display: flex;
+  gap: 1.2rem;
+  font-size: 1.05rem;
+  color: var(--color-text-secondary);
+  margin-bottom: 1rem;
+}
+.property-features span {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+/* =============================
+   Hero Banner
+============================= */
+.hero {
+  position: relative;
+  min-height: 60vh;
+  background: linear-gradient(90deg, rgba(253,253,253,0.95) 0%, rgba(185,151,103,0.12) 100%), url('/assets/images/hero-banner.jpg') center/cover no-repeat;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  padding: 6rem 0 4rem 0;
+}
+.hero-content {
+  max-width: 600px;
+  margin-left: 5vw;
+  background: rgba(255,255,255,0.85);
+  border-radius: 18px;
+  padding: 2.5rem 2rem;
+  box-shadow: 0 4px 24px var(--color-shadow);
+}
+.hero-title {
+  font-family: var(--font-primary);
+  font-size: 2.7rem;
+  font-weight: 700;
+  color: var(--color-primary-accent);
+  margin-bottom: 1.2rem;
+}
+.hero-subtitle {
+  font-family: var(--font-secondary);
+  font-size: 1.3rem;
+  color: var(--color-text-secondary);
+  margin-bottom: 2rem;
+}
+
+/* =============================
+   Sección de Estadísticas (Sobre Nosotros)
+============================= */
+.stats-section {
+  background: var(--color-accent-light);
+  padding: 4rem 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.stats-grid {
+  display: flex;
+  gap: 4rem;
+  justify-content: center;
+  align-items: center;
+}
+.stat {
+  text-align: center;
+}
+.stat-number {
+  font-size: 2.7rem;
+  font-family: var(--font-primary);
+  color: var(--color-primary-accent);
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+  transition: color 0.3s;
+}
+.stat-label {
+  font-family: var(--font-secondary);
+  color: var(--color-text-secondary);
+  font-size: 1.1rem;
+}
+
+/* =============================
+   Galería de Propiedad (Detalle)
+============================= */
+.property-gallery {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+.gallery-main {
+  position: relative;
+  width: 100%;
+  max-width: 700px;
+  margin: 0 auto;
+}
+.gallery-main img {
+  width: 100%;
+  border-radius: 14px;
+  box-shadow: 0 4px 24px var(--color-shadow);
+}
+.gallery-thumbnails {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  margin-top: 1rem;
+}
+.gallery-thumbnails img {
+  width: 80px;
+  height: 60px;
+  object-fit: cover;
+  border-radius: 8px;
+  cursor: pointer;
+  opacity: 0.7;
+  border: 2px solid transparent;
+  transition: border 0.3s, opacity 0.3s;
+}
+.gallery-thumbnails img.active, .gallery-thumbnails img:hover {
+  border: 2px solid var(--color-primary-accent);
+  opacity: 1;
+}
+.gallery-arrow {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background: rgba(253,253,253,0.8);
+  border: none;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  font-size: 1.5rem;
+  color: var(--color-primary-accent);
+  cursor: pointer;
+  box-shadow: 0 2px 8px var(--color-shadow);
+  transition: background 0.3s;
+  z-index: 2;
+}
+.gallery-arrow.left {
+  left: -20px;
+}
+.gallery-arrow.right {
+  right: -20px;
+}
+
+/* =============================
+   Modal Lightbox
+============================= */
+.lightbox-modal {
+  display: none;
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(30,30,30,0.92);
+  z-index: 9999;
+  align-items: center;
+  justify-content: center;
+}
+.lightbox-modal.active {
+  display: flex;
+}
+.lightbox-modal img {
+  max-width: 90vw;
+  max-height: 80vh;
+  border-radius: 18px;
+  box-shadow: 0 8px 32px var(--color-shadow);
+}
+.lightbox-close {
+  position: absolute;
+  top: 2rem;
+  right: 2rem;
+  background: none;
+  border: none;
+  color: #fff;
+  font-size: 2.5rem;
+  cursor: pointer;
+  z-index: 10001;
+}
+
+/* =============================
+   Formularios
+============================= */
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.2rem;
+}
+input, textarea {
+  font-family: var(--font-primary);
+  font-size: 1rem;
+  padding: 0.8em 1em;
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  background: #fff;
+  transition: border 0.3s;
+}
+input:focus, textarea:focus {
+  border-color: var(--color-primary-accent);
+  outline: none;
+}
+
+/* =============================
+   Responsividad
+============================= */
+@media (max-width: 1024px) {
+  .container {
+    width: 96%;
+  }
+  .property-grid {
+    gap: 1.5rem;
+  }
+}
+@media (max-width: 768px) {
+  .navbar {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    min-height: 60px;
+  }
+  .nav-toggle {
+    display: flex;
+    order: 1;
+    margin-left: 0;
+    margin-right: auto;
+    position: relative;
+    z-index: 201;
+  }
+  .logo-link {
+    order: 2;
+    margin: 0 auto;
+    left: 50%;
+    right: auto;
+    position: absolute;
+    transform: translateX(-50%);
+  }
+  .nav-list {
+    display: none;
+  }
+  .footer-content {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1.5rem;
+  }
+  .hero-content {
+    margin-left: 0;
+    padding: 2rem 1.2rem;
+  }
+  .stats-grid {
+    flex-direction: column;
+    gap: 2rem;
+  }
+  .mobile-nav-overlay {
+    flex-direction: row;
+  }
+  .mobile-nav-overlay::before {
+    width: 65vw;
+    max-width: 320px;
+  }
+  .mobile-nav-content {
+    width: 65vw;
+    max-width: 320px;
+    min-width: 180px;
+  }
+}
+@media (max-width: 480px) {
+  .hero-title {
+    font-size: 2rem;
+  }
+  .property-card img {
+    height: 150px;
+  }
+  .gallery-thumbnails img {
+    width: 50px;
+    height: 38px;
+  }
+}
+
+/* =============================
+   Componentes Reutilizables
+============================= */
+
+.section-title {
+  font-family: var(--font-primary);
+  font-size: 2.2rem;
+  font-weight: 700;
+  color: var(--color-primary-accent);
+  margin-bottom: 0.7rem;
+  text-align: center;
+  letter-spacing: 0.01em;
+}
+.section-subtitle {
+  font-family: var(--font-secondary);
+  font-size: 1.2rem;
+  color: var(--color-text-secondary);
+  margin-bottom: 2.2rem;
+  text-align: center;
+}
+
+.cta-banner {
+  background: linear-gradient(90deg, var(--color-primary-accent) 0%, #e7d3b2 100%);
+  color: #fff;
+  border-radius: 18px;
+  box-shadow: 0 4px 24px var(--color-shadow);
+  padding: 2.5rem 2rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.2rem;
+  margin: 3rem 0;
+  text-align: center;
+}
+.cta-banner .cta {
+  margin-top: 1rem;
+}
+
+.info-box {
+  background: #fff;
+  border-radius: 14px;
+  box-shadow: 0 2px 8px var(--color-shadow);
+  padding: 1.5rem 1.2rem;
+  display: flex;
+  align-items: flex-start;
+  gap: 1.2rem;
+  margin-bottom: 1.5rem;
+}
+.info-box .info-icon {
+  flex: 0 0 48px;
+  width: 48px;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2rem;
+  color: var(--color-primary-accent);
+}
+.info-box .info-content {
+  flex: 1 1 auto;
+}
+.info-box .info-title {
+  font-family: var(--font-primary);
+  font-weight: 600;
+  font-size: 1.1rem;
+  margin-bottom: 0.3rem;
+}
+.info-box .info-text {
+  font-family: var(--font-secondary);
+  color: var(--color-text-secondary);
+  font-size: 1rem;
+}
+
+.testimonial-card {
+  background: #fff;
+  border-radius: 16px;
+  box-shadow: 0 2px 12px var(--color-shadow);
+  padding: 2rem 1.5rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  max-width: 340px;
+  margin: 0 auto;
+  text-align: center;
+}
+.testimonial-card .testimonial-photo {
+  width: 70px;
+  height: 70px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin-bottom: 0.7rem;
+  border: 2px solid var(--color-primary-accent);
+}
+.testimonial-card .testimonial-name {
+  font-family: var(--font-primary);
+  font-weight: 600;
+  color: var(--color-primary-accent);
+  font-size: 1.1rem;
+  margin-bottom: 0.2rem;
+}
+.testimonial-card .testimonial-text {
+  font-family: var(--font-secondary);
+  color: var(--color-text-secondary);
+  font-size: 1rem;
+  font-style: italic;
+}
+
+@media (max-width: 768px) {
+  .cta-banner {
+    padding: 2rem 1rem;
+  }
+  .testimonial-card {
+    padding: 1.2rem 0.7rem;
+  }
+} 
