@@ -18,7 +18,44 @@ document.addEventListener('DOMContentLoaded', () => {
     .then(html => {
       document.body.insertAdjacentHTML('beforeend', html);
     });
+    
+  // Cargar propiedades dinámicamente según la página
+  cargarPropiedadesSegunPagina();
 });
+
+// =============================
+// Carga dinámica de propiedades según la página
+// =============================
+
+function cargarPropiedadesSegunPagina() {
+  const currentPath = window.location.pathname;
+  
+  // Verificar si estamos en la página principal
+  if (currentPath === '/' || currentPath === '/index.html') {
+    // Cargar propiedades destacadas en la página principal
+    setTimeout(() => {
+      if (typeof cargarPropiedadesDestacadas === 'function') {
+        cargarPropiedadesDestacadas();
+      }
+    }, 1000); // Esperar a que se carguen los componentes
+  }
+  
+  // Verificar si estamos en la página de propiedades
+  else if (currentPath === '/propiedades.html') {
+    // Cargar todas las propiedades
+    setTimeout(() => {
+      if (typeof cargarTodasPropiedades === 'function') {
+        cargarTodasPropiedades();
+      }
+    }, 1000);
+  }
+  
+  // Verificar si estamos en una página de detalle de propiedad
+  else if (currentPath.includes('/propiedades/') && currentPath.endsWith('.html')) {
+    // La página de detalle se maneja en propiedad-dinamica.html
+    // No necesitamos hacer nada aquí
+  }
+}
 
 // =============================
 // Menú móvil (hamburguesa)
@@ -69,7 +106,109 @@ function animarContador(element, valorFinal, duracion = 1500) {
   actualizar();
 }
 
+// =============================
+// Funciones de utilidad para el manejo de errores
+// =============================
+
+/**
+ * Muestra un mensaje de error en la consola y opcionalmente en la UI
+ * @param {string} mensaje - Mensaje de error
+ * @param {boolean} mostrarEnUI - Si mostrar el error en la interfaz
+ */
+function mostrarError(mensaje, mostrarEnUI = false) {
+  console.error('PropInvest Error:', mensaje);
+  
+  if (mostrarEnUI) {
+    // Crear un elemento de notificación de error
+    const errorDiv = document.createElement('div');
+    errorDiv.style.cssText = `
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      background: #e74c3c;
+      color: white;
+      padding: 1rem;
+      border-radius: 8px;
+      z-index: 1000;
+      max-width: 300px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    `;
+    errorDiv.textContent = mensaje;
+    
+    document.body.appendChild(errorDiv);
+    
+    // Remover después de 5 segundos
+    setTimeout(() => {
+      if (errorDiv.parentNode) {
+        errorDiv.parentNode.removeChild(errorDiv);
+      }
+    }, 5000);
+  }
+}
+
+/**
+ * Muestra un mensaje de éxito en la UI
+ * @param {string} mensaje - Mensaje de éxito
+ */
+function mostrarExito(mensaje) {
+  const successDiv = document.createElement('div');
+  successDiv.style.cssText = `
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    background: #27ae60;
+    color: white;
+    padding: 1rem;
+    border-radius: 8px;
+    z-index: 1000;
+    max-width: 300px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  `;
+  successDiv.textContent = mensaje;
+  
+  document.body.appendChild(successDiv);
+  
+  // Remover después de 3 segundos
+  setTimeout(() => {
+    if (successDiv.parentNode) {
+      successDiv.parentNode.removeChild(successDiv);
+    }
+  }, 3000);
+}
+
+// =============================
+// Funciones de utilidad para SEO y metadatos
+// =============================
+
+/**
+ * Actualiza los metadatos de la página dinámicamente
+ * @param {Object} metadata - Objeto con título, descripción, etc.
+ */
+function actualizarMetadatos(metadata) {
+  if (metadata.title) {
+    document.title = metadata.title;
+  }
+  
+  if (metadata.description) {
+    const metaDesc = document.querySelector('meta[name="description"]');
+    if (metaDesc) {
+      metaDesc.content = metadata.description;
+    }
+  }
+  
+  if (metadata.image) {
+    const metaImage = document.querySelector('meta[property="og:image"]');
+    if (metaImage) {
+      metaImage.content = metadata.image;
+    }
+  }
+}
+
 // Exportar utilidades globales
 window.PropInvestUtils = {
-  animarContador
+  animarContador,
+  mostrarError,
+  mostrarExito,
+  actualizarMetadatos,
+  cargarPropiedadesSegunPagina
 }; 

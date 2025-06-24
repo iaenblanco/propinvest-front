@@ -76,51 +76,10 @@
       <div class="section-title">Propiedades Destacadas</div>
       <div class="section-subtitle">Descubre una selección de residencias únicas y exclusivas.</div>
       <div class="property-grid">
-        <!-- Tarjeta 1 -->
-        <article class="property-card">
-          <img src="/assets/images/propiedad-1.jpg" alt="Residencia Moderna en Lo Barnechea" />
-          <div class="property-card-content">
-            <h2 class="property-title">Residencia Moderna Lo Barnechea</h2>
-            <div class="property-location">Lo Barnechea, Santiago</div>
-            <div class="property-price">UF 25.000</div>
-            <div class="property-features">
-              <span>🛏 5</span>
-              <span>🛁 6</span>
-              <span>🏡 480 m²</span>
-            </div>
-            <a href="/propiedades/residencia-moderna-lo-barnechea.html" class="btn">Ver Propiedad</a>
-          </div>
-        </article>
-        <!-- Tarjeta 2 -->
-        <article class="property-card">
-          <img src="/assets/images/propiedad-2.jpg" alt="Hacienda Clásica en Chicureo" />
-          <div class="property-card-content">
-            <h2 class="property-title">Hacienda Clásica Chicureo</h2>
-            <div class="property-location">Chicureo, Colina</div>
-            <div class="property-price">UF 32.000</div>
-            <div class="property-features">
-              <span>🛏 6</span>
-              <span>🛁 7</span>
-              <span>🏡 650 m²</span>
-            </div>
-            <a href="/propiedades/hacienda-clasica-chicureo.html" class="btn">Ver Propiedad</a>
-          </div>
-        </article>
-        <!-- Tarjeta 3 -->
-        <article class="property-card">
-          <img src="/assets/images/propiedad-3.jpg" alt="Casa de Diseño en Zapallar" />
-          <div class="property-card-content">
-            <h2 class="property-title">Casa Diseño Zapallar</h2>
-            <div class="property-location">Zapallar, Valparaíso</div>
-            <div class="property-price">UF 40.000</div>
-            <div class="property-features">
-              <span>🛏 4</span>
-              <span>🛁 5</span>
-              <span>🏡 390 m²</span>
-            </div>
-            <a href="/propiedades/casa-diseno-zapallar.html" class="btn">Ver Propiedad</a>
-          </div>
-        </article>
+        <!-- Las propiedades se cargarán dinámicamente desde Strapi -->
+        <div id="loading-properties" style="text-align: center; padding: 2rem; color: var(--color-text-secondary);">
+          Cargando propiedades destacadas...
+        </div>
       </div>
     </section>
 
@@ -140,18 +99,22 @@
         <div class="testimonial-card">
           <img src="/assets/images/agent-1.jpg" alt="Foto cliente satisfecho" class="testimonial-photo" />
           <div class="testimonial-name">María P.</div>
-          <div class="testimonial-text">“La atención fue personalizada y el proceso, impecable. Encontré la casa de mis sueños.”</div>
+          <div class="testimonial-text">"La atención fue personalizada y el proceso, impecable. Encontré la casa de mis sueños."</div>
         </div>
         <div class="testimonial-card">
           <img src="/assets/images/agent-1.jpg" alt="Foto cliente satisfecho" class="testimonial-photo" />
           <div class="testimonial-name">Carlos D.</div>
-          <div class="testimonial-text">“PropInvest me ayudó a invertir de forma segura y con total confidencialidad.”</div>
+          <div class="testimonial-text">"PropInvest me ayudó a invertir de forma segura y con total confidencialidad."</div>
         </div>
       </div>
     </section>
   </main>
 
   <!-- El footer se inyecta dinámicamente -->
+  
+  <!-- Scripts necesarios -->
+  <script src="/assets/js/config.js"></script>
+  <script src="/assets/js/api.js"></script>
   <script src="/assets/js/main.js" defer></script>
 </body>
 </html> 
