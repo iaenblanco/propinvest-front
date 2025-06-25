@@ -704,35 +704,28 @@ input:focus, textarea:focus {
   .navbar {
     display: flex;
     align-items: center;
-    justify-content: space-between;
-    gap: 2rem;
+    justify-content: flex-start;
+    position: relative;
+    gap: 0;
   }
   .logo-link {
-    order: 0;
-    margin-right: 2.5rem;
-    margin-left: 0;
+    margin: 0;
+    padding: 0;
     position: static;
-    transform: none;
     flex: 0 0 auto;
   }
-  .nav-list {
+  .nav-list.nav-center {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
     display: flex;
-    gap: 2rem;
+    gap: 2.5rem;
     align-items: center;
     background: none;
     box-shadow: none;
     padding: 0;
     margin: 0;
-  }
-  .nav-left {
-    order: 1;
-    flex: 1 1 auto;
-    justify-content: flex-start;
-  }
-  .nav-right {
-    order: 2;
-    flex: 0 1 auto;
-    justify-content: flex-end;
   }
   .nav-toggle {
     display: none !important;
