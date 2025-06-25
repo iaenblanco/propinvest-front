@@ -40,10 +40,9 @@
   <!-- Script para cargar la propiedad dinámicamente -->
   <script>
     document.addEventListener('DOMContentLoaded', async function() {
-      // Obtener el slug de la URL
-      const pathSegments = window.location.pathname.split('/');
-      const filename = pathSegments[pathSegments.length - 1];
-      const slug = filename.replace('.html', '');
+      // Obtener el slug desde los parámetros de la URL
+      const params = new URLSearchParams(window.location.search);
+      const slug = params.get('slug');
       
       if (!slug) {
         mostrarError('Slug de propiedad no válido');
@@ -83,32 +82,31 @@
     }
     
     function actualizarDatosEstructurados(propiedad) {
-      const attrs = propiedad.attributes;
       const imagenes = getTodasImagenes(propiedad);
       
       const jsonLd = {
         "@context": "https://schema.org",
         "@type": "RealEstateListing",
-        "name": attrs.Titulo,
-        "description": attrs.Descripcion || `Propiedad en ${attrs.Ubicacion}`,
+        "name": propiedad.Titulo,
+        "description": propiedad.Descripcion || `Propiedad en ${propiedad.Ubicacion}`,
         "url": window.location.href,
         "address": {
           "@type": "PostalAddress",
-          "streetAddress": attrs.Direccion || attrs.Ubicacion,
-          "addressLocality": attrs.Ubicacion.split(',')[0]?.trim() || attrs.Ubicacion,
+          "streetAddress": propiedad.Direccion || propiedad.Ubicacion,
+          "addressLocality": propiedad.Ubicacion.split(',')[0]?.trim() || propiedad.Ubicacion,
           "addressRegion": "RM",
           "addressCountry": "CL"
         },
         "image": imagenes,
         "offers": {
           "@type": "Offer",
-          "price": attrs.Precio.toString(),
+          "price": propiedad.Precio ? propiedad.Precio.toString() : '',
           "priceCurrency": "UF"
         },
-        "numberOfRooms": attrs.Dormitorios,
+        "numberOfRooms": propiedad.Dormitorios,
         "floorSize": {
           "@type": "QuantitativeValue",
-          "value": attrs.Superficie,
+          "value": propiedad.Superficie,
           "unitCode": "MTK"
         }
       };
