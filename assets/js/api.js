@@ -354,6 +354,28 @@ function configurarWhatsApp(nombrePropiedad) {
   }
 }
 
+function getPrimeraImagen(propiedad) {
+  if (!propiedad.attributes.Imagenes || !propiedad.attributes.Imagenes.data || propiedad.attributes.Imagenes.data.length === 0) {
+    return '/assets/images/propiedad-default.jpg';
+  }
+  const primeraImagen = propiedad.attributes.Imagenes.data[0];
+  if (!primeraImagen || !primeraImagen.attributes || !primeraImagen.attributes.url) {
+    return '/assets/images/propiedad-default.jpg';
+  }
+  return getStrapiImageUrl(primeraImagen.attributes.url);
+}
+
+function getTodasImagenes(propiedad) {
+  if (!propiedad.attributes.Imagenes || !propiedad.attributes.Imagenes.data || propiedad.attributes.Imagenes.data.length === 0) {
+    return ['/assets/images/propiedad-default.jpg'];
+  }
+  return propiedad.attributes.Imagenes.data.map(imagen =>
+    imagen && imagen.attributes && imagen.attributes.url
+      ? getStrapiImageUrl(imagen.attributes.url, 'large')
+      : '/assets/images/propiedad-default.jpg'
+  );
+}
+
 // Exportar funciones y clase
 window.StrapiAPI = StrapiAPI;
 window.PropiedadUtils = {

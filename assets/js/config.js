@@ -8,10 +8,10 @@ const STRAPI_CONFIG = {
   
   // Endpoints específicos (usando mayúscula en los campos)
   ENDPOINTS: {
-    PROPIEDADES: '/propiedads',
-    PROPIEDAD_BY_SLUG: '/propiedads?filters[Slug][$eq]=',
-    PROPIEDADES_DESTACADAS: '/propiedads?filters[Destacado][$eq]=true&filters[Publicado][$eq]=true',
-    PROPIEDADES_PUBLICADAS: '/propiedads?filters[Publicado][$eq]=true'
+    PROPIEDADES: '/propiedads?populate=*',
+    PROPIEDAD_BY_SLUG: '/propiedads?populate=*&filters[Slug][$eq]=',
+    PROPIEDADES_DESTACADAS: '/propiedads?populate=*&filters[Destacado][$eq]=true&filters[Publicado][$eq]=true',
+    PROPIEDADES_PUBLICADAS: '/propiedads?populate=*&filters[Publicado][$eq]=true'
   },
   
   // Configuración de imágenes
