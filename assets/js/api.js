@@ -106,7 +106,8 @@ class StrapiAPI {
 function crearTarjetaPropiedad(propiedad) {
   const imagen = getPrimeraImagen(propiedad);
   const precio = formatearPrecio(propiedad.Precio);
-  
+  // Aseguramos que el slug no tenga espacios ni caracteres extraños
+  const slug = propiedad.Slug ? propiedad.Slug.replace(/\s+/g, '-').toLowerCase() : 'sin-slug';
   return `
     <article class="property-card">
       <img src="${imagen}" alt="${propiedad.Titulo}" />
@@ -119,7 +120,7 @@ function crearTarjetaPropiedad(propiedad) {
           <span>🚿 ${propiedad.Banos}</span>
           <span>🏡 ${propiedad.Superficie} m²</span>
         </div>
-        <a href="/propiedades/${propiedad.Slug}.html" class="btn">Ver Propiedad</a>
+        <a href="/propiedades/${slug}.html" class="btn">Ver Propiedad</a>
       </div>
     </article>
   `;
