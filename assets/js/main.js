@@ -32,20 +32,22 @@ function cargarPropiedadesSegunPagina() {
   
   // Verificar si estamos en la página principal
   if (currentPath === '/' || currentPath === '/index.html') {
-    // Cargar propiedades destacadas en la página principal
     setTimeout(() => {
       if (typeof cargarPropiedadesDestacadas === 'function') {
+        console.log('Llamando a cargarPropiedadesDestacadas()');
         cargarPropiedadesDestacadas();
       }
-    }, 1000); // Esperar a que se carguen los componentes
+    }, 1000);
   }
   
   // Verificar si estamos en la página de propiedades
-  else if (currentPath === '/propiedades.html') {
-    // Cargar todas las propiedades
+  else if (currentPath === '/propiedades.html' || currentPath === '/propiedades') {
     setTimeout(() => {
       if (typeof cargarTodasPropiedades === 'function') {
+        console.log('Llamando a cargarTodasPropiedades()');
         cargarTodasPropiedades();
+      } else {
+        console.error('No existe la función cargarTodasPropiedades');
       }
     }, 1000);
   }
