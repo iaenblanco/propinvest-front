@@ -730,4 +730,20 @@ input:focus, textarea:focus {
   .nav-toggle {
     display: none !important;
   }
+}
+
+.nav-list.nav-center li a.active {
+  position: relative;
+  color: var(--color-primary-accent);
+  font-weight: 700;
+}
+.nav-list.nav-center li a.active::after {
+  content: '';
+  display: block;
+  margin: 0 auto;
+  margin-top: 6px;
+  width: 70%;
+  height: 3.5px;
+  border-radius: 2px;
+  background: var(--color-primary-accent);
 } 

@@ -21,6 +21,19 @@ document.addEventListener('DOMContentLoaded', () => {
     
   // Cargar propiedades dinámicamente según la página
   cargarPropiedadesSegunPagina();
+
+  // Marcar enlace activo en el menú principal (desktop)
+  setTimeout(() => {
+    const path = window.location.pathname.replace(/\/index\.html$/, '/');
+    const navLinks = document.querySelectorAll('.nav-list.nav-center li a');
+    navLinks.forEach(link => {
+      let href = link.getAttribute('href');
+      if (href.endsWith('/index.html')) href = href.replace('/index.html', '/');
+      if (href === path) {
+        link.classList.add('active');
+      }
+    });
+  }, 100); // Espera a que el header esté en el DOM
 });
 
 // =============================
