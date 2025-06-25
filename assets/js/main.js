@@ -30,8 +30,8 @@ document.addEventListener('DOMContentLoaded', () => {
       let href = link.getAttribute('href');
       // Normaliza href para que /index.html y / sean equivalentes
       if (href.endsWith('/index.html')) href = href.replace('/index.html', '/');
-      // Permite coincidencia exacta o con y sin slash final
-      if (href === path || href === path + '/' || href + '/' === path) {
+      // Compara solo el final del path, para funcionar en subcarpetas y deploys
+      if (path.endsWith(href.replace('.', '')) || (href === '/' && (path === '/' || path === ''))) {
         link.classList.add('active');
       }
     });
