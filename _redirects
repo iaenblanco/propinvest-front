@@ -2,7 +2,7 @@
 # Este archivo permite que las URLs dinámicas de propiedades funcionen correctamente
 
 # Redirigir todas las URLs de propiedades dinámicas a la plantilla
-/propiedades/*   /propiedad-dinamica.html   200
+/propiedades/* /propiedad-dinamica.html 200
 
 # Redirecciones adicionales si es necesario
 # /api/* https://tu-strapi-backend.com/api/:splat 200 
