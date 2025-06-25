@@ -2,6 +2,19 @@
 // API Service para Strapi
 // =============================
 
+// Función auxiliar para construir URLs de imágenes de Strapi
+function getStrapiImageUrl(imageUrl, size = 'medium') {
+  if (!imageUrl) return '/assets/images/propiedad-default.jpg';
+  
+  // Si la URL ya es completa, la devolvemos
+  if (imageUrl.startsWith('http')) {
+    return imageUrl;
+  }
+  
+  // Construir URL completa con el tamaño especificado
+  return `${STRAPI_CONFIG.IMAGE_CONFIG.BASE_URL}${imageUrl}?format=${size}`;
+}
+
 class StrapiAPI {
   constructor() {
     this.baseURL = STRAPI_CONFIG.API_BASE_URL;
@@ -104,23 +117,23 @@ class StrapiAPI {
  * @returns {string} HTML de la tarjeta
  */
 function crearTarjetaPropiedad(propiedad) {
+  const attrs = propiedad.attributes;
   const imagen = getPrimeraImagen(propiedad);
-  const precio = formatearPrecio(propiedad.Precio);
-  // Aseguramos que el slug no tenga espacios ni caracteres extraños
-  const slug = propiedad.Slug ? propiedad.Slug.replace(/\s+/g, '-').toLowerCase() : 'sin-slug';
+  const precio = formatearPrecio(attrs.Precio);
+  
   return `
     <article class="property-card">
-      <img src="${imagen}" alt="${propiedad.Titulo}" />
+      <img src="${imagen}" alt="${attrs.Titulo}" />
       <div class="property-card-content">
-        <h2 class="property-title">${propiedad.Titulo}</h2>
-        <div class="property-location">${propiedad.Ubicacion}</div>
+        <h2 class="property-title">${attrs.Titulo}</h2>
+        <div class="property-location">${attrs.Ubicacion}</div>
         <div class="property-price">${precio}</div>
         <div class="property-features">
-          <span>🛏 ${propiedad.Dormitorios}</span>
-          <span>🚿 ${propiedad.Banos}</span>
-          <span>🏡 ${propiedad.Superficie} m²</span>
+          <span>🛏 ${attrs.Dormitorios}</span>
+          <span>🚿 ${attrs.Banos}</span>
+          <span>🏡 ${attrs.Superficie} m²</span>
         </div>
-        <a href="/propiedades/${slug}.html" class="btn">Ver Propiedad</a>
+        <a href="/propiedad-dinamica.html?slug=${attrs.Slug}" class="btn">Ver Propiedad</a>
       </div>
     </article>
   `;
@@ -186,16 +199,17 @@ async function cargarTodasPropiedades() {
  * @param {Object} propiedad - Objeto de propiedad de Strapi
  */
 function renderizarDetallePropiedad(propiedad) {
+  const attrs = propiedad.attributes;
   const imagenes = getTodasImagenes(propiedad);
-  const precio = formatearPrecio(propiedad.Precio);
+  const precio = formatearPrecio(attrs.Precio);
   
   // Actualizar título de la página
-  document.title = `${propiedad.Titulo} | PropInvest`;
+  document.title = `${attrs.Titulo} | PropInvest`;
   
   // Actualizar meta description
   const metaDescription = document.querySelector('meta[name="description"]');
   if (metaDescription) {
-    metaDescription.content = `Descubre ${propiedad.Titulo}: ${propiedad.Dormitorios} dormitorios, ${propiedad.Banos} baños, ${propiedad.Superficie} m² de lujo y diseño. Vive la exclusividad con PropInvest.`;
+    metaDescription.content = `Descubre ${attrs.Titulo}: ${attrs.Dormitorios} dormitorios, ${attrs.Banos} baños, ${attrs.Superficie} m² de lujo y diseño. Vive la exclusividad con PropInvest.`;
   }
 
   // Renderizar galería de imágenes
@@ -205,14 +219,14 @@ function renderizarDetallePropiedad(propiedad) {
   const mainContent = document.querySelector('main .container');
   if (mainContent) {
     mainContent.innerHTML = `
-      <div class="section-title">${propiedad.Titulo}</div>
-      <div class="section-subtitle">${propiedad.Ubicacion}</div>
+      <div class="section-title">${attrs.Titulo}</div>
+      <div class="section-subtitle">${attrs.Ubicacion}</div>
       
       <!-- Galería de imágenes -->
       <div class="property-gallery" id="gallery">
         <div class="gallery-main">
           <button class="gallery-arrow left" aria-label="Anterior">&#8592;</button>
-          <img src="${imagenes[0]}" alt="${propiedad.Titulo} - Imagen 1" id="main-image">
+          <img src="${imagenes[0]}" alt="${attrs.Titulo} - Imagen 1" id="main-image">
           <button class="gallery-arrow right" aria-label="Siguiente">&#8594;</button>
         </div>
         <div class="gallery-thumbnails">
@@ -233,12 +247,12 @@ function renderizarDetallePropiedad(propiedad) {
         <div style="flex:2; min-width:300px;">
           <h2 class="property-title" style="font-size:1.5rem;">${precio}</h2>
           <div class="property-features" style="margin-bottom:1.2rem;">
-            <span>🛏 ${propiedad.Dormitorios} Dormitorios</span>
-            <span>🚿 ${propiedad.Banos} Baños</span>
-            <span>🏡 ${propiedad.Superficie} m²</span>
+            <span>🛏 ${attrs.Dormitorios} Dormitorios</span>
+            <span>🚿 ${attrs.Banos} Baños</span>
+            <span>🏡 ${attrs.Superficie} m²</span>
           </div>
           <div style="font-family:var(--font-secondary); color:var(--color-text-secondary);">
-            ${propiedad.Descripcion || 'Descripción no disponible.'}
+            ${attrs.Descripcion || 'Descripción no disponible.'}
           </div>
           <a id="whatsapp-link" href="#" class="cta" target="_blank" rel="noopener">Contactar por esta propiedad</a>
         </div>
@@ -247,10 +261,10 @@ function renderizarDetallePropiedad(propiedad) {
             <div class="info-icon">📍</div>
             <div class="info-content">
               <div class="info-title">Ubicación</div>
-              <div class="info-text">${propiedad.Direccion || propiedad.Ubicacion}</div>
+              <div class="info-text">${attrs.Direccion || attrs.Ubicacion}</div>
             </div>
           </div>
-          <iframe src="https://www.google.com/maps?q=${propiedad.Ubicacion}&z=15&output=embed" 
+          <iframe src="https://www.google.com/maps?q=${attrs.Ubicacion}&z=15&output=embed" 
                   width="100%" height="220" 
                   style="border:0; border-radius:12px; box-shadow:0 2px 8px var(--color-shadow);" 
                   allowfullscreen="" loading="lazy" 
@@ -262,7 +276,7 @@ function renderizarDetallePropiedad(propiedad) {
   }
 
   // Configurar botón de WhatsApp
-  configurarWhatsApp(propiedad.Titulo);
+  configurarWhatsApp(attrs.Titulo);
 }
 
 /**
@@ -354,23 +368,23 @@ function configurarWhatsApp(nombrePropiedad) {
 }
 
 function getPrimeraImagen(propiedad) {
-  if (!propiedad.Imagenes || !Array.isArray(propiedad.Imagenes) || propiedad.Imagenes.length === 0) {
+  if (!propiedad.attributes.Imagenes || !propiedad.attributes.Imagenes.data || propiedad.attributes.Imagenes.data.length === 0) {
     return '/assets/images/propiedad-default.jpg';
   }
-  const primeraImagen = propiedad.Imagenes[0];
-  if (!primeraImagen || !primeraImagen.url) {
+  const primeraImagen = propiedad.attributes.Imagenes.data[0];
+  if (!primeraImagen || !primeraImagen.attributes || !primeraImagen.attributes.url) {
     return '/assets/images/propiedad-default.jpg';
   }
-  return primeraImagen.url.startsWith('http') ? primeraImagen.url : `${STRAPI_CONFIG.IMAGE_CONFIG.BASE_URL}${primeraImagen.url}`;
+  return getStrapiImageUrl(primeraImagen.attributes.url);
 }
 
 function getTodasImagenes(propiedad) {
-  if (!propiedad.Imagenes || !Array.isArray(propiedad.Imagenes) || propiedad.Imagenes.length === 0) {
+  if (!propiedad.attributes.Imagenes || !propiedad.attributes.Imagenes.data || propiedad.attributes.Imagenes.data.length === 0) {
     return ['/assets/images/propiedad-default.jpg'];
   }
-  return propiedad.Imagenes.map(imagen =>
-    imagen && imagen.url
-      ? (imagen.url.startsWith('http') ? imagen.url : `${STRAPI_CONFIG.IMAGE_CONFIG.BASE_URL}${imagen.url}`)
+  return propiedad.attributes.Imagenes.data.map(imagen =>
+    imagen && imagen.attributes && imagen.attributes.url
+      ? getStrapiImageUrl(imagen.attributes.url, 'large')
       : '/assets/images/propiedad-default.jpg'
   );
 }

@@ -40,10 +40,9 @@
   <!-- Script para cargar la propiedad dinámicamente -->
   <script>
     document.addEventListener('DOMContentLoaded', async function() {
-      // Obtener el slug de la URL
-      const pathSegments = window.location.pathname.split('/');
-      const filename = pathSegments[pathSegments.length - 1];
-      const slug = filename.replace('.html', '');
+      // Obtener el slug de los parámetros de URL
+      const urlParams = new URLSearchParams(window.location.search);
+      const slug = urlParams.get('slug');
       
       if (!slug) {
         mostrarError('Slug de propiedad no válido');
