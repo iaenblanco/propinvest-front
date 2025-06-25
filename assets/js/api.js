@@ -119,7 +119,7 @@ function crearTarjetaPropiedad(propiedad) {
           <span>🚿 ${propiedad.Banos}</span>
           <span>🏡 ${propiedad.Superficie} m²</span>
         </div>
-        <a href="/propiedad-dinamica.html?slug=${propiedad.Slug}" class="btn">Ver Propiedad</a>
+        <a href="/propiedades/${propiedad.Slug}" class="btn">Ver Propiedad</a>
       </div>
     </article>
   `;
