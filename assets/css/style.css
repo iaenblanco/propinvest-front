@@ -733,17 +733,17 @@ input:focus, textarea:focus {
 }
 
 .nav-list.nav-center li a.active {
-  position: relative;
+  font-weight: 400;
   color: var(--color-primary-accent);
-  font-weight: 700;
 }
 .nav-list.nav-center li a.active::after {
   content: '';
   display: block;
   margin: 0 auto;
-  margin-top: 6px;
-  width: 70%;
-  height: 3.5px;
-  border-radius: 2px;
-  background: var(--color-primary-accent);
+  margin-top: 7px;
+  width: 60%;
+  height: 2px;
+  border-radius: 1px;
+  background: rgba(185, 151, 103, 0.45);
+  box-shadow: none;
 } 

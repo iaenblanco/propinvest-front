@@ -28,8 +28,10 @@ document.addEventListener('DOMContentLoaded', () => {
     const navLinks = document.querySelectorAll('.nav-list.nav-center li a');
     navLinks.forEach(link => {
       let href = link.getAttribute('href');
+      // Normaliza href para que /index.html y / sean equivalentes
       if (href.endsWith('/index.html')) href = href.replace('/index.html', '/');
-      if (href === path) {
+      // Permite coincidencia exacta o con y sin slash final
+      if (href === path || href === path + '/' || href + '/' === path) {
         link.classList.add('active');
       }
     });
