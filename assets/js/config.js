@@ -6,12 +6,12 @@ const STRAPI_CONFIG = {
   // URL base de la API de Strapi
   API_BASE_URL: 'https://truthful-rhythm-e8bcafa766.strapiapp.com/api',
   
-  // Endpoints específicos
+  // Endpoints específicos (usando mayúscula en los campos)
   ENDPOINTS: {
     PROPIEDADES: '/propiedads',
-    PROPIEDAD_BY_SLUG: '/propiedads?filters[slug][$eq]=',
-    PROPIEDADES_DESTACADAS: '/propiedads?filters[destacado][$eq]=true&filters[publicado][$eq]=true',
-    PROPIEDADES_PUBLICADAS: '/propiedads?filters[publicado][$eq]=true'
+    PROPIEDAD_BY_SLUG: '/propiedads?filters[Slug][$eq]=',
+    PROPIEDADES_DESTACADAS: '/propiedads?filters[Destacado][$eq]=true&filters[Publicado][$eq]=true',
+    PROPIEDADES_PUBLICADAS: '/propiedads?filters[Publicado][$eq]=true'
   },
   
   // Configuración de imágenes
