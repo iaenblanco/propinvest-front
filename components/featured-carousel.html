@@ -1,0 +1,27 @@
+<!-- =============================
+     COMPONENTE CARRUSEL DE PROPIEDADES DESTACADAS
+     Componente reutilizable para mostrar propiedades destacadas
+     ============================= -->
+
+<section class="container" style="margin-top:4rem;">
+  <div class="section-title">Propiedades Destacadas</div>
+  <div class="section-subtitle">Descubre una selección de residencias únicas y exclusivas.</div>
+  <div class="featured-properties-carousel">
+    <!-- El carrusel se cargará dinámicamente -->
+  </div>
+</section>
+
+<!-- Scripts necesarios para el carrusel -->
+<script src="/assets/js/config.js"></script>
+<script src="/assets/js/api.js"></script>
+<script src="/assets/js/featured-carousel.js"></script>
+<script>
+  // Inicializar el carrusel cuando el componente se carga
+  document.addEventListener('DOMContentLoaded', () => {
+    setTimeout(() => {
+      if (typeof cargarPropiedadesDestacadasCarousel === 'function') {
+        cargarPropiedadesDestacadasCarousel('.featured-properties-carousel');
+      }
+    }, 1000);
+  });
+</script> 

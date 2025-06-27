@@ -34,9 +34,11 @@ function cargarPropiedadesSegunPagina() {
   // Verificar si estamos en la página principal
   if (currentPath === '/' || currentPath === '/index.html') {
     setTimeout(() => {
-      if (typeof cargarPropiedadesDestacadas === 'function') {
-        console.log('Llamando a cargarPropiedadesDestacadas()');
-        cargarPropiedadesDestacadas();
+      if (typeof cargarPropiedadesDestacadasCarousel === 'function') {
+        console.log('Llamando a cargarPropiedadesDestacadasCarousel()');
+        cargarPropiedadesDestacadasCarousel('.featured-properties-carousel');
+      } else {
+        console.error('No existe la función cargarPropiedadesDestacadasCarousel');
       }
     }, 1000);
   }

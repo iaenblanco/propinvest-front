@@ -7,7 +7,7 @@
   <title>PropInvest | Propiedades que definen un legado</title>
   <meta name="description" content="Propiedades exclusivas y de lujo en Chile. Descubre tu próxima inversión inmobiliaria con PropInvest." />
   <link rel="stylesheet" href="/assets/css/style.css">
-  <link rel="icon" href="/assets/images/logo-luxe-properties.png" type="image/png">
+  <link rel="icon" href="/assets/images/favicon.png" type="image/png">
   <!-- Datos estructurados JSON-LD para la empresa -->
   <script type="application/ld+json">
     {
@@ -15,7 +15,7 @@
       "@type": "RealEstateAgent",
       "name": "PropInvest",
       "url": "https://propinvest.cl/",
-      "logo": "https://propinvest.cl/assets/images/logo-luxe-properties.png",
+      "logo": "https://propinvest.cl/assets/images/logo.png",
       "description": "Propiedades exclusivas y de lujo en Chile.",
       "address": {
         "@type": "PostalAddress",
@@ -75,11 +75,8 @@
     <section class="container" style="margin-top:4rem;">
       <div class="section-title">Propiedades Destacadas</div>
       <div class="section-subtitle">Descubre una selección de residencias únicas y exclusivas.</div>
-      <div class="property-grid">
-        <!-- Las propiedades se cargarán dinámicamente desde Strapi -->
-        <div id="loading-properties" style="text-align: center; padding: 2rem; color: var(--color-text-secondary);">
-          Cargando propiedades destacadas...
-        </div>
+      <div class="featured-properties-carousel">
+        <!-- El carrusel se cargará dinámicamente -->
       </div>
     </section>
 
@@ -115,6 +112,7 @@
   <!-- Scripts necesarios -->
   <script src="/assets/js/config.js"></script>
   <script src="/assets/js/api.js"></script>
+  <script src="/assets/js/featured-carousel.js"></script>
   <script src="/assets/js/main.js" defer></script>
 </body>
 </html> 
