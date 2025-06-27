@@ -176,6 +176,51 @@ async function cargarTodasPropiedades() {
   }
 }
 
+/**
+ * Renderiza propiedades según la categoría basada en la URL
+ * @param {string} currentPath - Ruta actual de la página
+ */
+async function cargarPropiedadesPorCategoria(currentPath) {
+  try {
+    const api = new StrapiAPI();
+    let propiedades = await api.getPropiedades();
+    
+    // Filtrar propiedades según la categoría
+    if (currentPath.includes('/en-venta')) {
+      propiedades = propiedades.filter(prop => prop.Tipo === 'Venta' || !prop.Tipo);
+      actualizarTituloPagina('Propiedades en Venta', 'Elige entre las mejores residencias de lujo en venta en Chile.');
+    } else if (currentPath.includes('/en-arriendo')) {
+      propiedades = propiedades.filter(prop => prop.Tipo === 'Arriendo');
+      actualizarTituloPagina('Propiedades en Arriendo', 'Elige entre las mejores residencias de lujo en arriendo en Chile.');
+    } else if (currentPath.includes('/oportunidades')) {
+      propiedades = propiedades.filter(prop => prop.EsOportunidad === true || prop.Categoria === 'Oportunidad');
+      actualizarTituloPagina('Oportunidades Inmobiliarias', 'Descubre propiedades con gran potencial de inversión y revalorización.');
+    }
+    
+    renderizarPropiedades(propiedades, '.property-grid');
+  } catch (error) {
+    console.error('Error al cargar propiedades por categoría:', error);
+  }
+}
+
+/**
+ * Actualiza el título y subtítulo de la página dinámicamente
+ * @param {string} titulo - Nuevo título de la página
+ * @param {string} subtitulo - Nuevo subtítulo de la página
+ */
+function actualizarTituloPagina(titulo, subtitulo) {
+  const tituloElement = document.querySelector('.section-title');
+  const subtituloElement = document.querySelector('.section-subtitle');
+  
+  if (tituloElement) {
+    tituloElement.textContent = titulo;
+  }
+  
+  if (subtituloElement) {
+    subtituloElement.textContent = subtitulo;
+  }
+}
+
 // =============================
 // Funciones para página de detalle
 // =============================

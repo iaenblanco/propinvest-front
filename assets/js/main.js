@@ -10,6 +10,7 @@ document.addEventListener('DOMContentLoaded', () => {
     .then(html => {
       document.body.insertAdjacentHTML('afterbegin', html);
       inicializarMenuMovil();
+      inicializarMenuDesplegable();
     });
 
   // Cargar Footer
@@ -40,7 +41,7 @@ function cargarPropiedadesSegunPagina() {
     }, 1000);
   }
   
-  // Verificar si estamos en la página de propiedades
+  // Verificar si estamos en la página de propiedades general
   else if (currentPath === '/propiedades.html' || currentPath === '/propiedades') {
     setTimeout(() => {
       if (typeof cargarTodasPropiedades === 'function') {
@@ -48,6 +49,18 @@ function cargarPropiedadesSegunPagina() {
         cargarTodasPropiedades();
       } else {
         console.error('No existe la función cargarTodasPropiedades');
+      }
+    }, 1000);
+  }
+  
+  // Verificar si estamos en una página de categoría específica
+  else if (currentPath.includes('/propiedades/')) {
+    setTimeout(() => {
+      if (typeof cargarPropiedadesPorCategoria === 'function') {
+        console.log('Llamando a cargarPropiedadesPorCategoria()');
+        cargarPropiedadesPorCategoria(currentPath);
+      } else {
+        console.error('No existe la función cargarPropiedadesPorCategoria');
       }
     }, 1000);
   }
@@ -84,6 +97,24 @@ function inicializarMenuMovil() {
     if (e.target === mobileNav) {
       mobileNav.classList.remove('active');
       document.body.style.overflow = '';
+    }
+  });
+}
+
+// =============================
+// Menú desplegable móvil
+// =============================
+function inicializarMenuDesplegable() {
+  // Menú desplegable móvil
+  const mobileDropdowns = document.querySelectorAll('.mobile-dropdown');
+  
+  mobileDropdowns.forEach(dropdown => {
+    const toggle = dropdown.querySelector('.mobile-dropdown-toggle');
+    if (toggle) {
+      toggle.addEventListener('click', (e) => {
+        e.preventDefault();
+        dropdown.classList.toggle('active');
+      });
     }
   });
 }
