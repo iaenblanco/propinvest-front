@@ -1,20 +1,5 @@
-# Redirecciones mínimas para Cloudflare Pages
-# Solo redirecciones necesarias para evitar bucles infinitos
+# Redirecciones para Cloudflare Pages
 
-# Redirecciones para páginas principales (sin .html)
-/index /index.html 200
-/asesorias /asesorias.html 200
-/sobre-nosotros /sobre-nosotros.html 200
-/contacto /contacto.html 200
-/propiedades /propiedades.html 200
-
-# Redirecciones para categorías de propiedades (sin .html)
-/propiedades/en-venta /propiedades/en-venta.html 200
-/propiedades/en-arriendo /propiedades/en-arriendo.html 200
-/propiedades/oportunidades /propiedades/oportunidades.html 200
-
-# Regla para propiedades dinámicas (solo cuando hay parámetros de slug)
-/propiedades/* /propiedad-dinamica.html 200
-
-# Manejo de errores 404 - redirigir a index
-/* /index.html 404
+# No se necesitan redirecciones para la configuración actual.
+# Los enlaces del menú apuntan directamente a los archivos .html
+# y la página de propiedad dinámica funciona con parámetros de URL (?slug=...).
