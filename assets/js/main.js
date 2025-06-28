@@ -51,13 +51,15 @@ function cargarPropiedadesSegunPagina() {
   
   // Páginas de CATEGORÍAS específicas (en-venta, en-arriendo, etc.)
   else if (currentPath.startsWith('/propiedades/')) {
+    console.log('🔍 Detectada página de categoría:', currentPath);
     setTimeout(() => {
       // Nos aseguramos de que la función exista antes de llamarla
       if (typeof cargarPropiedadesPorCategoria === 'function') {
-        console.log('Llamando a cargarPropiedadesPorCategoria() para una categoría específica.');
+        console.log('✅ Llamando a cargarPropiedadesPorCategoria() para una categoría específica.');
         cargarPropiedadesPorCategoria(currentPath);
       } else {
-        console.error('La función cargarPropiedadesPorCategoria no está definida.');
+        console.error('❌ La función cargarPropiedadesPorCategoria no está definida.');
+        console.log('🔍 Funciones disponibles:', Object.keys(window).filter(key => key.includes('cargar')));
       }
     }, 1000);
   }

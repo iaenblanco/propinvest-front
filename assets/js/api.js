@@ -181,25 +181,33 @@ async function cargarTodasPropiedades() {
  * @param {string} currentPath - Ruta actual de la página
  */
 async function cargarPropiedadesPorCategoria(currentPath) {
+  console.log('🚀 Iniciando cargarPropiedadesPorCategoria con path:', currentPath);
   try {
     const api = new StrapiAPI();
+    console.log('📡 Obteniendo todas las propiedades...');
     let propiedades = await api.getPropiedades();
+    console.log('📊 Propiedades obtenidas:', propiedades.length);
     
     // Filtrar propiedades según la categoría
     if (currentPath.includes('/en-venta')) {
+      console.log('🏠 Filtrando propiedades en venta...');
       propiedades = propiedades.filter(prop => prop.Tipo === 'Venta' || !prop.Tipo);
       actualizarTituloPagina('Propiedades en Venta', 'Elige entre las mejores residencias de lujo en venta en Chile.');
     } else if (currentPath.includes('/en-arriendo')) {
+      console.log('🏠 Filtrando propiedades en arriendo...');
       propiedades = propiedades.filter(prop => prop.Tipo === 'Arriendo');
       actualizarTituloPagina('Propiedades en Arriendo', 'Elige entre las mejores residencias de lujo en arriendo en Chile.');
     } else if (currentPath.includes('/oportunidades')) {
+      console.log('🏠 Filtrando oportunidades...');
       propiedades = propiedades.filter(prop => prop.EsOportunidad === true || prop.Categoria === 'Oportunidad');
       actualizarTituloPagina('Oportunidades Inmobiliarias', 'Descubre propiedades con gran potencial de inversión y revalorización.');
     }
     
+    console.log('🎯 Propiedades filtradas:', propiedades.length);
     renderizarPropiedades(propiedades, '.property-grid');
+    console.log('✅ Renderizado completado');
   } catch (error) {
-    console.error('Error al cargar propiedades por categoría:', error);
+    console.error('❌ Error al cargar propiedades por categoría:', error);
   }
 }
 
@@ -421,11 +429,15 @@ function getTodasImagenes(propiedad) {
 
 // Exportar funciones y clase
 window.StrapiAPI = StrapiAPI;
+window.cargarPropiedadesPorCategoria = cargarPropiedadesPorCategoria;
+window.cargarTodasPropiedades = cargarTodasPropiedades;
+window.cargarPropiedadesDestacadasCarousel = cargarPropiedadesDestacadas;
 window.PropiedadUtils = {
   crearTarjetaPropiedad,
   renderizarPropiedades,
   cargarPropiedadesDestacadas,
   cargarTodasPropiedades,
+  cargarPropiedadesPorCategoria,
   renderizarDetallePropiedad,
   inicializarGaleria,
   configurarWhatsApp
