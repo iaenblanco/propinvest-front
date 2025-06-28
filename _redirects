@@ -1,5 +1,8 @@
 # Redirecciones para Cloudflare Pages
 
+# Redirigir /propiedad-dinamica sin parámetros a la página de propiedades
+/propiedad-dinamica /propiedades.html 302
+
 # No se necesitan redirecciones para la configuración actual.
 # Los enlaces del menú apuntan directamente a los archivos .html
 # y la página de propiedad dinámica funciona con parámetros de URL (?slug=...).
