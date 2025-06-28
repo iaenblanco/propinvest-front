@@ -1,0 +1,16 @@
+# Reglas de redirección para PropInvest
+# Este archivo maneja las redirecciones de URLs para el sitio web
+
+# Habilitar el motor de reescritura
+RewriteEngine On
+
+# Reglas específicas para páginas de categorías (DEBEN IR PRIMERO)
+RewriteRule ^propiedades/en-venta/?$ /propiedades/en-venta.html [L,R=200]
+RewriteRule ^propiedades/en-arriendo/?$ /propiedades/en-arriendo.html [L,R=200]
+RewriteRule ^propiedades/oportunidades/?$ /propiedades/oportunidades.html [L,R=200]
+
+# Regla general para propiedades dinámicas (DEBE IR DESPUÉS)
+RewriteRule ^propiedades/(.+)$ /propiedad-dinamica.html?slug=$1 [L,QSA]
+
+# Redirecciones adicionales si es necesario
+# RewriteRule ^api/(.*)$ https://tu-strapi-backend.com/api/$1 [L,R=200] 

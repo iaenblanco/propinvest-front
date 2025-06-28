@@ -11,6 +11,8 @@ document.addEventListener('DOMContentLoaded', () => {
       document.body.insertAdjacentHTML('afterbegin', html);
       inicializarMenuMovil();
       inicializarMenuDesplegable();
+      // Agregar manejo de redirecciones después de cargar el header
+      manejarRedirecciones();
     });
 
   // Cargar Footer
@@ -235,6 +237,43 @@ function actualizarMetadatos(metadata) {
     const metaImage = document.querySelector('meta[property="og:image"]');
     if (metaImage) {
       metaImage.content = metadata.image;
+    }
+  }
+}
+
+// =============================
+// Manejo de redirecciones del lado del cliente
+// =============================
+
+function manejarRedirecciones() {
+  const currentPath = window.location.pathname;
+  
+  // Mapeo de rutas específicas a sus archivos HTML
+  const rutasEspecificas = {
+    '/propiedades/en-venta': '/propiedades/en-venta.html',
+    '/propiedades/en-arriendo': '/propiedades/en-arriendo.html',
+    '/propiedades/oportunidades': '/propiedades/oportunidades.html'
+  };
+  
+  // Verificar si la ruta actual coincide con alguna ruta específica
+  if (rutasEspecificas[currentPath]) {
+    // Redirigir a la página específica
+    window.location.href = rutasEspecificas[currentPath];
+    return;
+  }
+  
+  // Si es una ruta de propiedad individual (no es una categoría específica)
+  if (currentPath.startsWith('/propiedades/') && 
+      !currentPath.includes('/en-venta') && 
+      !currentPath.includes('/en-arriendo') && 
+      !currentPath.includes('/oportunidades') &&
+      !currentPath.endsWith('.html')) {
+    
+    // Extraer el slug de la propiedad
+    const slug = currentPath.split('/propiedades/')[1];
+    if (slug) {
+      // Redirigir a la página dinámica con el slug
+      window.location.href = `/propiedad-dinamica.html?slug=${slug}`;
     }
   }
 }
