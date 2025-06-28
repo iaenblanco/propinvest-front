@@ -25,47 +25,53 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 // =============================
-// Carga dinámica de propiedades según la página (VERSIÓN CORREGIDA)
+// Carga dinámica de propiedades según la página
 // =============================
 
 function cargarPropiedadesSegunPagina() {
   const currentPath = window.location.pathname;
-
-  // Página principal (Home)
+  
+  // Verificar si estamos en la página principal
   if (currentPath === '/' || currentPath === '/index.html') {
     setTimeout(() => {
       if (typeof cargarPropiedadesDestacadasCarousel === 'function') {
+        console.log('Llamando a cargarPropiedadesDestacadasCarousel()');
         cargarPropiedadesDestacadasCarousel('.featured-properties-carousel');
+      } else {
+        console.error('No existe la función cargarPropiedadesDestacadasCarousel');
       }
     }, 1000);
   }
   
-  // Página de "Todas las propiedades"
-  else if (currentPath === '/propiedades.html') {
+  // Verificar si estamos en la página de propiedades general
+  else if (currentPath === '/propiedades.html' || currentPath === '/propiedades') {
     setTimeout(() => {
       if (typeof cargarTodasPropiedades === 'function') {
+        console.log('Llamando a cargarTodasPropiedades()');
         cargarTodasPropiedades();
+      } else {
+        console.error('No existe la función cargarTodasPropiedades');
       }
     }, 1000);
   }
   
-  // Páginas de CATEGORÍAS específicas (en-venta, en-arriendo, etc.)
-  else if (currentPath.startsWith('/propiedades/')) {
-    console.log('🔍 Detectada página de categoría:', currentPath);
+  // Verificar si estamos en una página de categoría específica
+  else if (currentPath.includes('/propiedades/')) {
     setTimeout(() => {
-      // Nos aseguramos de que la función exista antes de llamarla
       if (typeof cargarPropiedadesPorCategoria === 'function') {
-        console.log('✅ Llamando a cargarPropiedadesPorCategoria() para una categoría específica.');
+        console.log('Llamando a cargarPropiedadesPorCategoria()');
         cargarPropiedadesPorCategoria(currentPath);
       } else {
-        console.error('❌ La función cargarPropiedadesPorCategoria no está definida.');
-        console.log('🔍 Funciones disponibles:', Object.keys(window).filter(key => key.includes('cargar')));
+        console.error('No existe la función cargarPropiedadesPorCategoria');
       }
     }, 1000);
   }
   
-  // La página de detalle (propiedad-dinamica.html) tiene su propia lógica interna
-  // y no necesita ser manejada aquí.
+  // Verificar si estamos en una página de detalle de propiedad
+  else if (currentPath.includes('/propiedades/') && currentPath.endsWith('.html')) {
+    // La página de detalle se maneja en propiedad-dinamica.html
+    // No necesitamos hacer nada aquí
+  }
 }
 
 // =============================

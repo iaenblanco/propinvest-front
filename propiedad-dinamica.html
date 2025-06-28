@@ -45,9 +45,7 @@
       const slug = params.get('slug');
       
       if (!slug) {
-        // Redirigir a la página de propiedades si no hay slug
-        console.log('No se proporcionó slug, redirigiendo a propiedades...');
-        window.location.href = '/propiedades.html';
+        mostrarError('Slug de propiedad no válido');
         return;
       }
       
