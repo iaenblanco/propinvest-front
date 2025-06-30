@@ -56,7 +56,9 @@ class StrapiAPI {
   async getPropiedadesDestacadas() {
     try {
       const response = await this.fetchAPI(STRAPI_CONFIG.ENDPOINTS.PROPIEDADES_DESTACADAS);
-      return response.data || [];
+      // Filtrar solo las que tengan Objetivo === 'Venta' y Destacado === true
+      const propiedades = response.data || [];
+      return propiedades.filter(prop => prop.Objetivo === 'Venta' && prop.Destacado === true);
     } catch (error) {
       console.error('Error al obtener propiedades destacadas:', error);
       return [];
@@ -187,13 +189,13 @@ async function cargarPropiedadesPorCategoria(currentPath) {
     
     // Filtrar propiedades según la categoría
     if (currentPath.includes('/en-venta')) {
-      propiedades = propiedades.filter(prop => prop.Tipo === 'Venta' || !prop.Tipo);
+      propiedades = propiedades.filter(prop => prop.Objetivo === 'Venta');
       actualizarTituloPagina('Propiedades en Venta', 'Elige entre las mejores residencias de lujo en venta en Chile.');
     } else if (currentPath.includes('/en-arriendo')) {
-      propiedades = propiedades.filter(prop => prop.Tipo === 'Arriendo');
+      propiedades = propiedades.filter(prop => prop.Objetivo === 'Arriendo');
       actualizarTituloPagina('Propiedades en Arriendo', 'Elige entre las mejores residencias de lujo en arriendo en Chile.');
     } else if (currentPath.includes('/oportunidades')) {
-      propiedades = propiedades.filter(prop => prop.EsOportunidad === true || prop.Categoria === 'Oportunidad');
+      propiedades = propiedades.filter(prop => prop.Oportunidades === true);
       actualizarTituloPagina('Oportunidades Inmobiliarias', 'Descubre propiedades con gran potencial de inversión y revalorización.');
     }
     
