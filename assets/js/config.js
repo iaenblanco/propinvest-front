@@ -6,16 +6,16 @@ const STRAPI_CONFIG = {
   // URL base de la API de Strapi
   API_BASE_URL: 'https://truthful-rhythm-e8bcafa766.strapiapp.com/api',
   
-  // Endpoints específicos (usando mayúscula en los campos)
+  // Endpoints optimizados (solo campos necesarios para listado)
   ENDPOINTS: {
-    PROPIEDADES: '/propiedads?populate=*',
+    PROPIEDADES: '/propiedads?populate=Imagenes&fields[0]=Titulo&fields[1]=Slug&fields[2]=Precio&fields[3]=Ubicacion&fields[4]=Dormitorios&fields[5]=Banos&fields[6]=Superficie&fields[7]=Objetivo&fields[8]=Destacado&fields[9]=Publicado',
     PROPIEDAD_BY_SLUG: '/propiedads?populate=*&filters[Slug][$eq]=',
-    PROPIEDADES_DESTACADAS: '/propiedads?populate=*&filters[Destacado][$eq]=true&filters[Publicado][$eq]=true',
-    PROPIEDADES_DESTACADAS_ARRIENDO: '/propiedads?populate=*&filters[Destacado][$eq]=true&filters[Publicado][$eq]=true&filters[Objetivo][$eq]=Arriendo',
-    PROPIEDADES_PUBLICADAS: '/propiedads?populate=*&filters[Publicado][$eq]=true'
+    PROPIEDADES_DESTACADAS: '/propiedads?populate=Imagenes&filters[Destacado][$eq]=true&filters[Publicado][$eq]=true&fields[0]=Titulo&fields[1]=Slug&fields[2]=Precio&fields[3]=Ubicacion&fields[4]=Dormitorios&fields[5]=Banos&fields[6]=Superficie&fields[7]=Objetivo&fields[8]=Destacado&fields[9]=Publicado',
+    PROPIEDADES_DESTACADAS_ARRIENDO: '/propiedads?populate=Imagenes&filters[Destacado][$eq]=true&filters[Publicado][$eq]=true&filters[Objetivo][$eq]=Arriendo&fields[0]=Titulo&fields[1]=Slug&fields[2]=Precio&fields[3]=Ubicacion&fields[4]=Dormitorios&fields[5]=Banos&fields[6]=Superficie&fields[7]=Objetivo&fields[8]=Destacado&fields[9]=Publicado',
+    PROPIEDADES_PUBLICADAS: '/propiedads?populate=Imagenes&filters[Publicado][$eq]=true&fields[0]=Titulo&fields[1]=Slug&fields[2]=Precio&fields[3]=Ubicacion&fields[4]=Dormitorios&fields[5]=Banos&fields[6]=Superficie&fields[7]=Objetivo&fields[8]=Destacado&fields[9]=Publicado'
   },
   
-  // Configuración de imágenes
+  // Configuración de imágenes optimizada
   IMAGE_CONFIG: {
     // URL base para las imágenes de Strapi
     BASE_URL: 'https://truthful-rhythm-e8bcafa766.strapiapp.com',

@@ -5,17 +5,39 @@
 class StrapiAPI {
   constructor() {
     this.baseURL = STRAPI_CONFIG.API_BASE_URL;
+    this.cache = new Map();
+    this.cacheTimeout = 5 * 60 * 1000; // 5 minutos
   }
 
   /**
-   * Realiza una petición a la API de Strapi
+   * Realiza una petición a la API de Strapi con caché
    * @param {string} endpoint - Endpoint específico
    * @param {Object} options - Opciones adicionales para fetch
    * @returns {Promise} Respuesta de la API
    */
   async fetchAPI(endpoint, options = {}) {
+    const cacheKey = `${endpoint}_${JSON.stringify(options)}`;
+    
+    // Verificar caché
+    const cached = this.cache.get(cacheKey);
+    if (cached && Date.now() - cached.timestamp < this.cacheTimeout) {
+      console.log('📦 Usando datos en caché para:', endpoint);
+      // Registrar hit de caché
+      if (window.PerformanceOptimizer) {
+        window.PerformanceOptimizer.recordMetric('cacheHits');
+      }
+      return cached.data;
+    }
+
     try {
       const url = `${this.baseURL}${endpoint}`;
+      console.log('🌐 Llamando a la API:', url);
+      
+      // Registrar llamada a API
+      if (window.PerformanceOptimizer) {
+        window.PerformanceOptimizer.recordMetric('apiCalls');
+      }
+      
       const response = await fetch(url, {
         headers: {
           'Content-Type': 'application/json',
@@ -28,11 +50,28 @@ class StrapiAPI {
         throw new Error(`Error en la API: ${response.status} ${response.statusText}`);
       }
 
-      return await response.json();
+      const data = await response.json();
+      
+      // Guardar en caché
+      this.cache.set(cacheKey, {
+        data: data,
+        timestamp: Date.now()
+      });
+      
+      console.log('✅ Datos obtenidos y guardados en caché:', endpoint);
+      return data;
     } catch (error) {
       console.error('Error al conectar con Strapi:', error);
       throw error;
     }
+  }
+
+  /**
+   * Limpia el caché
+   */
+  clearCache() {
+    this.cache.clear();
+    console.log('🗑️ Caché limpiado');
   }
 
   /**
@@ -78,6 +117,63 @@ class StrapiAPI {
     } catch (error) {
       console.error('Error al obtener propiedades destacadas en arriendo:', error);
       return [];
+    }
+  }
+
+  /**
+   * Obtiene todas las propiedades destacadas (venta y arriendo) en una sola llamada
+   * @returns {Promise<Object>} Objeto con propiedades de venta y arriendo
+   */
+  async getTodasPropiedadesDestacadas() {
+    try {
+      const response = await this.fetchAPI(STRAPI_CONFIG.ENDPOINTS.PROPIEDADES_DESTACADAS);
+      const propiedades = response.data || [];
+      
+      const resultado = {
+        venta: propiedades.filter(prop => prop.Objetivo === 'Venta' && prop.Destacado === true),
+        arriendo: propiedades.filter(prop => prop.Objetivo === 'Arriendo' && prop.Destacado === true)
+      };
+      
+      // Precargar imágenes de las propiedades destacadas
+      this.preloadImages(resultado.venta.concat(resultado.arriendo));
+      
+      return resultado;
+    } catch (error) {
+      console.error('Error al obtener todas las propiedades destacadas:', error);
+      return { venta: [], arriendo: [] };
+    }
+  }
+
+  /**
+   * Precarga las imágenes de las propiedades para mejorar el rendimiento
+   * @param {Array} propiedades - Array de propiedades
+   */
+  preloadImages(propiedades) {
+    const imagesToPreload = [];
+    
+    propiedades.forEach(propiedad => {
+      if (propiedad.attributes && propiedad.attributes.Imagenes && propiedad.attributes.Imagenes.data) {
+        propiedad.attributes.Imagenes.data.forEach(imagen => {
+          const imageUrl = getStrapiImageUrl(imagen.attributes.url, 'medium');
+          imagesToPreload.push(imageUrl);
+        });
+      }
+    });
+    
+    // Precargar imágenes en segundo plano
+    if (imagesToPreload.length > 0) {
+      console.log(`🖼️ Precargando ${imagesToPreload.length} imágenes...`);
+      
+      // Registrar métrica de imágenes precargadas
+      if (window.PerformanceOptimizer) {
+        window.PerformanceOptimizer.recordMetric('imagePreloads', imagesToPreload.length);
+      }
+      
+      imagesToPreload.forEach(imageUrl => {
+        const img = new Image();
+        img.src = imageUrl;
+        // No necesitamos hacer nada más, solo cargar la imagen en caché del navegador
+      });
     }
   }
 

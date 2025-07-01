@@ -74,6 +74,19 @@ class FeaturedPropertiesCarousel {
     }
   }
 
+  /**
+   * Carga propiedades destacadas con datos pre-cargados opcionales
+   * @param {Array} propiedadesPreCargadas - Propiedades ya cargadas (opcional)
+   */
+  async loadFeaturedPropertiesOptimized(propiedadesPreCargadas = null) {
+    if (propiedadesPreCargadas && propiedadesPreCargadas.length > 0) {
+      console.log('📦 Usando propiedades pre-cargadas:', propiedadesPreCargadas.length);
+      return propiedadesPreCargadas;
+    }
+    
+    return await this.loadFeaturedProperties();
+  }
+
   showLoading() {
     this.container.innerHTML = `
       <div class="featured-loading">
@@ -369,6 +382,37 @@ class FeaturedPropertiesCarousel {
       this.updateCarousel();
     }
   }
+
+  /**
+   * Inicializa el carrusel con propiedades pre-cargadas
+   * @param {Array} propiedadesPreCargadas - Propiedades ya cargadas
+   */
+  async initWithData(propiedadesPreCargadas) {
+    try {
+      // Mostrar estado de carga
+      this.showLoading();
+      
+      if (!propiedadesPreCargadas || propiedadesPreCargadas.length === 0) {
+        this.showEmptyState();
+        return;
+      }
+      
+      // Renderizar el carrusel
+      this.renderCarousel(propiedadesPreCargadas);
+      
+      // Inicializar controles
+      this.initControls();
+      
+      // Iniciar autoplay si está habilitado
+      if (this.options.autoPlay) {
+        this.startAutoPlay();
+      }
+      
+    } catch (error) {
+      console.error('Error al inicializar el carrusel con datos:', error);
+      this.showErrorState();
+    }
+  }
 }
 
 // =============================
@@ -390,18 +434,26 @@ function initFeaturedCarousel(containerSelector = '.featured-properties-carousel
 // =============================
 
 /**
- * Función de compatibilidad para cargar propiedades destacadas en el carrusel
+ * Carga propiedades destacadas en el carrusel (versión optimizada)
  * @param {string} containerSelector - Selector del contenedor
+ * @param {Array} propiedadesPreCargadas - Propiedades ya cargadas (opcional)
  */
-async function cargarPropiedadesDestacadasCarousel(containerSelector = '.featured-properties-carousel') {
-  return initFeaturedCarousel(containerSelector, {
-    autoPlay: true,
-    autoPlayInterval: 6000,
-    showIndicators: true,
-    showArrows: true,
-    propertyType: 'venta',
-    // itemsPerView se detecta automáticamente según el tamaño de pantalla
-  });
+async function cargarPropiedadesDestacadasCarousel(containerSelector = '.featured-properties-carousel', propiedadesPreCargadas = null) {
+  try {
+    const carousel = new FeaturedPropertiesCarousel(containerSelector, {
+      propertyType: 'venta',
+      autoPlay: true,
+      autoPlayInterval: 5000
+    });
+    
+    if (propiedadesPreCargadas) {
+      await carousel.initWithData(propiedadesPreCargadas);
+    } else {
+      await carousel.init();
+    }
+  } catch (error) {
+    console.error('Error al cargar carrusel de propiedades destacadas:', error);
+  }
 }
 
 // =============================
@@ -409,18 +461,26 @@ async function cargarPropiedadesDestacadasCarousel(containerSelector = '.feature
 // =============================
 
 /**
- * Función para cargar propiedades destacadas en arriendo en el carrusel
+ * Carga propiedades destacadas en arriendo en el carrusel (versión optimizada)
  * @param {string} containerSelector - Selector del contenedor
+ * @param {Array} propiedadesPreCargadas - Propiedades ya cargadas (opcional)
  */
-async function cargarPropiedadesDestacadasArriendoCarousel(containerSelector = '.featured-rental-properties-carousel') {
-  return initFeaturedCarousel(containerSelector, {
-    autoPlay: true,
-    autoPlayInterval: 7000, // Intervalo ligeramente diferente para evitar sincronización
-    showIndicators: true,
-    showArrows: true,
-    propertyType: 'arriendo',
-    // itemsPerView se detecta automáticamente según el tamaño de pantalla
-  });
+async function cargarPropiedadesDestacadasArriendoCarousel(containerSelector = '.featured-rental-properties-carousel', propiedadesPreCargadas = null) {
+  try {
+    const carousel = new FeaturedPropertiesCarousel(containerSelector, {
+      propertyType: 'arriendo',
+      autoPlay: true,
+      autoPlayInterval: 5000
+    });
+    
+    if (propiedadesPreCargadas) {
+      await carousel.initWithData(propiedadesPreCargadas);
+    } else {
+      await carousel.init();
+    }
+  } catch (error) {
+    console.error('Error al cargar carrusel de propiedades destacadas en arriendo:', error);
+  }
 }
 
 // =============================

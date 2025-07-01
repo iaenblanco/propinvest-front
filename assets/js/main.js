@@ -20,7 +20,7 @@ document.addEventListener('DOMContentLoaded', () => {
       document.body.insertAdjacentHTML('beforeend', html);
     });
     
-  // Cargar propiedades dinámicamente según la página
+  // Cargar propiedades dinámicamente según la página (sin timeout)
   cargarPropiedadesSegunPagina();
 });
 
@@ -33,52 +33,69 @@ function cargarPropiedadesSegunPagina() {
   
   // Verificar si estamos en la página principal
   if (currentPath === '/' || currentPath === '/index.html') {
-    setTimeout(() => {
-      if (typeof cargarPropiedadesDestacadasCarousel === 'function') {
-        console.log('Llamando a cargarPropiedadesDestacadasCarousel()');
-        cargarPropiedadesDestacadasCarousel('.featured-properties-carousel');
-      } else {
-        console.error('No existe la función cargarPropiedadesDestacadasCarousel');
-      }
-      
-      // Inicializar carrusel de propiedades destacadas en arriendo
-      if (typeof cargarPropiedadesDestacadasArriendoCarousel === 'function') {
-        console.log('Llamando a cargarPropiedadesDestacadasArriendoCarousel()');
-        cargarPropiedadesDestacadasArriendoCarousel('.featured-rental-properties-carousel');
-      } else {
-        console.error('No existe la función cargarPropiedadesDestacadasArriendoCarousel');
-      }
-    }, 1000);
+    // Cargar ambas propiedades destacadas en paralelo
+    cargarPropiedadesDestacadasParalelo();
   }
   
   // Verificar si estamos en la página de propiedades general
   else if (currentPath === '/propiedades.html' || currentPath === '/propiedades') {
-    setTimeout(() => {
-      if (typeof cargarTodasPropiedades === 'function') {
-        console.log('Llamando a cargarTodasPropiedades()');
-        cargarTodasPropiedades();
-      } else {
-        console.error('No existe la función cargarTodasPropiedades');
-      }
-    }, 1000);
+    if (typeof cargarTodasPropiedades === 'function') {
+      console.log('Llamando a cargarTodasPropiedades()');
+      cargarTodasPropiedades();
+    } else {
+      console.error('No existe la función cargarTodasPropiedades');
+    }
   }
   
   // Verificar si estamos en una página de categoría específica
   else if (currentPath.includes('/propiedades/')) {
-    setTimeout(() => {
-      if (typeof cargarPropiedadesPorCategoria === 'function') {
-        console.log('Llamando a cargarPropiedadesPorCategoria()');
-        cargarPropiedadesPorCategoria(currentPath);
-      } else {
-        console.error('No existe la función cargarPropiedadesPorCategoria');
-      }
-    }, 1000);
+    if (typeof cargarPropiedadesPorCategoria === 'function') {
+      console.log('Llamando a cargarPropiedadesPorCategoria()');
+      cargarPropiedadesPorCategoria(currentPath);
+    } else {
+      console.error('No existe la función cargarPropiedadesPorCategoria');
+    }
   }
   
   // Verificar si estamos en una página de detalle de propiedad
   else if (currentPath.includes('/propiedades/') && currentPath.endsWith('.html')) {
     // La página de detalle se maneja en propiedad-dinamica.html
     // No necesitamos hacer nada aquí
+  }
+}
+
+/**
+ * Carga las propiedades destacadas de venta y arriendo en paralelo
+ * para optimizar el rendimiento
+ */
+async function cargarPropiedadesDestacadasParalelo() {
+  try {
+    console.log('🚀 Iniciando carga paralela de propiedades destacadas...');
+    
+    const api = new StrapiAPI();
+    
+    // Cargar todas las propiedades destacadas en una sola llamada
+    const todasPropiedades = await api.getTodasPropiedadesDestacadas();
+    
+    // Renderizar propiedades de venta
+    if (typeof cargarPropiedadesDestacadasCarousel === 'function') {
+      console.log('Llamando a cargarPropiedadesDestacadasCarousel()');
+      cargarPropiedadesDestacadasCarousel('.featured-properties-carousel', todasPropiedades.venta);
+    } else {
+      console.error('No existe la función cargarPropiedadesDestacadasCarousel');
+    }
+    
+    // Renderizar propiedades de arriendo
+    if (typeof cargarPropiedadesDestacadasArriendoCarousel === 'function') {
+      console.log('Llamando a cargarPropiedadesDestacadasArriendoCarousel()');
+      cargarPropiedadesDestacadasArriendoCarousel('.featured-rental-properties-carousel', todasPropiedades.arriendo);
+    } else {
+      console.error('No existe la función cargarPropiedadesDestacadasArriendoCarousel');
+    }
+    
+    console.log('✅ Propiedades destacadas cargadas exitosamente');
+  } catch (error) {
+    console.error('Error al cargar propiedades destacadas en paralelo:', error);
   }
 }
 
