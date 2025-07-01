@@ -12,6 +12,7 @@ class FeaturedPropertiesCarousel {
       showIndicators: options.showIndicators !== false, // Por defecto activado
       showArrows: options.showArrows !== false, // Por defecto activado
       itemsPerView: options.itemsPerView || this.getItemsPerView(), // Detectar automáticamente
+      propertyType: options.propertyType || 'venta', // Tipo de propiedades: 'venta' o 'arriendo'
       ...options
     };
     
@@ -60,7 +61,13 @@ class FeaturedPropertiesCarousel {
   async loadFeaturedProperties() {
     try {
       const api = new StrapiAPI();
-      return await api.getPropiedadesDestacadas();
+      
+      // Cargar propiedades según el tipo especificado
+      if (this.options.propertyType === 'arriendo') {
+        return await api.getPropiedadesDestacadasArriendo();
+      } else {
+        return await api.getPropiedadesDestacadas();
+      }
     } catch (error) {
       console.error('Error al cargar propiedades destacadas:', error);
       return [];
@@ -392,6 +399,35 @@ async function cargarPropiedadesDestacadasCarousel(containerSelector = '.feature
     autoPlayInterval: 6000,
     showIndicators: true,
     showArrows: true,
+    propertyType: 'venta',
     // itemsPerView se detecta automáticamente según el tamaño de pantalla
   });
-} 
+}
+
+// =============================
+// FUNCIÓN PARA CARGAR PROPIEDADES DESTACADAS EN ARRIENDO
+// =============================
+
+/**
+ * Función para cargar propiedades destacadas en arriendo en el carrusel
+ * @param {string} containerSelector - Selector del contenedor
+ */
+async function cargarPropiedadesDestacadasArriendoCarousel(containerSelector = '.featured-rental-properties-carousel') {
+  return initFeaturedCarousel(containerSelector, {
+    autoPlay: true,
+    autoPlayInterval: 7000, // Intervalo ligeramente diferente para evitar sincronización
+    showIndicators: true,
+    showArrows: true,
+    propertyType: 'arriendo',
+    // itemsPerView se detecta automáticamente según el tamaño de pantalla
+  });
+}
+
+// =============================
+// EXPORTAR FUNCIONES GLOBALMENTE
+// =============================
+
+// Hacer las funciones disponibles globalmente
+window.cargarPropiedadesDestacadasCarousel = cargarPropiedadesDestacadasCarousel;
+window.cargarPropiedadesDestacadasArriendoCarousel = cargarPropiedadesDestacadasArriendoCarousel;
+window.initFeaturedCarousel = initFeaturedCarousel; 

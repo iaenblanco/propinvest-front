@@ -11,6 +11,7 @@ const STRAPI_CONFIG = {
     PROPIEDADES: '/propiedads?populate=*',
     PROPIEDAD_BY_SLUG: '/propiedads?populate=*&filters[Slug][$eq]=',
     PROPIEDADES_DESTACADAS: '/propiedads?populate=*&filters[Destacado][$eq]=true&filters[Publicado][$eq]=true',
+    PROPIEDADES_DESTACADAS_ARRIENDO: '/propiedads?populate=*&filters[Destacado][$eq]=true&filters[Publicado][$eq]=true&filters[Objetivo][$eq]=Arriendo',
     PROPIEDADES_PUBLICADAS: '/propiedads?populate=*&filters[Publicado][$eq]=true'
   },
   

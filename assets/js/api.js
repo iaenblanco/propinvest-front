@@ -66,6 +66,22 @@ class StrapiAPI {
   }
 
   /**
+   * Obtiene propiedades destacadas en arriendo
+   * @returns {Promise<Array>} Array de propiedades destacadas en arriendo
+   */
+  async getPropiedadesDestacadasArriendo() {
+    try {
+      const response = await this.fetchAPI(STRAPI_CONFIG.ENDPOINTS.PROPIEDADES_DESTACADAS_ARRIENDO);
+      // Filtrar solo las que tengan Objetivo === 'Arriendo' y Destacado === true
+      const propiedades = response.data || [];
+      return propiedades.filter(prop => prop.Objetivo === 'Arriendo' && prop.Destacado === true);
+    } catch (error) {
+      console.error('Error al obtener propiedades destacadas en arriendo:', error);
+      return [];
+    }
+  }
+
+  /**
    * Obtiene una propiedad específica por slug
    * @param {string} slug - Slug de la propiedad
    * @returns {Promise<Object|null>} Propiedad encontrada o null

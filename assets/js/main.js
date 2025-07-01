@@ -40,6 +40,14 @@ function cargarPropiedadesSegunPagina() {
       } else {
         console.error('No existe la función cargarPropiedadesDestacadasCarousel');
       }
+      
+      // Inicializar carrusel de propiedades destacadas en arriendo
+      if (typeof cargarPropiedadesDestacadasArriendoCarousel === 'function') {
+        console.log('Llamando a cargarPropiedadesDestacadasArriendoCarousel()');
+        cargarPropiedadesDestacadasArriendoCarousel('.featured-rental-properties-carousel');
+      } else {
+        console.error('No existe la función cargarPropiedadesDestacadasArriendoCarousel');
+      }
     }, 1000);
   }
   
