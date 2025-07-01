@@ -264,6 +264,58 @@ function actualizarMetadatos(metadata) {
   }
 }
 
+// =============================
+// UF en tiempo real y barra superior
+// =============================
+
+function mostrarUF() {
+  fetch('https://mindicador.cl/api/uf')
+    .then(res => res.json())
+    .then(data => {
+      const uf = data.serie[0].valor;
+      const ufBarra = document.getElementById('uf-barra');
+      if (ufBarra) {
+        ufBarra.innerText = `UF $${uf.toLocaleString('es-CL', {minimumFractionDigits:2})}`;
+      }
+      window.valorUF = uf;
+    })
+    .catch(() => {
+      const ufBarra = document.getElementById('uf-barra');
+      if (ufBarra) {
+        ufBarra.innerText = 'No se pudo cargar el valor de la UF';
+      }
+    });
+}
+
+// Ocultar barra UF al hacer scroll
+function ocultarBarraUFAlScroll() {
+  let lastScroll = 0;
+  window.addEventListener('scroll', function() {
+    const topBar = document.getElementById('top-bar-uf');
+    if (!topBar) return;
+    if (window.scrollY > 10) {
+      topBar.style.top = '-50px';
+    } else {
+      topBar.style.top = '0';
+    }
+  });
+}
+
+// Ejecutar después de cargar el header
+function inicializarBarraUF() {
+  mostrarUF();
+  ocultarBarraUFAlScroll();
+}
+
+// Esperar a que el header esté en el DOM
+const observer = new MutationObserver(() => {
+  if (document.getElementById('top-bar-uf')) {
+    inicializarBarraUF();
+    observer.disconnect();
+  }
+});
+observer.observe(document.body, { childList: true, subtree: true });
+
 // Exportar utilidades globales
 window.PropInvestUtils = {
   animarContador,

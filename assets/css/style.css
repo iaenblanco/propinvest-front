@@ -1610,4 +1610,28 @@ img.lazy.loaded {
     font-size: 0.7rem;
     padding: 0.3rem 0.8rem;
   }
+}
+
+/* Barra superior UF centrada y visible solo en desktop */
+#top-bar-uf {
+  background: #353535;
+  color: #fff;
+  font-size: 15px;
+  padding: 4px 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  z-index: 1000;
+  transition: top 0.3s;
+}
+#top-bar-uf .top-bar-content {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+@media (max-width: 768px) {
+  #top-bar-uf {
+    display: none !important;
+  }
 } 
