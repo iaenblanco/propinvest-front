@@ -340,87 +340,236 @@ function actualizarTituloPagina(titulo, subtitulo) {
 // =============================
 
 /**
- * Renderiza la página de detalle de una propiedad
+ * Obtiene la tasa de cambio UF a CLP en tiempo real
+ * @returns {Promise<number>} Tasa de cambio UF/CLP
+ */
+async function obtenerTasaUF() {
+  try {
+    const response = await fetch('https://mindicador.cl/api/uf');
+    const data = await response.json();
+    return data.serie[0].valor;
+  } catch (error) {
+    console.error('Error al obtener tasa UF:', error);
+    return 35000; // Valor por defecto si falla la API
+  }
+}
+
+/**
+ * Formatea precio en CLP con separadores de miles
+ * @param {number} precio - Precio en CLP
+ * @returns {string} Precio formateado
+ */
+function formatearPrecioCLP(precio) {
+  return new Intl.NumberFormat('es-CL', {
+    style: 'currency',
+    currency: 'CLP',
+    minimumFractionDigits: 0,
+    maximumFractionDigits: 0
+  }).format(precio);
+}
+
+/**
+ * Renderiza la página de detalle de una propiedad con layout profesional y sidebar
  * @param {Object} propiedad - Objeto de propiedad de Strapi
  */
-function renderizarDetallePropiedad(propiedad) {
+async function renderizarDetallePropiedad(propiedad) {
   const imagenes = getTodasImagenes(propiedad);
-  const precio = formatearPrecio(propiedad.Precio);
-  
-  // Actualizar título de la página
+  const precioUF = formatearPrecio(propiedad.Precio);
+  const tasaUF = await obtenerTasaUF();
+  const precioCLP = propiedad.Precio ? formatearPrecioCLP(propiedad.Precio * tasaUF) : '';
+
   document.title = `${propiedad.Titulo} | PropInvest`;
-  
-  // Actualizar meta description
   const metaDescription = document.querySelector('meta[name="description"]');
   if (metaDescription) {
-    metaDescription.content = `Descubre ${propiedad.Titulo}: ${propiedad.Dormitorios} dormitorios, ${propiedad.Banos} baños, ${propiedad.Superficie} m² de lujo y diseño. Vive la exclusividad con PropInvest.`;
+    metaDescription.content = `${propiedad.Titulo} en ${propiedad.Ubicacion || propiedad.Region || ''}. ${propiedad.Dormitorios ? `${propiedad.Dormitorios} dormitorios` : ''} ${propiedad.Banos ? `${propiedad.Banos} baños` : ''} ${propiedad.Superficie ? `${propiedad.Superficie} m²` : ''}. Vive la exclusividad con PropInvest.`;
   }
 
-  // Renderizar galería de imágenes
-  renderizarGaleria(imagenes);
-
-  // Actualizar contenido principal
   const mainContent = document.querySelector('main .container');
   if (mainContent) {
     mainContent.innerHTML = `
-      <div class="section-title">${propiedad.Titulo}</div>
-      <div class="section-subtitle">${propiedad.Ubicacion}</div>
-      
-      <!-- Galería de imágenes -->
-      <div class="property-gallery" id="gallery">
-        <div class="gallery-main">
-          <button class="gallery-arrow left" aria-label="Anterior">&#8592;</button>
-          <img src="${imagenes[0]}" alt="${propiedad.Titulo} - Imagen 1" id="main-image">
-          <button class="gallery-arrow right" aria-label="Siguiente">&#8594;</button>
-        </div>
-        <div class="gallery-thumbnails">
-          ${imagenes.map((img, index) => `
-            <img src="${img}" alt="Thumbnail ${index + 1}" class="${index === 0 ? 'active' : ''}">
-          `).join('')}
-        </div>
-      </div>
-
-      <!-- Modal Lightbox -->
-      <div class="lightbox-modal" id="lightbox-modal">
-        <button class="lightbox-close" aria-label="Cerrar">&times;</button>
-        <img src="" alt="Imagen ampliada" id="lightbox-img">
-      </div>
-
-      <!-- Descripción y datos clave -->
-      <div style="margin-top:2.5rem; display:flex; flex-wrap:wrap; gap:2.5rem; align-items:flex-start;">
-        <div style="flex:2; min-width:300px;">
-          <h2 class="property-title" style="font-size:1.5rem;">${precio}</h2>
-          <div class="property-features" style="margin-bottom:1.2rem;">
-            <span>🛏 ${propiedad.Dormitorios} Dormitorios</span>
-            <span>🚿 ${propiedad.Banos} Baños</span>
-            <span>🏡 ${propiedad.Superficie} m²</span>
-          </div>
-          <div style="font-family:var(--font-secondary); color:var(--color-text-secondary);">
-            ${propiedad.Descripcion || 'Descripción no disponible.'}
-          </div>
-          <a id="whatsapp-link" href="#" class="cta" target="_blank" rel="noopener">Contactar por esta propiedad</a>
-        </div>
-        <div style="flex:1; min-width:280px;">
-          <div class="info-box">
-            <div class="info-icon">📍</div>
-            <div class="info-content">
-              <div class="info-title">Ubicación</div>
-              <div class="info-text">${propiedad.Direccion || propiedad.Ubicacion}</div>
+      <div class="detalle-layout" style="display:flex; flex-wrap:wrap; gap:3rem; align-items:flex-start;">
+        <!-- Columna principal -->
+        <div class="detalle-main" style="flex:2; min-width:320px;">
+          <!-- Encabezado -->
+          <div class="property-header" style="border-bottom:1px solid var(--color-border); margin-bottom:2rem; padding-bottom:1.5rem;">
+            <div>
+              <h1 class="property-main-title">${propiedad.Titulo}</h1>
+              ${propiedad.Tipo && propiedad.Objetivo ? `<div class="property-type">${propiedad.Tipo} • ${propiedad.Objetivo}</div>` : ''}
+              ${propiedad.Ubicacion ? `<div class="property-location">📍 ${propiedad.Ubicacion}</div>` : ''}
+            </div>
+            <div class="property-price-section">
+              ${propiedad.Precio ? `<div class="property-price"><div class="price-uf">${precioUF}</div>${precioCLP ? `<div class="price-clp">${precioCLP}</div>` : ''}</div>` : ''}
+              <div class="property-key-features" style="flex-direction:row; gap:1.5rem; margin-top:0.5rem;">
+                ${propiedad.Dormitorios ? `<span class="feature-item">🛏 ${propiedad.Dormitorios}</span>` : ''}
+                ${propiedad.Banos ? `<span class="feature-item">🚿 ${propiedad.Banos}</span>` : ''}
+                ${propiedad.Superficie ? `<span class="feature-item">🏡 ${propiedad.Superficie} m²</span>` : ''}
+              </div>
             </div>
           </div>
-          <iframe src="https://www.google.com/maps?q=${propiedad.Ubicacion}&z=15&output=embed" 
-                  width="100%" height="220" 
-                  style="border:0; border-radius:12px; box-shadow:0 2px 8px var(--color-shadow);" 
-                  allowfullscreen="" loading="lazy" 
-                  referrerpolicy="no-referrer-when-downgrade">
-          </iframe>
+
+          <!-- Galería y ficha técnica en desktop -->
+          <div class="detalle-galeria-ficha" style="display:flex; flex-wrap:wrap; gap:2.5rem; align-items:flex-start;">
+            <div class="property-gallery" id="gallery" style="flex:2; min-width:320px;">
+              ${imagenes.length > 0 ? `
+                ${imagenes.length === 1 ? `<div class="single-image"><img src="${imagenes[0]}" alt="${propiedad.Titulo}" class="main-image" style="aspect-ratio:1/1; width:100%; height:auto; object-fit:cover;"></div>` : `
+                  <div class="gallery-main">
+                    <button class="gallery-arrow left" aria-label="Anterior">‹</button>
+                    <img src="${imagenes[0]}" alt="${propiedad.Titulo} - Imagen 1" id="main-image" class="main-image" style="aspect-ratio:1/1; width:100%; height:auto; object-fit:cover;">
+                    <button class="gallery-arrow right" aria-label="Siguiente">›</button>
+                  </div>
+                  <div class="gallery-thumbnails">
+                    ${imagenes.map((img, index) => `<img src="${img}" alt="Thumbnail ${index + 1}" class="thumbnail ${index === 0 ? 'active' : ''}" style="aspect-ratio:1/1; width:80px; height:80px; object-fit:cover;">`).join('')}
+                  </div>`}
+                <div class="lightbox-modal" id="lightbox-modal"><button class="lightbox-close" aria-label="Cerrar">×</button><img src="" alt="Imagen ampliada" id="lightbox-img"></div>
+              ` : ''}
+            </div>
+            <!-- Ficha técnica SOLO en desktop -->
+            <div class="technical-specs-section ficha-desktop" style="flex:1; min-width:220px; max-width:320px; display:none;">
+              <h2 class="section-title" style="font-size:1.2rem; text-align:left; margin-bottom:1rem;">Ficha Técnica</h2>
+              <div class="specs-grid" style="display:block;">
+                ${propiedad.Dormitorios ? `<div class="spec-item"><span class="spec-label">Dormitorios:</span><span class="spec-value">${propiedad.Dormitorios}</span></div>` : ''}
+                ${propiedad.Banos ? `<div class="spec-item"><span class="spec-label">Baños:</span><span class="spec-value">${propiedad.Banos}</span></div>` : ''}
+                ${propiedad.Superficie ? `<div class="spec-item"><span class="spec-label">Superficie Total:</span><span class="spec-value">${propiedad.Superficie} m²</span></div>` : ''}
+                ${propiedad.M2utiles ? `<div class="spec-item"><span class="spec-label">Superficie Útil:</span><span class="spec-value">${propiedad.M2utiles} m²</span></div>` : ''}
+                ${propiedad.suites ? `<div class="spec-item"><span class="spec-label">Suites:</span><span class="spec-value">${propiedad.suites}</span></div>` : ''}
+                ${propiedad.Servicio ? `<div class="spec-item"><span class="spec-label">Servicio:</span><span class="spec-value">${propiedad.Servicio}</span></div>` : ''}
+                ${propiedad.Estacionamientos ? `<div class="spec-item"><span class="spec-label">Estacionamientos:</span><span class="spec-value">${propiedad.Estacionamientos}</span></div>` : ''}
+                ${propiedad.Terrazas ? `<div class="spec-item"><span class="spec-label">Terrazas:</span><span class="spec-value">${propiedad.Terrazas}</span></div>` : ''}
+                ${propiedad.Bodega ? `<div class="spec-item"><span class="spec-label">Bodega:</span><span class="spec-value">${propiedad.Bodega}</span></div>` : ''}
+              </div>
+            </div>
+          </div>
+
+          <!-- Descripción -->
+          ${propiedad.Descripcion ? `<div class="description-section"><h2 class="section-title">Descripción</h2><div class="description-content">${propiedad.Descripcion}</div></div>` : ''}
+
+          <!-- Ficha técnica en mobile (debajo de la descripción) -->
+          <div class="technical-specs-section ficha-mobile" style="display:block;">
+            <h2 class="section-title" style="font-size:1.2rem; text-align:left; margin-bottom:1rem;">Ficha Técnica</h2>
+            <div class="specs-grid" style="display:block;">
+              ${propiedad.Dormitorios ? `<div class="spec-item"><span class="spec-label">Dormitorios:</span><span class="spec-value">${propiedad.Dormitorios}</span></div>` : ''}
+              ${propiedad.Banos ? `<div class="spec-item"><span class="spec-label">Baños:</span><span class="spec-value">${propiedad.Banos}</span></div>` : ''}
+              ${propiedad.Superficie ? `<div class="spec-item"><span class="spec-label">Superficie Total:</span><span class="spec-value">${propiedad.Superficie} m²</span></div>` : ''}
+              ${propiedad.M2utiles ? `<div class="spec-item"><span class="spec-label">Superficie Útil:</span><span class="spec-value">${propiedad.M2utiles} m²</span></div>` : ''}
+              ${propiedad.suites ? `<div class="spec-item"><span class="spec-label">Suites:</span><span class="spec-value">${propiedad.suites}</span></div>` : ''}
+              ${propiedad.Servicio ? `<div class="spec-item"><span class="spec-label">Servicio:</span><span class="spec-value">${propiedad.Servicio}</span></div>` : ''}
+              ${propiedad.Estacionamientos ? `<div class="spec-item"><span class="spec-label">Estacionamientos:</span><span class="spec-value">${propiedad.Estacionamientos}</span></div>` : ''}
+              ${propiedad.Terrazas ? `<div class="spec-item"><span class="spec-label">Terrazas:</span><span class="spec-value">${propiedad.Terrazas}</span></div>` : ''}
+              ${propiedad.Bodega ? `<div class="spec-item"><span class="spec-label">Bodega:</span><span class="spec-value">${propiedad.Bodega}</span></div>` : ''}
+            </div>
+          </div>
+
+          <!-- Características destacadas -->
+          ${(propiedad.Piscina || propiedad.Quincho || propiedad.sala_multiuso || propiedad.Gimnasio || propiedad.Lavanderia || propiedad.Walk_in_closet || propiedad.ano_construccion || propiedad.Piso || propiedad.Orientacion) ? `<div class="amenities-section"><h2 class="section-title">Características</h2><div class="amenities-list">${propiedad.Piscina ? `<div class="amenity-item"><span class="amenity-icon">✅</span><span class="amenity-text">Piscina</span></div>` : ''}${propiedad.Quincho ? `<div class="amenity-item"><span class="amenity-icon">✅</span><span class="amenity-text">Quincho</span></div>` : ''}${propiedad.sala_multiuso ? `<div class="amenity-item"><span class="amenity-icon">✅</span><span class="amenity-text">Sala Multiuso</span></div>` : ''}${propiedad.Gimnasio ? `<div class="amenity-item"><span class="amenity-icon">✅</span><span class="amenity-text">Gimnasio</span></div>` : ''}${propiedad.Lavanderia ? `<div class="amenity-item"><span class="amenity-icon">✅</span><span class="amenity-text">Lavandería</span></div>` : ''}${propiedad.Walk_in_closet ? `<div class="amenity-item"><span class="amenity-icon">✅</span><span class="amenity-text">Walk-in Closet</span></div>` : ''}${propiedad.ano_construccion ? `<div class="amenity-item"><span class="amenity-icon">✅</span><span class="amenity-text">Año de construcción: ${propiedad.ano_construccion}</span></div>` : ''}${propiedad.Piso ? `<div class="amenity-item"><span class="amenity-icon">✅</span><span class="amenity-text">Piso: ${propiedad.Piso}</span></div>` : ''}${propiedad.Orientacion ? `<div class="amenity-item"><span class="amenity-icon">✅</span><span class="amenity-text">Orientación: ${propiedad.Orientacion}</span></div>` : ''}</div></div>` : ''}
+
+          <!-- Gastos de mantención -->
+          ${(propiedad.Gastos_comunes || propiedad.Contribuciones) ? `<div class="expenses-section"><h2 class="section-title">Gastos de Mantención</h2><div class="expenses-list">${propiedad.Gastos_comunes ? `<div class="expense-item"><span class="expense-label">Gastos Comunes:</span><span class="expense-value">${formatearPrecioCLP(propiedad.Gastos_comunes)}</span></div>` : ''}${propiedad.Contribuciones ? `<div class="expense-item"><span class="expense-label">Contribuciones:</span><span class="expense-value">${formatearPrecioCLP(propiedad.Contribuciones)}</span></div>` : ''}</div></div>` : ''}
+
+          <!-- Mapa de ubicación -->
+          ${(propiedad.Region || propiedad.Ubicacion) ? `<div class="location-section"><h2 class="section-title">Ubicación</h2><div class="location-info">${propiedad.Region ? `<div class="location-region">${propiedad.Region}</div>` : ''}${propiedad.Ubicacion ? `<div class="location-area">${propiedad.Ubicacion}</div>` : ''}</div><div class="location-map"><iframe src="https://www.google.com/maps?q=${encodeURIComponent(propiedad.Ubicacion || propiedad.Region)}&z=13&output=embed" width="100%" height="300" style="border:0; border-radius:12px;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe></div></div>` : ''}
+
+          <!-- Botón de contacto -->
+          <div class="contact-section"><a id="whatsapp-link" href="#" class="contact-button" target="_blank" rel="noopener"><span class="contact-icon">💬</span><span class="contact-text">Contactar por esta propiedad</span></a></div>
         </div>
+        <!-- Sidebar -->
+        <aside class="detalle-sidebar" style="flex:1; min-width:320px; max-width:400px; display:flex; flex-direction:column; gap:2.5rem;">
+          <div class="info-box" style="background:var(--color-background); border-radius:14px; box-shadow:0 2px 8px var(--color-shadow); padding:1.5rem 1.2rem; display:flex; align-items:flex-start; gap:1.2rem;">
+            <div class="info-icon" style="font-size:2rem; color:var(--color-primary-accent);">🔒</div>
+            <div class="info-content">
+              <div class="info-title" style="font-family:var(--font-primary); font-weight:600; font-size:1.1rem; margin-bottom:0.3rem;">Confidencialidad y seguridad</div>
+              <div class="info-text" style="font-family:var(--font-secondary); color:var(--color-text-secondary); font-size:1rem;">Procesos discretos y seguros para proteger tu inversión y privacidad.</div>
+            </div>
+          </div>
+          <div id="sidebar-destacadas"></div>
+        </aside>
       </div>
     `;
   }
 
-  // Configurar botón de WhatsApp
   configurarWhatsApp(propiedad.Titulo);
+  if (imagenes.length > 1) setTimeout(() => { inicializarGaleria(imagenes); }, 100);
+  cargarSidebarDestacadas(propiedad);
+
+  // Mostrar ficha técnica en desktop y ocultar en mobile
+  function ajustarFichaTecnica() {
+    const fichaDesktop = document.querySelector('.ficha-desktop');
+    const fichaMobile = document.querySelector('.ficha-mobile');
+    if (window.innerWidth >= 1024) {
+      if (fichaDesktop) fichaDesktop.style.display = 'block';
+      if (fichaMobile) fichaMobile.style.display = 'none';
+    } else {
+      if (fichaDesktop) fichaDesktop.style.display = 'none';
+      if (fichaMobile) fichaMobile.style.display = 'block';
+    }
+  }
+  ajustarFichaTecnica();
+  window.addEventListener('resize', ajustarFichaTecnica);
+}
+
+/**
+ * Carga y renderiza las propiedades destacadas en el sidebar
+ * @param {Object} propiedadActual - Propiedad actual para filtrar
+ */
+async function cargarSidebarDestacadas(propiedadActual) {
+  const api = new StrapiAPI();
+  let todas = await api.getPropiedades();
+  // 1. Mismo Objetivo y Tipo, excluyendo la actual
+  let filtradas = todas.filter(p =>
+    p.id !== propiedadActual.id &&
+    p.Objetivo === propiedadActual.Objetivo &&
+    p.Tipo === propiedadActual.Tipo
+  );
+  // 2. Si no hay, solo mismo Objetivo
+  if (filtradas.length === 0) {
+    filtradas = todas.filter(p =>
+      p.id !== propiedadActual.id &&
+      p.Objetivo === propiedadActual.Objetivo
+    );
+  }
+  // 3. Si tampoco hay, cualquier otra destacada (excepto la actual)
+  if (filtradas.length === 0) {
+    filtradas = todas.filter(p =>
+      p.id !== propiedadActual.id &&
+      p.Destacado === true
+    );
+  }
+  // 4. Si aún no hay, cualquier otra propiedad (excepto la actual)
+  if (filtradas.length === 0) {
+    filtradas = todas.filter(p => p.id !== propiedadActual.id);
+  }
+  // Ordenar: primero destacados, luego el resto
+  filtradas = filtradas.sort((a, b) => (b.Destacado === true) - (a.Destacado === true));
+  // Tomar máximo 3
+  filtradas = filtradas.slice(0, 3);
+  // Renderizar
+  const cont = document.getElementById('sidebar-destacadas');
+  if (cont) {
+    if (filtradas.length === 0) {
+      cont.innerHTML = '';
+      return;
+    }
+    cont.innerHTML = `
+      <div class="sidebar-section">
+        <hr style="border:none; border-top:1.5px solid var(--color-border); margin:2.2rem 0 1.5rem 0;">
+        <div class="section-title" style="font-size:1.3rem; text-align:left; margin-bottom:1rem; color:var(--color-primary-accent); border:none; padding:0;">Propiedades Destacadas</div>
+        <div class="sidebar-destacadas-list" style="display:flex; flex-direction:column; gap:1.5rem;">
+          ${filtradas.map(prop => `
+            <a href="/propiedad-dinamica.html?slug=${prop.Slug}" class="sidebar-destacada-card" style="display:block; background:var(--color-background); border-radius:14px; box-shadow:0 2px 8px var(--color-shadow); text-decoration:none; color:inherit; overflow:hidden; border:1px solid var(--color-border);">
+              <div style="width:100%; aspect-ratio:1/1; background:#f5f5f5; display:flex; align-items:center; justify-content:center;">
+                <img src="${getPrimeraImagen(prop)}" alt="${prop.Titulo}" style="width:100%; height:100%; object-fit:cover; display:block;">
+              </div>
+              <div style="padding:1.1rem 1rem 1rem 1rem; display:flex; flex-direction:column; gap:0.3rem; align-items:flex-start;">
+                <div style="font-family:var(--font-primary); font-weight:600; font-size:1.08rem; color:var(--color-text-primary); margin-bottom:0.2rem; line-height:1.2;">${prop.Titulo}</div>
+                <div style="font-size:1rem; color:var(--color-primary-accent); font-weight:600;">${formatearPrecio(prop.Precio)}</div>
+                <div style="font-size:0.95rem; color:var(--color-text-secondary);">${prop.Ubicacion || ''}</div>
+                ${prop.Destacado ? `<span style="color:var(--color-primary-accent); font-size:0.85rem; font-weight:700;">★ Destacada</span>` : ''}
+              </div>
+            </a>
+          `).join('')}
+        </div>
+      </div>
+    `;
+  }
 }
 
 /**
