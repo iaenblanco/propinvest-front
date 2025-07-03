@@ -1917,7 +1917,10 @@ img.lazy.loaded {
 .specs-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  gap: 1rem !important;
+}
+
+.specs-grid .spec-item:not(:last-child) {
+  margin-bottom: 1.2rem;
 }
 
 .spec-item {
@@ -2182,4 +2185,18 @@ img.lazy.loaded {
 }
 .spec-item .carac-tick svg {
   display: block;
+}
+
+@media (min-width: 1025px) {
+  .specs-grid {
+    grid-template-columns: 1fr;
+    max-width: 380px;
+    width: 100%;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  .spec-item {
+    width: 100%;
+    box-sizing: border-box;
+  }
 } 
