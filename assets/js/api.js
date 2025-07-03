@@ -384,6 +384,33 @@ async function renderizarDetallePropiedad(propiedad) {
     metaDescription.content = `${propiedad.Titulo} en ${propiedad.Ubicacion || propiedad.Region || ''}. ${propiedad.Dormitorios ? `${propiedad.Dormitorios} dormitorios` : ''} ${propiedad.Banos ? `${propiedad.Banos} baños` : ''} ${propiedad.Superficie ? `${propiedad.Superficie} m²` : ''}. Vive la exclusividad con PropInvest.`;
   }
 
+  // Generar HTML de Características con estructura de Ficha Técnica
+  function getCaracteristicasHTML(tipo) {
+    // tipo: 'desktop' o 'mobile'
+    const items = [];
+    // Características con ticket elegante
+    if (propiedad.Piscina) items.push({label: 'Piscina', value: '', tick: true});
+    if (propiedad.Quincho) items.push({label: 'Quincho', value: '', tick: true});
+    if (propiedad.sala_multiuso) items.push({label: 'Sala Multiuso', value: '', tick: true});
+    if (propiedad.Gimnasio) items.push({label: 'Gimnasio', value: '', tick: true});
+    if (propiedad.Lavanderia) items.push({label: 'Lavandería', value: '', tick: true});
+    if (propiedad.Walk_in_closet) items.push({label: 'Walk-in Closet', value: '', tick: true});
+    // Año de construcción: solo mostrar si tiene valor, nunca con ticket
+    if (propiedad.ano_construccion) items.push({label: 'Año de construcción', value: propiedad.ano_construccion});
+    // Piso y Orientación: solo mostrar si tienen valor
+    if (propiedad.Piso) items.push({label: 'Piso', value: propiedad.Piso});
+    if (propiedad.Orientacion) items.push({label: 'Orientación', value: propiedad.Orientacion});
+    if (items.length === 0) return '';
+    return `
+      <div class="technical-specs-section caracteristicas-${tipo}" style="display:block; margin-bottom:2rem;">
+        <h2 class="section-title" style="font-size:1.2rem; text-align:left; margin-bottom:1rem;">Características</h2>
+        <div class="specs-grid">
+          ${items.map(item => `<div class="spec-item"><span class="spec-label">${item.label}${item.value ? ':' : ''}</span><span class="spec-value">${item.value ? item.value : ''}</span>${item.tick ? '<span class="carac-tick" title="Incluido"><svg width="22" height="22" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="11" cy="11" r="10" stroke="#444" stroke-width="2" fill="#f7f7f7"/><path d="M6.5 11.5L10 15L15.5 8.5" stroke="#444" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>' : ''}</div>`).join('')}
+        </div>
+      </div>
+    `;
+  }
+
   const mainContent = document.querySelector('main .container');
   if (mainContent) {
     mainContent.innerHTML = `
@@ -459,8 +486,10 @@ async function renderizarDetallePropiedad(propiedad) {
             </div>
           </div>
 
-          <!-- Características destacadas -->
-          ${(propiedad.Piscina || propiedad.Quincho || propiedad.sala_multiuso || propiedad.Gimnasio || propiedad.Lavanderia || propiedad.Walk_in_closet || propiedad.ano_construccion || propiedad.Piso || propiedad.Orientacion) ? `<div class="amenities-section"><h2 class="section-title">Características</h2><div class="amenities-list">${propiedad.Piscina ? `<div class="amenity-item"><span class="amenity-icon">✅</span><span class="amenity-text">Piscina</span></div>` : ''}${propiedad.Quincho ? `<div class="amenity-item"><span class="amenity-icon">✅</span><span class="amenity-text">Quincho</span></div>` : ''}${propiedad.sala_multiuso ? `<div class="amenity-item"><span class="amenity-icon">✅</span><span class="amenity-text">Sala Multiuso</span></div>` : ''}${propiedad.Gimnasio ? `<div class="amenity-item"><span class="amenity-icon">✅</span><span class="amenity-text">Gimnasio</span></div>` : ''}${propiedad.Lavanderia ? `<div class="amenity-item"><span class="amenity-icon">✅</span><span class="amenity-text">Lavandería</span></div>` : ''}${propiedad.Walk_in_closet ? `<div class="amenity-item"><span class="amenity-icon">✅</span><span class="amenity-text">Walk-in Closet</span></div>` : ''}${propiedad.ano_construccion ? `<div class="amenity-item"><span class="amenity-icon">✅</span><span class="amenity-text">Año de construcción: ${propiedad.ano_construccion}</span></div>` : ''}${propiedad.Piso ? `<div class="amenity-item"><span class="amenity-icon">✅</span><span class="amenity-text">Piso: ${propiedad.Piso}</span></div>` : ''}${propiedad.Orientacion ? `<div class="amenity-item"><span class="amenity-icon">✅</span><span class="amenity-text">Orientación: ${propiedad.Orientacion}</span></div>` : ''}</div></div>` : ''}
+          <!-- Características SOLO en mobile (en desktop se renderiza en sidebar) -->
+          <div class="caracteristicas-mobile" style="display:block;">
+            ${getCaracteristicasHTML('mobile')}
+          </div>
 
           <!-- Gastos de mantención -->
           ${(propiedad.Gastos_comunes || propiedad.Contribuciones) ? `<div class="expenses-section"><h2 class="section-title">Gastos de Mantención</h2><div class="expenses-list">${propiedad.Gastos_comunes ? `<div class="expense-item"><span class="expense-label">Gastos Comunes:</span><span class="expense-value">${formatearPrecioCLP(propiedad.Gastos_comunes)}</span></div>` : ''}${propiedad.Contribuciones ? `<div class="expense-item"><span class="expense-label">Contribuciones:</span><span class="expense-value">${formatearPrecioCLP(propiedad.Contribuciones)}</span></div>` : ''}</div></div>` : ''}
@@ -480,6 +509,10 @@ async function renderizarDetallePropiedad(propiedad) {
               <div class="info-text" style="font-family:var(--font-secondary); color:var(--color-text-secondary); font-size:1rem;">Procesos discretos y seguros para proteger tu inversión y privacidad.</div>
             </div>
           </div>
+          <!-- Características SOLO en desktop (en mobile se renderiza en main) -->
+          <div class="caracteristicas-desktop" style="display:none;">
+            ${getCaracteristicasHTML('desktop')}
+          </div>
           <div id="sidebar-destacadas"></div>
         </aside>
       </div>
@@ -490,20 +523,26 @@ async function renderizarDetallePropiedad(propiedad) {
   if (imagenes.length > 1) setTimeout(() => { inicializarGaleria(imagenes); }, 100);
   cargarSidebarDestacadas(propiedad);
 
-  // Mostrar ficha técnica en desktop y ocultar en mobile
-  function ajustarFichaTecnica() {
+  // Mostrar ficha técnica y características en desktop/móvil según tamaño de pantalla
+  function ajustarFichaTecnicaYCaracteristicas() {
     const fichaDesktop = document.querySelector('.ficha-desktop');
     const fichaMobile = document.querySelector('.ficha-mobile');
+    const caracDesktop = document.querySelector('.caracteristicas-desktop');
+    const caracMobile = document.querySelector('.caracteristicas-mobile');
     if (window.innerWidth >= 1024) {
       if (fichaDesktop) fichaDesktop.style.display = 'block';
       if (fichaMobile) fichaMobile.style.display = 'none';
+      if (caracDesktop) caracDesktop.style.display = 'block';
+      if (caracMobile) caracMobile.style.display = 'none';
     } else {
       if (fichaDesktop) fichaDesktop.style.display = 'none';
       if (fichaMobile) fichaMobile.style.display = 'block';
+      if (caracDesktop) caracDesktop.style.display = 'none';
+      if (caracMobile) caracMobile.style.display = 'block';
     }
   }
-  ajustarFichaTecnica();
-  window.addEventListener('resize', ajustarFichaTecnica);
+  ajustarFichaTecnicaYCaracteristicas();
+  window.addEventListener('resize', ajustarFichaTecnicaYCaracteristicas);
 }
 
 /**

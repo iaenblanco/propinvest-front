@@ -1917,7 +1917,7 @@ img.lazy.loaded {
 .specs-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  gap: 1rem;
+  gap: 1rem !important;
 }
 
 .spec-item {
@@ -2079,16 +2079,13 @@ img.lazy.loaded {
     flex-direction: column;
     gap: 1.5rem;
   }
-  
   .property-price-section {
     text-align: left;
     width: 100%;
   }
-  
   .key-features-grid {
     grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
   }
-  
   .specs-grid {
     grid-template-columns: 1fr;
   }
@@ -2168,4 +2165,21 @@ img.lazy.loaded {
     padding: 0.875rem 1.5rem;
     font-size: 1rem;
   }
+}
+
+.carac-tick {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-left: 0.7rem;
+  min-width: 28px;
+  min-height: 28px;
+  border-radius: 50%;
+  background: #f7f7f7;
+  border: 1.5px solid #444;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.04);
+  transition: box-shadow 0.2s;
+}
+.spec-item .carac-tick svg {
+  display: block;
 } 
