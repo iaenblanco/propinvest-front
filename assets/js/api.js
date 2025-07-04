@@ -360,12 +360,15 @@ async function obtenerTasaUF() {
  * @returns {string} Precio formateado
  */
 function formatearPrecioCLP(precio) {
-  return new Intl.NumberFormat('es-CL', {
+  const formatted = new Intl.NumberFormat('es-CL', {
     style: 'currency',
     currency: 'CLP',
     minimumFractionDigits: 0,
     maximumFractionDigits: 0
   }).format(precio);
+  
+  // Reemplazar el "$" al inicio con "CLP $"
+  return formatted.replace(/^\$/, 'CLP $');
 }
 
 /**
@@ -413,7 +416,7 @@ async function renderizarDetallePropiedad(propiedad) {
         <!-- Columna principal (izquierda) -->
         <div class="detalle-main" style="flex:2; min-width:320px;">
           <!-- Galería principal -->
-          <div class="property-gallery" id="gallery" style="width:100%;">
+          <div class="property-gallery" id="gallery" style="width:100%; margin-top:0;">
             ${imagenes.length > 0 ? `
               <div class="gallery-main" style="width:100%; max-width:772px; height:470px; max-height:70vw; min-width:220px; margin-left:auto; margin-right:auto; display:flex; align-items:center; justify-content:center; background:#f7f7f7; position:relative;">
                 <button class="carousel-arrow prev" aria-label="Imagen anterior" style="position:absolute; left:10px; top:50%; transform:translateY(-50%); z-index:2; background:rgba(255,255,255,0.7); border:none; border-radius:50%; width:40px; height:40px; display:flex; align-items:center; justify-content:center; cursor:pointer;">
@@ -456,18 +459,59 @@ async function renderizarDetallePropiedad(propiedad) {
           </div>
         </div>
         <!-- Columna derecha -->
-        <aside class="detalle-sidebar" style="flex:1; min-width:320px; max-width:400px; display:flex; flex-direction:column; gap:2.5rem;">
+        <aside class="detalle-sidebar" style="flex:1; min-width:320px; max-width:400px; display:flex; flex-direction:column; gap:2.5rem; margin-top:0;">
           <!-- Cuadro informativo -->
-          <div class="info-box" style="background:var(--color-background); border-radius:14px; box-shadow:0 2px 8px var(--color-shadow); padding:1.5rem 1.2rem; display:flex; flex-direction:column; gap:1.2rem;">
-            <h1 class="property-main-title" style="font-size:1.5rem; margin-bottom:0.5rem;">${propiedad.Titulo}</h1>
-            ${propiedad.Tipo && propiedad.Objetivo ? `<div class="property-type">${propiedad.Tipo} • ${propiedad.Objetivo}</div>` : ''}
-            ${propiedad.Ubicacion ? `<div class="property-location">📍 ${propiedad.Ubicacion}</div>` : ''}
-            ${propiedad.Precio ? `<div class="property-price"><div class="price-uf">${precioUF}</div>${precioCLP ? `<div class="price-clp">${precioCLP}</div>` : ''}</div>` : ''}
-            <div class="property-key-features" style="flex-direction:row; gap:1.5rem; margin-top:0.5rem;">
-              ${propiedad.Dormitorios ? `<span class="feature-item">🛏 ${propiedad.Dormitorios}</span>` : ''}
-              ${propiedad.Banos ? `<span class="feature-item">🚿 ${propiedad.Banos}</span>` : ''}
-              ${propiedad.Superficie ? `<span class="feature-item">🏡 ${propiedad.Superficie} m² totales</span>` : ''}
-              ${propiedad.M2utiles ? `<span class="feature-item">📏 ${propiedad.M2utiles} m² útiles</span>` : ''}
+          <div class="info-box" style="background:var(--color-background); border:1px solid var(--color-text-primary); border-radius:14px; box-shadow:0 2px 8px var(--color-shadow); padding:2rem; display:flex; flex-direction:column; gap:1.5rem; height:fit-content; margin-top:0;">
+            ${propiedad.Tipo && propiedad.Objetivo ? `<div class="property-type" style="font-size:0.9rem; color:var(--color-text-secondary); font-weight:500; margin:0; text-transform:capitalize;">${propiedad.Tipo} en ${propiedad.Objetivo}</div>` : ''}
+            <h1 class="property-main-title" style="font-size:1.6rem; margin:0; line-height:1.2; color:var(--color-text-primary);">${propiedad.Titulo}</h1>
+            ${propiedad.Ubicacion ? `<div class="property-location" style="font-size:1rem; color:var(--color-text-secondary); margin:0;">📍 ${propiedad.Ubicacion}</div>` : ''}
+            ${propiedad.Precio ? `<div class="property-price" style="margin:0.5rem 0;">
+              <div class="price-uf" style="font-size:2rem; font-weight:700; color:var(--color-primary-accent); margin:0;">${precioUF}</div>
+              ${precioCLP ? `<div class="price-clp" style="font-size:1.1rem; color:var(--color-text-secondary); margin-top:0.2rem;">${precioCLP}</div>` : ''}
+            </div>` : ''}
+            <div class="property-key-features" style="display:grid; grid-template-columns:1fr 1fr; gap:1rem; margin-top:0.5rem;">
+              ${propiedad.Dormitorios ? `<span class="feature-item" style="display:flex; align-items:center; gap:0.5rem; font-size:0.95rem; color:var(--color-text-primary); font-weight:500;">🛏 ${propiedad.Dormitorios}</span>` : ''}
+              ${propiedad.Banos ? `<span class="feature-item" style="display:flex; align-items:center; gap:0.5rem; font-size:0.95rem; color:var(--color-text-primary); font-weight:500;">🚿 ${propiedad.Banos}</span>` : ''}
+              ${propiedad.Superficie ? `<span class="feature-item" style="display:flex; align-items:center; gap:0.5rem; font-size:0.95rem; color:var(--color-text-primary); font-weight:500; grid-column:1/-1;">🏡 ${propiedad.Superficie} m² totales</span>` : ''}
+              ${propiedad.M2utiles ? `<span class="feature-item" style="display:flex; align-items:center; gap:0.5rem; font-size:0.95rem; color:var(--color-text-primary); font-weight:500; grid-column:1/-1;">📏 ${propiedad.M2utiles} m² útiles</span>` : ''}
+            </div>
+          </div>
+          
+          <!-- Cuadro informativo móvil (se muestra solo en móvil) -->
+          <div class="info-box-mobile" style="background:var(--color-background); border:1px solid var(--color-text-primary); border-radius:12px; box-shadow:0 2px 8px var(--color-shadow); padding:1.2rem; display:none; flex-direction:column; gap:1rem; margin-top:1rem;">
+            <!-- Fila 1: Tipo y Precio UF -->
+            <div style="display:flex; justify-content:space-between; align-items:flex-start; gap:1rem;">
+              ${propiedad.Tipo && propiedad.Objetivo ? `<div class="property-type-mobile" style="font-size:0.8rem; color:var(--color-text-secondary); font-weight:500; text-transform:capitalize; flex-shrink:0;">${propiedad.Tipo} en ${propiedad.Objetivo}</div>` : ''}
+              ${propiedad.Precio ? `<div class="price-uf-mobile" style="font-size:1.4rem; font-weight:700; color:var(--color-primary-accent); text-align:right; flex-shrink:0;">${precioUF}</div>` : ''}
+            </div>
+            
+            <!-- Fila 2: Título -->
+            <h1 class="property-main-title-mobile" style="font-size:1.2rem; margin:0; line-height:1.2; color:var(--color-text-primary); font-weight:600;">${propiedad.Titulo}</h1>
+            
+            <!-- Fila 3: Ubicación y Precio CLP -->
+            <div style="display:flex; justify-content:space-between; align-items:center; gap:1rem;">
+              ${propiedad.Ubicacion ? `<div class="property-location-mobile" style="font-size:0.85rem; color:var(--color-text-secondary); flex:1;">📍 ${propiedad.Ubicacion}</div>` : ''}
+              ${precioCLP ? `<div class="price-clp-mobile" style="font-size:0.9rem; color:var(--color-text-secondary); text-align:right; flex-shrink:0;">${precioCLP}</div>` : ''}
+            </div>
+            
+            <!-- Fila 4: Características en grid compacto -->
+            <div class="property-key-features-mobile" style="display:grid; grid-template-columns:repeat(4, 1fr); gap:0.5rem; margin-top:0.5rem;">
+              ${propiedad.Dormitorios ? `<span class="feature-item-mobile" style="display:flex; flex-direction:column; align-items:center; gap:0.2rem; font-size:0.75rem; color:var(--color-text-primary); font-weight:500; text-align:center;">
+                <span style="font-size:1rem;">🛏</span>
+                <span>${propiedad.Dormitorios}</span>
+              </span>` : ''}
+              ${propiedad.Banos ? `<span class="feature-item-mobile" style="display:flex; flex-direction:column; align-items:center; gap:0.2rem; font-size:0.75rem; color:var(--color-text-primary); font-weight:500; text-align:center;">
+                <span style="font-size:1rem;">🚿</span>
+                <span>${propiedad.Banos}</span>
+              </span>` : ''}
+              ${propiedad.Superficie ? `<span class="feature-item-mobile" style="display:flex; flex-direction:column; align-items:center; gap:0.2rem; font-size:0.75rem; color:var(--color-text-primary); font-weight:500; text-align:center;">
+                <span style="font-size:1rem;">🏡</span>
+                <span>${propiedad.Superficie}m²</span>
+              </span>` : ''}
+              ${propiedad.M2utiles ? `<span class="feature-item-mobile" style="display:flex; flex-direction:column; align-items:center; gap:0.2rem; font-size:0.75rem; color:var(--color-text-primary); font-weight:500; text-align:center;">
+                <span style="font-size:1rem;">📏</span>
+                <span>${propiedad.M2utiles}m²</span>
+              </span>` : ''}
             </div>
           </div>
           <!-- Propiedades destacadas -->
@@ -503,8 +547,12 @@ async function renderizarDetallePropiedad(propiedad) {
   }
 
   configurarWhatsApp(propiedad.Titulo);
-  if (imagenes.length > 1) setTimeout(() => { inicializarGaleria(imagenes); }, 100);
   cargarSidebarDestacadas(propiedad);
+  
+  // Inicializar galería si hay más de una imagen
+  if (imagenes.length > 1) {
+    setTimeout(() => { inicializarGaleria(imagenes); }, 100);
+  }
 
   // Mostrar ficha técnica y características en desktop/móvil según tamaño de pantalla
   function ajustarFichaTecnicaYCaracteristicas() {
@@ -512,38 +560,32 @@ async function renderizarDetallePropiedad(propiedad) {
     const fichaMobile = document.querySelector('.ficha-mobile');
     const caracDesktop = document.querySelector('.caracteristicas-desktop');
     const caracMobile = document.querySelector('.caracteristicas-mobile');
+    const infoBoxDesktop = document.querySelector('.info-box');
+    const infoBoxMobile = document.querySelector('.info-box-mobile');
+    
     if (window.innerWidth >= 1024) {
+      // Desktop
       if (fichaDesktop) fichaDesktop.style.display = 'block';
       if (fichaMobile) fichaMobile.style.display = 'none';
       if (caracDesktop) caracDesktop.style.display = 'block';
       if (caracMobile) caracMobile.style.display = 'none';
+      if (infoBoxDesktop) infoBoxDesktop.style.display = 'flex';
+      if (infoBoxMobile) infoBoxMobile.style.display = 'none';
     } else {
+      // Móvil
       if (fichaDesktop) fichaDesktop.style.display = 'none';
       if (fichaMobile) fichaMobile.style.display = 'block';
       if (caracDesktop) caracDesktop.style.display = 'none';
       if (caracMobile) caracMobile.style.display = 'block';
+      if (infoBoxDesktop) infoBoxDesktop.style.display = 'none';
+      if (infoBoxMobile) infoBoxMobile.style.display = 'flex';
     }
   }
   ajustarFichaTecnicaYCaracteristicas();
   window.addEventListener('resize', ajustarFichaTecnicaYCaracteristicas);
 
-  // Agregar funcionalidad JS para las flechas en la galería principal
-  setTimeout(() => {
-    const mainImage = document.getElementById('main-image');
-    const prevBtn = document.querySelector('.gallery-main .carousel-arrow.prev');
-    const nextBtn = document.querySelector('.gallery-main .carousel-arrow.next');
-    let currentIdx = 0;
-    if (mainImage && prevBtn && nextBtn && imagenes.length > 1) {
-      prevBtn.addEventListener('click', () => {
-        currentIdx = (currentIdx - 1 + imagenes.length) % imagenes.length;
-        mainImage.src = imagenes[currentIdx];
-      });
-      nextBtn.addEventListener('click', () => {
-        currentIdx = (currentIdx + 1) % imagenes.length;
-        mainImage.src = imagenes[currentIdx];
-      });
-    }
-  }, 200);
+  // La funcionalidad de la galería se maneja completamente en inicializarGaleria()
+  // No necesitamos código adicional aquí
 }
 
 /**
@@ -612,42 +654,64 @@ async function cargarSidebarDestacadas(propiedadActual) {
   }
 }
 
-/**
- * Renderiza la galería de imágenes
- * @param {Array} imagenes - Array de URLs de imágenes
- */
-function renderizarGaleria(imagenes) {
-  // La galería se renderiza en el HTML principal
-  // Aquí solo configuramos la funcionalidad
-  setTimeout(() => {
-    inicializarGaleria(imagenes);
-  }, 100);
-}
+
 
 /**
  * Inicializa la funcionalidad de la galería
  * @param {Array} imagenes - Array de URLs de imágenes
  */
 function inicializarGaleria(imagenes) {
+  console.log('🖼️ Inicializando galería con', imagenes.length, 'imágenes');
+  
   let current = 0;
   const mainImg = document.getElementById('main-image');
   const thumbs = document.querySelectorAll('.gallery-thumbnails img');
-  const left = document.querySelector('.gallery-arrow.left');
-  const right = document.querySelector('.gallery-arrow.right');
+  // Usar los selectores correctos para las flechas (los que se generan en el HTML dinámico)
+  const left = document.querySelector('.gallery-main .carousel-arrow.prev');
+  const right = document.querySelector('.gallery-main .carousel-arrow.next');
   const lightbox = document.getElementById('lightbox-modal');
   const lightboxImg = document.getElementById('lightbox-img');
   const closeLightbox = document.querySelector('.lightbox-close');
 
-  if (!mainImg || !thumbs.length) return;
+  console.log('🔍 Elementos encontrados:', {
+    mainImg: !!mainImg,
+    thumbs: thumbs.length,
+    left: !!left,
+    right: !!right
+  });
+
+  if (!mainImg || !thumbs.length) {
+    console.log('❌ No se encontraron elementos necesarios para la galería');
+    return;
+  }
 
   function showImage(idx) {
     current = idx;
+    console.log('🖼️ Mostrando imagen', current + 1, 'de', imagenes.length);
     mainImg.src = imagenes[current];
-    thumbs.forEach((t, i) => t.classList.toggle('active', i === current));
+    // Actualizar la clase 'active' en los thumbnails
+    thumbs.forEach((t, i) => {
+      const isActive = i === current;
+      t.classList.toggle('active', isActive);
+      console.log(`  Thumbnail ${i + 1}: ${isActive ? 'ACTIVO' : 'inactivo'}`);
+    });
   }
 
-  if (left) left.addEventListener('click', () => showImage((current - 1 + imagenes.length) % imagenes.length));
-  if (right) right.addEventListener('click', () => showImage((current + 1) % imagenes.length));
+  // Agregar event listeners para las flechas
+  if (left) {
+    console.log('⬅️ Agregando event listener a flecha izquierda');
+    left.addEventListener('click', () => {
+      console.log('⬅️ Flecha izquierda clickeada');
+      showImage((current - 1 + imagenes.length) % imagenes.length);
+    });
+  }
+  if (right) {
+    console.log('➡️ Agregando event listener a flecha derecha');
+    right.addEventListener('click', () => {
+      console.log('➡️ Flecha derecha clickeada');
+      showImage((current + 1) % imagenes.length);
+    });
+  }
   
   thumbs.forEach((thumb, i) => {
     thumb.addEventListener('click', () => showImage(i));
@@ -686,6 +750,7 @@ function inicializarGaleria(imagenes) {
 
   // Inicializar
   showImage(0);
+  console.log('✅ Galería inicializada correctamente');
 }
 
 /**
