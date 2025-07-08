@@ -439,9 +439,7 @@ async function renderizarDetallePropiedad(propiedad) {
     mainContent.innerHTML = `
       
       <div class="detalle-layout" style="display:flex; flex-wrap:wrap; gap:3rem; align-items:flex-start;">
-        <!-- Columna principal (izquierda) -->
         <div class="detalle-main" style="flex:2; min-width:320px;">
-          <!-- Galería principal -->
           <div class="property-gallery" id="gallery" style="width:100%; margin-top:0;">
             ${imagenes.length > 0 ? `
               <div class="gallery-main" style="width:100%; max-width:772px; height:470px; max-height:70vw; min-width:220px; margin-left:auto; margin-right:auto; display:flex; align-items:center; justify-content:center; background:#f7f7f7; position:relative;">
@@ -463,24 +461,19 @@ async function renderizarDetallePropiedad(propiedad) {
               <div class="lightbox-modal" id="lightbox-modal"><button class="lightbox-close" aria-label="Cerrar">×</button><img src="" alt="Imagen ampliada" id="lightbox-img"></div>
             ` : ''}
           </div>
-          <!-- Cuadro informativo móvil (ahora después de la galería, solo visible en móvil) -->
           <div class="info-box-mobile" style="background:var(--color-background); border:1px solid var(--color-text-primary); border-radius:12px; box-shadow:0 2px 8px var(--color-shadow); padding:1.2rem; display:none; flex-direction:column; gap:1rem; margin-bottom:1.5rem;">
-            <!-- Fila 1: Tipo y Precio UF -->
             <div style="display:flex; justify-content:space-between; align-items:flex-start; gap:1rem;">
               ${propiedad.Tipo && propiedad.Objetivo ? `<div class="property-type-mobile" style="font-size:0.8rem; color:var(--color-text-secondary); font-weight:500; text-transform:capitalize; flex-shrink:0;">${propiedad.Tipo} en ${propiedad.Objetivo}</div>` : ''}
               ${propiedad.Precio ? `<div class="price-uf-mobile" style="font-size:1.4rem; font-weight:700; color:var(--color-primary-accent); text-align:right; flex-shrink:0;">${precioUF}</div>` : ''}
             </div>
             
-            <!-- Fila 2: Título -->
             <h1 class="property-main-title-mobile" style="font-size:1.2rem; margin:0; line-height:1.2; color:var(--color-text-primary); font-weight:600;">${propiedad.Titulo}</h1>
             
-            <!-- Fila 3: Ubicación y Precio CLP -->
             <div style="display:flex; justify-content:space-between; align-items:center; gap:1rem;">
               ${propiedad.Ubicacion ? `<div class="property-location-mobile" style="font-size:0.85rem; color:var(--color-text-secondary); flex:1;">📍 ${propiedad.Ubicacion}</div>` : ''}
               ${precioCLP ? `<div class="price-clp-mobile" style="font-size:0.9rem; color:var(--color-text-secondary); text-align:right; flex-shrink:0;">${precioCLP}</div>` : ''}
             </div>
             
-            <!-- Fila 4: Características en grid compacto -->
             <div class="property-key-features-mobile" style="display:grid; grid-template-columns:repeat(4, 1fr); gap:0.5rem; margin-top:0.5rem;">
               ${propiedad.Dormitorios ? `<span class="feature-item-mobile" style="display:flex; flex-direction:column; align-items:center; gap:0.2rem; font-size:0.75rem; color:var(--color-text-primary); font-weight:500; text-align:center;">
                 <span style="font-size:1rem;">🛏</span>
@@ -501,7 +494,6 @@ async function renderizarDetallePropiedad(propiedad) {
             </div>
           </div>
 
-          <!-- Ficha técnica y características móviles (movidos aquí) -->
           <div class="technical-specs-section ficha-mobile" style="display:block;">
             <h2 class="section-title" style="font-size:1.2rem; text-align:left; margin-bottom:1rem;">Ficha Técnica</h2>
             <div class="specs-grid" style="display:grid; grid-template-columns:repeat(auto-fit, minmax(150px, 1fr)); gap:0.75rem;">
@@ -557,7 +549,6 @@ async function renderizarDetallePropiedad(propiedad) {
             </div>
           </div>
 
-          <!-- BLOQUE DESKTOP REINSERTADO -->
           <div class="ficha-caracteristicas-desktop" style="margin-top:2.5rem;">
             <div class="technical-specs-section ficha-desktop" style="display:block;">
               <h2 class="section-title" style="font-size:1.2rem; text-align:left; margin-bottom:1rem;">Ficha Técnica</h2>
@@ -604,9 +595,7 @@ async function renderizarDetallePropiedad(propiedad) {
             </div>
           </div>
         </div>
-        <!-- Columna derecha -->
         <aside class="detalle-sidebar" style="flex:1; min-width:320px; max-width:400px; display:flex; flex-direction:column; gap:2.5rem; margin-top:0;">
-          <!-- Cuadro informativo -->
           <div class="info-box" style="background:var(--color-background); border:1px solid var(--color-text-primary); border-radius:14px; box-shadow:0 2px 8px var(--color-shadow); padding:2rem; display:flex; flex-direction:column; gap:1.5rem; height:fit-content; margin-top:0;">
             ${propiedad.Tipo && propiedad.Objetivo ? `<div class="property-type" style="font-size:0.9rem; color:var(--color-text-secondary); font-weight:500; margin:0; text-transform:capitalize;">${propiedad.Tipo} en ${propiedad.Objetivo}</div>` : ''}
             <h1 class="property-main-title" style="font-size:1.6rem; margin:0; line-height:1.2; color:var(--color-text-primary);">${propiedad.Titulo}</h1>
@@ -623,17 +612,17 @@ async function renderizarDetallePropiedad(propiedad) {
             </div>
           </div>
           
-          <!-- Propiedades destacadas -->
-          <div id="sidebar-destacadas"></div>
+          ${(propiedad.Region || propiedad.Ubicacion) ? `<div class="location-section"><h2 class="section-title">Ubicación</h2><div class="location-info">${propiedad.Region ? `<div class="location-region">${propiedad.Region}</div>` : ''}${propiedad.Ubicacion ? `<div class="location-area">${propiedad.Ubicacion}</div>` : ''}</div><div class="location-map"><iframe src="https://www.google.com/maps?q=${encodeURIComponent(propiedad.Ubicacion || propiedad.Region)}&z=13&output=embed" width="100%" height="300" style="border:0; border-radius:12px;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe></div></div>` : ''}
+
         </aside>
       </div>
-      <!-- Sección inferior: descripción, gastos, mapa, contacto, solo debajo de ambas columnas -->
       <div class="detalle-inferior" style="margin-top:3rem;">
         ${propiedad.Descripcion ? `<div class="description-section"><h2 class="section-title">Descripción</h2><div class="description-content">${propiedad.Descripcion}</div></div>` : ''}
         ${(propiedad.Gastos_comunes || propiedad.Contribuciones) ? `<div class="expenses-section"><h2 class="section-title">Gastos de Mantención</h2><div class="expenses-list">${propiedad.Gastos_comunes ? `<div class="expense-item"><span class="expense-label">Gastos Comunes:</span><span class="expense-value">${formatearPrecioCLP(propiedad.Gastos_comunes)}</span></div>` : ''}${propiedad.Contribuciones ? `<div class="expense-item"><span class="expense-label">Contribuciones:</span><span class="expense-value">${formatearPrecioCLP(propiedad.Contribuciones)}</span></div>` : ''}</div></div>` : ''}
-        ${(propiedad.Region || propiedad.Ubicacion) ? `<div class="location-section"><h2 class="section-title">Ubicación</h2><div class="location-info">${propiedad.Region ? `<div class="location-region">${propiedad.Region}</div>` : ''}${propiedad.Ubicacion ? `<div class="location-area">${propiedad.Ubicacion}</div>` : ''}</div><div class="location-map"><iframe src="https://www.google.com/maps?q=${encodeURIComponent(propiedad.Ubicacion || propiedad.Region)}&z=13&output=embed" width="100%" height="300" style="border:0; border-radius:12px;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe></div></div>` : ''}
+        
         <div class="contact-section"><a id="whatsapp-link" href="#" class="contact-button" target="_blank" rel="noopener"><span class="contact-icon">💬</span><span class="contact-text">Contactar por esta propiedad</span></a></div>
       </div>
+       <div id="bottom-destacadas" style="margin-top: 3rem;"></div>
     `;
   }
 
@@ -757,19 +746,19 @@ async function cargarSidebarDestacadas(propiedadActual) {
   // Tomar máximo 3
   filtradas = filtradas.slice(0, 3);
   // Renderizar
-  const cont = document.getElementById('sidebar-destacadas');
+  const cont = document.getElementById('bottom-destacadas');
   if (cont) {
     if (filtradas.length === 0) {
       cont.innerHTML = '';
       return;
     }
     cont.innerHTML = `
-      <div class="sidebar-section">
+      <div class="destacadas-section">
         <hr style="border:none; border-top:1.5px solid var(--color-border); margin:2.2rem 0 1.5rem 0;">
-        <div class="section-title" style="font-size:1.3rem; text-align:left; margin-bottom:1rem; color:var(--color-primary-accent); border:none; padding:0;">Propiedades Destacadas</div>
-        <div class="sidebar-destacadas-list" style="display:flex; flex-direction:column; gap:1.5rem;">
+        <div class="section-title" style="font-size:1.3rem; text-align:left; margin-bottom:1rem; color:var(--color-primary-accent); border:none; padding:0;">Propiedades Similares</div>
+        <div class="destacadas-list" style="display:flex; flex-direction:row; gap:1.5rem; overflow-x: auto; padding-bottom: 1rem;">
           ${filtradas.map(prop => `
-            <a href="/propiedad-dinamica.html?slug=${prop.Slug}" class="sidebar-destacada-card" style="display:block; background:var(--color-background); border-radius:14px; box-shadow:0 2px 8px var(--color-shadow); text-decoration:none; color:inherit; overflow:hidden; border:1px solid var(--color-border);">
+            <a href="/propiedad-dinamica.html?slug=${prop.Slug}" class="destacada-card" style="flex: 0 0 300px; background:var(--color-background); border-radius:14px; box-shadow:0 2px 8px var(--color-shadow); text-decoration:none; color:inherit; overflow:hidden; border:1px solid var(--color-border);">
               <div style="width:100%; aspect-ratio:1/1; background:#f5f5f5; display:flex; align-items:center; justify-content:center;">
                 <img src="${getPrimeraImagen(prop)}" alt="${prop.Titulo}" style="width:100%; height:100%; object-fit:cover; display:block;">
               </div>
@@ -928,4 +917,4 @@ window.PropiedadUtils = {
   renderizarDetallePropiedad,
   inicializarGaleria,
   configurarWhatsApp
-}; 
+};
