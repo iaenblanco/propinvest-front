@@ -474,34 +474,33 @@ async function renderizarDetallePropiedad(propiedad) {
             </div>
           </div>
 
-          <div class="technical-specs-section ficha-mobile" style="display:block;">
-            <h2 class="section-title" style="font-size:1.2rem; text-align:left; margin-bottom:1rem;">Ficha Técnica Completa</h2>
-            <div class="specs-grid" style="display:grid; grid-template-columns:repeat(auto-fit, minmax(150px, 1fr)); gap:0.75rem;">
+          <div class="technical-specs-section ficha-mobile" style="display:block; margin-top: 2rem;">
+            <h2 class="section-title" style="font-size:1.2rem; text-align:left; margin-bottom:1rem;">Características</h2>
+            <div class="specs-list-mobile" style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.8rem 1.5rem;">
               ${todasLasEspecificaciones.map(item => {
                 const valor = propiedad[item.key];
                 if (!valor && !(valor === true || valor === 'Sí')) return '';
-                
-                let valorHtml = '';
-                if (item.type === 'spec') {
-                  valorHtml = `<span class="spec-value" style="font-weight:700; color:var(--color-primary-accent);">${valor}${item.unit || ''}</span>`;
-                } else if (valor === true || valor === 'Sí') {
-                  valorHtml = `<span class="spec-value" style="font-weight:700; color:var(--color-primary-accent);">Sí</span>`;
+
+                const iconHtml = item.icon ? `<span style='display:inline-flex; align-items:center; justify-content:center; width:32px; height:32px; background:#f5f5f5; border-radius:50%;'>${item.icon}</span>` : ``;
+                let valorDisplay = '';
+
+                if (item.type === 'spec' && valor) {
+                    valorDisplay = `${valor}${item.unit || ''}`;
+                } else if (item.type === 'feature' && (valor === true || valor === 'Sí')) {
+                    valorDisplay = 'Sí';
+                } else {
+                    return ''; // No renderizar si no hay valor que mostrar
                 }
 
-                if (valorHtml === '') return ''; // No renderizar si no hay valor que mostrar
-
-                return `
-                  <div class="spec-item" style="display:flex; justify-content:space-between; align-items:center; padding:0.75rem; background:#f8f8f8; border-radius:8px;">
-                    <span class="spec-label" style="font-weight:600; color:var(--color-text-primary); font-size:0.9rem;">${item.label}</span>
-                    ${valorHtml}
-                  </div>`;
+                // Se elimina el fondo, padding y bordes para un look más limpio.
+                return `<div class="spec-row-mobile" style="display:flex; align-items:center; gap:0.6rem; font-size:0.9rem; color:var(--color-text-primary);">${iconHtml} ${item.label}: <span style='font-weight:700; margin-left:auto;'>${valorDisplay}</span></div>`;
               }).join('')}
             </div>
           </div>
           
           <div class="ficha-caracteristicas-desktop" style="margin-top:2.5rem;">
             <div class="technical-specs-section ficha-desktop" style="display:block;">
-              <h2 class="section-title" style="font-size:1.2rem; text-align:left; margin-bottom:1rem;">Ficha Técnica Completa</h2>
+              <h2 class="section-title" style="font-size:1.2rem; text-align:left; margin-bottom:1rem;">Características</h2>
               <div class="specs-list" style="width:100%; display:grid; grid-template-columns:repeat(3, 1fr); gap:0.7rem 2.5rem; margin-bottom:0.5rem;">
                 ${todasLasEspecificaciones.map(item => {
                   const valor = propiedad[item.key];
