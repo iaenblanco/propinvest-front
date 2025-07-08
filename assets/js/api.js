@@ -437,44 +437,7 @@ async function renderizarDetallePropiedad(propiedad) {
   const mainContent = document.querySelector('main .container');
   if (mainContent) {
     mainContent.innerHTML = `
-      <!-- Cuadro informativo móvil (arriba de todo, solo visible en móvil) -->
-      <div class="info-box-mobile" style="background:var(--color-background); border:1px solid var(--color-text-primary); border-radius:12px; box-shadow:0 2px 8px var(--color-shadow); padding:1.2rem; display:none; flex-direction:column; gap:1rem; margin-bottom:1.5rem;">
-        <!-- Fila 1: Tipo y Precio UF -->
-        <div style="display:flex; justify-content:space-between; align-items:flex-start; gap:1rem;">
-          ${propiedad.Tipo && propiedad.Objetivo ? `<div class="property-type-mobile" style="font-size:0.8rem; color:var(--color-text-secondary); font-weight:500; text-transform:capitalize; flex-shrink:0;">${propiedad.Tipo} en ${propiedad.Objetivo}</div>` : ''}
-          ${propiedad.Precio ? `<div class="price-uf-mobile" style="font-size:1.4rem; font-weight:700; color:var(--color-primary-accent); text-align:right; flex-shrink:0;">${precioUF}</div>` : ''}
-        </div>
-        
-        <!-- Fila 2: Título -->
-        <h1 class="property-main-title-mobile" style="font-size:1.2rem; margin:0; line-height:1.2; color:var(--color-text-primary); font-weight:600;">${propiedad.Titulo}</h1>
-        
-        <!-- Fila 3: Ubicación y Precio CLP -->
-        <div style="display:flex; justify-content:space-between; align-items:center; gap:1rem;">
-          ${propiedad.Ubicacion ? `<div class="property-location-mobile" style="font-size:0.85rem; color:var(--color-text-secondary); flex:1;">📍 ${propiedad.Ubicacion}</div>` : ''}
-          ${precioCLP ? `<div class="price-clp-mobile" style="font-size:0.9rem; color:var(--color-text-secondary); text-align:right; flex-shrink:0;">${precioCLP}</div>` : ''}
-        </div>
-        
-        <!-- Fila 4: Características en grid compacto -->
-        <div class="property-key-features-mobile" style="display:grid; grid-template-columns:repeat(4, 1fr); gap:0.5rem; margin-top:0.5rem;">
-          ${propiedad.Dormitorios ? `<span class="feature-item-mobile" style="display:flex; flex-direction:column; align-items:center; gap:0.2rem; font-size:0.75rem; color:var(--color-text-primary); font-weight:500; text-align:center;">
-            <span style="font-size:1rem;">🛏</span>
-            <span>${propiedad.Dormitorios}</span>
-          </span>` : ''}
-          ${propiedad.Banos ? `<span class="feature-item-mobile" style="display:flex; flex-direction:column; align-items:center; gap:0.2rem; font-size:0.75rem; color:var(--color-text-primary); font-weight:500; text-align:center;">
-            <span style="font-size:1rem;">🚿</span>
-            <span>${propiedad.Banos}</span>
-          </span>` : ''}
-          ${propiedad.Superficie ? `<span class="feature-item-mobile" style="display:flex; flex-direction:column; align-items:center; gap:0.2rem; font-size:0.75rem; color:var(--color-text-primary); font-weight:500; text-align:center;">
-            <span style="font-size:1rem;">🏡</span>
-            <span>${propiedad.Superficie}m²</span>
-          </span>` : ''}
-          ${propiedad.M2utiles ? `<span class="feature-item-mobile" style="display:flex; flex-direction:column; align-items:center; gap:0.2rem; font-size:0.75rem; color:var(--color-text-primary); font-weight:500; text-align:center;">
-            <span style="font-size:1rem;">📏</span>
-            <span>${propiedad.M2utiles}m²</span>
-          </span>` : ''}
-        </div>
-      </div>
-
+      
       <div class="detalle-layout" style="display:flex; flex-wrap:wrap; gap:3rem; align-items:flex-start;">
         <!-- Columna principal (izquierda) -->
         <div class="detalle-main" style="flex:2; min-width:320px;">
@@ -500,6 +463,44 @@ async function renderizarDetallePropiedad(propiedad) {
               <div class="lightbox-modal" id="lightbox-modal"><button class="lightbox-close" aria-label="Cerrar">×</button><img src="" alt="Imagen ampliada" id="lightbox-img"></div>
             ` : ''}
           </div>
+          <!-- Cuadro informativo móvil (ahora después de la galería, solo visible en móvil) -->
+          <div class="info-box-mobile" style="background:var(--color-background); border:1px solid var(--color-text-primary); border-radius:12px; box-shadow:0 2px 8px var(--color-shadow); padding:1.2rem; display:none; flex-direction:column; gap:1rem; margin-bottom:1.5rem;">
+            <!-- Fila 1: Tipo y Precio UF -->
+            <div style="display:flex; justify-content:space-between; align-items:flex-start; gap:1rem;">
+              ${propiedad.Tipo && propiedad.Objetivo ? `<div class="property-type-mobile" style="font-size:0.8rem; color:var(--color-text-secondary); font-weight:500; text-transform:capitalize; flex-shrink:0;">${propiedad.Tipo} en ${propiedad.Objetivo}</div>` : ''}
+              ${propiedad.Precio ? `<div class="price-uf-mobile" style="font-size:1.4rem; font-weight:700; color:var(--color-primary-accent); text-align:right; flex-shrink:0;">${precioUF}</div>` : ''}
+            </div>
+            
+            <!-- Fila 2: Título -->
+            <h1 class="property-main-title-mobile" style="font-size:1.2rem; margin:0; line-height:1.2; color:var(--color-text-primary); font-weight:600;">${propiedad.Titulo}</h1>
+            
+            <!-- Fila 3: Ubicación y Precio CLP -->
+            <div style="display:flex; justify-content:space-between; align-items:center; gap:1rem;">
+              ${propiedad.Ubicacion ? `<div class="property-location-mobile" style="font-size:0.85rem; color:var(--color-text-secondary); flex:1;">📍 ${propiedad.Ubicacion}</div>` : ''}
+              ${precioCLP ? `<div class="price-clp-mobile" style="font-size:0.9rem; color:var(--color-text-secondary); text-align:right; flex-shrink:0;">${precioCLP}</div>` : ''}
+            </div>
+            
+            <!-- Fila 4: Características en grid compacto -->
+            <div class="property-key-features-mobile" style="display:grid; grid-template-columns:repeat(4, 1fr); gap:0.5rem; margin-top:0.5rem;">
+              ${propiedad.Dormitorios ? `<span class="feature-item-mobile" style="display:flex; flex-direction:column; align-items:center; gap:0.2rem; font-size:0.75rem; color:var(--color-text-primary); font-weight:500; text-align:center;">
+                <span style="font-size:1rem;">🛏</span>
+                <span>${propiedad.Dormitorios}</span>
+              </span>` : ''}
+              ${propiedad.Banos ? `<span class="feature-item-mobile" style="display:flex; flex-direction:column; align-items:center; gap:0.2rem; font-size:0.75rem; color:var(--color-text-primary); font-weight:500; text-align:center;">
+                <span style="font-size:1rem;">🚿</span>
+                <span>${propiedad.Banos}</span>
+              </span>` : ''}
+              ${propiedad.Superficie ? `<span class="feature-item-mobile" style="display:flex; flex-direction:column; align-items:center; gap:0.2rem; font-size:0.75rem; color:var(--color-text-primary); font-weight:500; text-align:center;">
+                <span style="font-size:1rem;">🏡</span>
+                <span>${propiedad.Superficie}m²</span>
+              </span>` : ''}
+              ${propiedad.M2utiles ? `<span class="feature-item-mobile" style="display:flex; flex-direction:column; align-items:center; gap:0.2rem; font-size:0.75rem; color:var(--color-text-primary); font-weight:500; text-align:center;">
+                <span style="font-size:1rem;">📏</span>
+                <span>${propiedad.M2utiles}m²</span>
+              </span>` : ''}
+            </div>
+          </div>
+
           <!-- Ficha técnica y características debajo de la galería -->
           <div class="ficha-caracteristicas-desktop" style="margin-top:2.5rem;">
             <div class="technical-specs-section ficha-desktop" style="display:block;">
