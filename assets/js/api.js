@@ -501,7 +501,63 @@ async function renderizarDetallePropiedad(propiedad) {
             </div>
           </div>
 
-          <!-- Ficha técnica y características debajo de la galería -->
+          <!-- Ficha técnica y características móviles (movidos aquí) -->
+          <div class="technical-specs-section ficha-mobile" style="display:block;">
+            <h2 class="section-title" style="font-size:1.2rem; text-align:left; margin-bottom:1rem;">Ficha Técnica</h2>
+            <div class="specs-grid" style="display:grid; grid-template-columns:repeat(auto-fit, minmax(150px, 1fr)); gap:0.75rem;">
+              ${propiedad.Dormitorios ? `<div class="spec-item" style="display:flex; justify-content:space-between; align-items:center; padding:0.75rem; background:#f8f8f8; border-radius:8px;">
+                <span class="spec-label" style="font-weight:600; color:var(--color-text-primary); font-size:0.9rem;">Dormitorios</span>
+                <span class="spec-value" style="font-weight:700; color:var(--color-primary-accent);">${propiedad.Dormitorios}</span>
+              </div>` : ''}
+              ${propiedad.Banos ? `<div class="spec-item" style="display:flex; justify-content:space-between; align-items:center; padding:0.75rem; background:#f8f8f8; border-radius:8px;">
+                <span class="spec-label" style="font-weight:600; color:var(--color-text-primary); font-size:0.9rem;">Baños</span>
+                <span class="spec-value" style="font-weight:700; color:var(--color-primary-accent);">${propiedad.Banos}</span>
+              </div>` : ''}
+              ${propiedad.Superficie ? `<div class="spec-item" style="display:flex; justify-content:space-between; align-items:center; padding:0.75rem; background:#f8f8f8; border-radius:8px;">
+                <span class="spec-label" style="font-weight:600; color:var(--color-text-primary); font-size:0.9rem;">Superficie Total</span>
+                <span class="spec-value" style="font-weight:700; color:var(--color-primary-accent);">${propiedad.Superficie} m²</span>
+              </div>` : ''}
+              ${propiedad.M2utiles ? `<div class="spec-item" style="display:flex; justify-content:space-between; align-items:center; padding:0.75rem; background:#f8f8f8; border-radius:8px;">
+                <span class="spec-label" style="font-weight:600; color:var(--color-text-primary); font-size:0.9rem;">Superficie Útil</span>
+                <span class="spec-value" style="font-weight:700; color:var(--color-primary-accent);">${propiedad.M2utiles} m²</span>
+              </div>` : ''}
+              ${propiedad.suites ? `<div class="spec-item" style="display:flex; justify-content:space-between; align-items:center; padding:0.75rem; background:#f8f8f8; border-radius:8px;">
+                <span class="spec-label" style="font-weight:600; color:var(--color-text-primary); font-size:0.9rem;">Suites</span>
+                <span class="spec-value" style="font-weight:700; color:var(--color-primary-accent);">${propiedad.suites}</span>
+              </div>` : ''}
+              ${propiedad.Servicio ? `<div class="spec-item" style="display:flex; justify-content:space-between; align-items:center; padding:0.75rem; background:#f8f8f8; border-radius:8px;">
+                <span class="spec-label" style="font-weight:600; color:var(--color-text-primary); font-size:0.9rem;">Servicio</span>
+                <span class="spec-value" style="font-weight:700; color:var(--color-primary-accent);">${propiedad.Servicio}</span>
+              </div>` : ''}
+              ${propiedad.Estacionamientos ? `<div class="spec-item" style="display:flex; justify-content:space-between; align-items:center; padding:0.75rem; background:#f8f8f8; border-radius:8px;">
+                <span class="spec-label" style="font-weight:600; color:var(--color-text-primary); font-size:0.9rem;">Estacionamientos</span>
+                <span class="spec-value" style="font-weight:700; color:var(--color-primary-accent);">${propiedad.Estacionamientos}</span>
+              </div>` : ''}
+              ${propiedad.Terrazas ? `<div class="spec-item" style="display:flex; justify-content:space-between; align-items:center; padding:0.75rem; background:#f8f8f8; border-radius:8px;">
+                <span class="spec-label" style="font-weight:600; color:var(--color-text-primary); font-size:0.9rem;">Terrazas</span>
+                <span class="spec-value" style="font-weight:700; color:var(--color-primary-accent);">${propiedad.Terrazas}</span>
+              </div>` : ''}
+              ${propiedad.Bodega ? `<div class="spec-item" style="display:flex; justify-content:space-between; align-items:center; padding:0.75rem; background:#f8f8f8; border-radius:8px;">
+                <span class="spec-label" style="font-weight:600; color:var(--color-text-primary); font-size:0.9rem;">Bodega</span>
+                <span class="spec-value" style="font-weight:700; color:var(--color-primary-accent);">${propiedad.Bodega}</span>
+              </div>` : ''}
+            </div>
+          </div>
+          
+          <div class="caracteristicas-mobile" style="display:block; margin-top:2rem;">
+            <div class="caracteristicas-header-mobile" style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1rem;">
+              <h2 class="section-title" style="font-size:1.2rem; text-align:left; margin:0;">Características destacadas</h2>
+              <a href="#" class="ver-mas-caracteristicas-mobile" style="color:#1976d2; font-size:1rem; text-decoration:none; display:flex; align-items:center; gap:0.3rem; font-weight:500; background:none; border:none; cursor:pointer; padding:0;">
+                Revisar todas las características
+                <svg class="flecha-carac-mobile" style="transition:transform 0.3s;" width="18" height="18" viewBox="0 0 24 24"><path d="M7 10l5 5 5-5" fill="none" stroke="#1976d2" stroke-width="2"/></svg>
+              </a>
+            </div>
+            <div class="caracteristicas-content-mobile" style="display:none;">
+              ${getCaracteristicasHTML('mobile')}
+            </div>
+          </div>
+
+          <!-- BLOQUE DESKTOP REINSERTADO -->
           <div class="ficha-caracteristicas-desktop" style="margin-top:2.5rem;">
             <div class="technical-specs-section ficha-desktop" style="display:block;">
               <h2 class="section-title" style="font-size:1.2rem; text-align:left; margin-bottom:1rem;">Ficha Técnica</h2>
@@ -518,7 +574,6 @@ async function renderizarDetallePropiedad(propiedad) {
               </div>
             </div>
             
-            <!-- Características expandibles -->
             <div class="caracteristicas-desktop" style="display:block; margin-top:2rem;">
               <div class="caracteristicas-header" style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1rem;">
                 <h2 class="section-title" style="font-size:1.2rem; text-align:left; margin:0;">Características destacadas</h2>
@@ -578,62 +633,6 @@ async function renderizarDetallePropiedad(propiedad) {
         ${(propiedad.Gastos_comunes || propiedad.Contribuciones) ? `<div class="expenses-section"><h2 class="section-title">Gastos de Mantención</h2><div class="expenses-list">${propiedad.Gastos_comunes ? `<div class="expense-item"><span class="expense-label">Gastos Comunes:</span><span class="expense-value">${formatearPrecioCLP(propiedad.Gastos_comunes)}</span></div>` : ''}${propiedad.Contribuciones ? `<div class="expense-item"><span class="expense-label">Contribuciones:</span><span class="expense-value">${formatearPrecioCLP(propiedad.Contribuciones)}</span></div>` : ''}</div></div>` : ''}
         ${(propiedad.Region || propiedad.Ubicacion) ? `<div class="location-section"><h2 class="section-title">Ubicación</h2><div class="location-info">${propiedad.Region ? `<div class="location-region">${propiedad.Region}</div>` : ''}${propiedad.Ubicacion ? `<div class="location-area">${propiedad.Ubicacion}</div>` : ''}</div><div class="location-map"><iframe src="https://www.google.com/maps?q=${encodeURIComponent(propiedad.Ubicacion || propiedad.Region)}&z=13&output=embed" width="100%" height="300" style="border:0; border-radius:12px;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe></div></div>` : ''}
         <div class="contact-section"><a id="whatsapp-link" href="#" class="contact-button" target="_blank" rel="noopener"><span class="contact-icon">💬</span><span class="contact-text">Contactar por esta propiedad</span></a></div>
-      </div>
-      <!-- Mobile: ficha técnica y características debajo de la descripción -->
-      <div class="technical-specs-section ficha-mobile" style="display:block;">
-        <h2 class="section-title" style="font-size:1.2rem; text-align:left; margin-bottom:1rem;">Ficha Técnica</h2>
-        <div class="specs-grid" style="display:grid; grid-template-columns:repeat(auto-fit, minmax(150px, 1fr)); gap:0.75rem;">
-          ${propiedad.Dormitorios ? `<div class="spec-item" style="display:flex; justify-content:space-between; align-items:center; padding:0.75rem; background:#f8f8f8; border-radius:8px;">
-            <span class="spec-label" style="font-weight:600; color:var(--color-text-primary); font-size:0.9rem;">Dormitorios</span>
-            <span class="spec-value" style="font-weight:700; color:var(--color-primary-accent);">${propiedad.Dormitorios}</span>
-          </div>` : ''}
-          ${propiedad.Banos ? `<div class="spec-item" style="display:flex; justify-content:space-between; align-items:center; padding:0.75rem; background:#f8f8f8; border-radius:8px;">
-            <span class="spec-label" style="font-weight:600; color:var(--color-text-primary); font-size:0.9rem;">Baños</span>
-            <span class="spec-value" style="font-weight:700; color:var(--color-primary-accent);">${propiedad.Banos}</span>
-          </div>` : ''}
-          ${propiedad.Superficie ? `<div class="spec-item" style="display:flex; justify-content:space-between; align-items:center; padding:0.75rem; background:#f8f8f8; border-radius:8px;">
-            <span class="spec-label" style="font-weight:600; color:var(--color-text-primary); font-size:0.9rem;">Superficie Total</span>
-            <span class="spec-value" style="font-weight:700; color:var(--color-primary-accent);">${propiedad.Superficie} m²</span>
-          </div>` : ''}
-          ${propiedad.M2utiles ? `<div class="spec-item" style="display:flex; justify-content:space-between; align-items:center; padding:0.75rem; background:#f8f8f8; border-radius:8px;">
-            <span class="spec-label" style="font-weight:600; color:var(--color-text-primary); font-size:0.9rem;">Superficie Útil</span>
-            <span class="spec-value" style="font-weight:700; color:var(--color-primary-accent);">${propiedad.M2utiles} m²</span>
-          </div>` : ''}
-          ${propiedad.suites ? `<div class="spec-item" style="display:flex; justify-content:space-between; align-items:center; padding:0.75rem; background:#f8f8f8; border-radius:8px;">
-            <span class="spec-label" style="font-weight:600; color:var(--color-text-primary); font-size:0.9rem;">Suites</span>
-            <span class="spec-value" style="font-weight:700; color:var(--color-primary-accent);">${propiedad.suites}</span>
-          </div>` : ''}
-          ${propiedad.Servicio ? `<div class="spec-item" style="display:flex; justify-content:space-between; align-items:center; padding:0.75rem; background:#f8f8f8; border-radius:8px;">
-            <span class="spec-label" style="font-weight:600; color:var(--color-text-primary); font-size:0.9rem;">Servicio</span>
-            <span class="spec-value" style="font-weight:700; color:var(--color-primary-accent);">${propiedad.Servicio}</span>
-          </div>` : ''}
-          ${propiedad.Estacionamientos ? `<div class="spec-item" style="display:flex; justify-content:space-between; align-items:center; padding:0.75rem; background:#f8f8f8; border-radius:8px;">
-            <span class="spec-label" style="font-weight:600; color:var(--color-text-primary); font-size:0.9rem;">Estacionamientos</span>
-            <span class="spec-value" style="font-weight:700; color:var(--color-primary-accent);">${propiedad.Estacionamientos}</span>
-          </div>` : ''}
-          ${propiedad.Terrazas ? `<div class="spec-item" style="display:flex; justify-content:space-between; align-items:center; padding:0.75rem; background:#f8f8f8; border-radius:8px;">
-            <span class="spec-label" style="font-weight:600; color:var(--color-text-primary); font-size:0.9rem;">Terrazas</span>
-            <span class="spec-value" style="font-weight:700; color:var(--color-primary-accent);">${propiedad.Terrazas}</span>
-          </div>` : ''}
-          ${propiedad.Bodega ? `<div class="spec-item" style="display:flex; justify-content:space-between; align-items:center; padding:0.75rem; background:#f8f8f8; border-radius:8px;">
-            <span class="spec-label" style="font-weight:600; color:var(--color-text-primary); font-size:0.9rem;">Bodega</span>
-            <span class="spec-value" style="font-weight:700; color:var(--color-primary-accent);">${propiedad.Bodega}</span>
-          </div>` : ''}
-        </div>
-      </div>
-      
-      <!-- Características móviles expandibles -->
-      <div class="caracteristicas-mobile" style="display:block; margin-top:2rem;">
-        <div class="caracteristicas-header-mobile" style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1rem;">
-          <h2 class="section-title" style="font-size:1.2rem; text-align:left; margin:0;">Características destacadas</h2>
-          <a href="#" class="ver-mas-caracteristicas-mobile" style="color:#1976d2; font-size:1rem; text-decoration:none; display:flex; align-items:center; gap:0.3rem; font-weight:500; background:none; border:none; cursor:pointer; padding:0;">
-            Revisar todas las características
-            <svg class="flecha-carac-mobile" style="transition:transform 0.3s;" width="18" height="18" viewBox="0 0 24 24"><path d="M7 10l5 5 5-5" fill="none" stroke="#1976d2" stroke-width="2"/></svg>
-          </a>
-        </div>
-        <div class="caracteristicas-content-mobile" style="display:none;">
-          ${getCaracteristicasHTML('mobile')}
-        </div>
       </div>
     `;
   }
