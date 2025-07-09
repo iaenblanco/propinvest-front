@@ -387,10 +387,7 @@ async function renderizarDetallePropiedad(propiedad) {
     metaDescription.content = `${propiedad.Titulo} en ${propiedad.Ubicacion || propiedad.Region || ''}. ${propiedad.Dormitorios ? `${propiedad.Dormitorios} dormitorios` : ''} ${propiedad.Banos ? `${propiedad.Banos} baños` : ''} ${propiedad.Superficie ? `${propiedad.Superficie} m²` : ''}. Vive la exclusividad con PropInvest.`;
   }
 
-  // --- INICIO DE LA MODIFICACIÓN ---
-  // Array unificado de todas las características y especificaciones CON SUS ÍCONOS
   const todasLasEspecificaciones = [
-      // Ficha Técnica Principal
       { key: 'Dormitorios', label: 'Dormitorios', type: 'spec', icon: `<svg width='20' height='20' fill='none' stroke='#222' stroke-width='1.7' viewBox='0 0 24 24'><path d='M3 10h18M6 10V7a3 3 0 0 1 6 0v3m-6 0v7m12-7v7m-6 0v-4a2 2 0 0 1 4 0v4'/></svg>` },
       { key: 'Banos', label: 'Baños', type: 'spec', icon: `<svg width='20' height='20' fill='none' stroke='#222' stroke-width='1.7' viewBox='0 0 24 24'><path d='M7 10v6a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2v-6'/><circle cx='12' cy='7' r='3'/></svg>` },
       { key: 'Superficie', label: 'Mt2 Totales', type: 'spec', unit: ' m²', icon: `<svg width='20' height='20' fill='none' stroke='#222' stroke-width='1.7' viewBox='0 0 24 24'><rect x='3' y='3' width='18' height='18' rx='2'/></svg>` },
@@ -402,25 +399,23 @@ async function renderizarDetallePropiedad(propiedad) {
       { key: 'Estacionamientos', label: 'Estacionamientos', type: 'spec', icon: `<svg width='20' height='20' fill='none' stroke='#222' stroke-width='1.7' viewBox='0 0 24 24'><rect x='2' y='7' width='20' height='10' rx='2'/><circle cx='7' cy='17' r='2'/><circle cx='17' cy='17' r='2'/></svg>` },
       { key: 'Terrazas', label: 'Terrazas', type: 'spec', icon: `<svg width='20' height='20' fill='none' stroke='#222' stroke-width='1.7' viewBox='0 0 24 24'><rect x='3' y='3' width='18' height='18' rx='2'/><path d='M3 12h18'/></svg>` },
       { key: 'Bodega', label: 'Bodega', type: 'spec', icon: `<svg width='20' height='20' fill='none' stroke='#222' stroke-width='1.7' viewBox='0 0 24 24'><rect x='3' y='3' width='18' height='18' rx='2'/><path d='M9 3v18'/></svg>` },
-      // Características Adicionales (antes en "Características destacadas")
       { key: 'Piscina', label: 'Piscina', type: 'feature', icon: `<svg width='20' height='20' fill='none' stroke='#222' stroke-width='1.7' viewBox='0 0 24 24'><path d='M2 17c2 0 2-2 4-2s2 2 4 2 2-2 4-2 2 2 4 2 2-2 4-2'/><path d='M2 21c2 0 2-2 4-2s2 2 4 2 2-2 4-2 2 2 4 2 2-2 4-2'/></svg>` },
       { key: 'Quincho', label: 'Quincho', type: 'feature', icon: `<svg width='20' height='20' fill='none' stroke='#222' stroke-width='1.7' viewBox='0 0 24 24'><rect x='3' y='10' width='18' height='8' rx='2'/><path d='M7 10V7a5 5 0 0 1 10 0v3'/></svg>` },
       { key: 'sala_multiuso', label: 'Sala Multiuso', type: 'feature', icon: `<svg width='20' height='20' fill='none' stroke='#222' stroke-width='1.7' viewBox='0 0 24 24'><rect x='4' y='4' width='16' height='16' rx='2'/><path d='M8 4v16'/></svg>` },
       { key: 'Gimnasio', label: 'Gimnasio', type: 'feature', icon: `<svg width='20' height='20' fill='none' stroke='#222' stroke-width='1.7' viewBox='0 0 24 24'><circle cx='12' cy='12' r='10'/><path d='M8 12h8'/></svg>` },
       { key: 'Lavanderia', label: 'Lavandería', type: 'feature', icon: `<svg width='20' height='20' fill='none' stroke='#222' stroke-width='1.7' viewBox='0 0 24 24'><rect x='3' y='3' width='18' height='18' rx='2'/><circle cx='12' cy='12' r='5'/></svg>` },
       { key: 'Walk_in_closet', label: 'Walk-in Closet', type: 'feature', icon: `<svg width='20' height='20' fill='none' stroke='#222' stroke-width='1.7' viewBox='0 0 24 24'><rect x='4' y='4' width='16' height='16' rx='2'/><path d='M8 4v16'/></svg>` },
-      // Características con valor específico
       { key: 'ano_construccion', label: 'Año de construcción', type: 'spec', icon: `<svg width='20' height='20' fill='none' stroke='#222' stroke-width='1.7' viewBox='0 0 24 24'><rect x='3' y='3' width='18' height='18' rx='2'/><path d='M3 9h18'/></svg>` },
       { key: 'Piso', label: 'Piso', type: 'spec', icon: `<svg width='20' height='20' fill='none' stroke='#222' stroke-width='1.7' viewBox='0 0 24 24'><rect x='3' y='3' width='18' height='18' rx='2'/><path d='M3 12h18'/></svg>` },
       { key: 'Orientacion', label: 'Orientación', type: 'spec', icon: `<svg width='20' height='20' fill='none' stroke='#222' stroke-width='1.7' viewBox='0 0 24 24'><circle cx='12' cy='12' r='10'/><path d='M12 6v6l4 2'/></svg>` },
   ];
-  // --- FIN DE LA MODIFICACIÓN ---
 
   const mainContent = document.querySelector('main .container');
   if (mainContent) {
     mainContent.innerHTML = `
       
       <div class="detalle-layout" style="display:flex; flex-wrap:wrap; gap:3rem; align-items:flex-start;">
+        
         <div class="detalle-main" style="flex:2; min-width:320px;">
           <div class="property-gallery" id="gallery" style="width:100%; margin-top:0;">
             ${imagenes.length > 0 ? `
@@ -475,14 +470,12 @@ async function renderizarDetallePropiedad(propiedad) {
               </span>` : ''}
             </div>
           </div>
-
-          <div class="technical-specs-section ficha-mobile" style="display:block; margin-top: 2rem;">
-            <h2 class="section-title" style="font-size:1.2rem; text-align:left; margin-bottom:1rem;">Características</h2>
+           <div class="technical-specs-section ficha-mobile" style="display:block; margin-top: 2rem;">
+            <h2 class="section-title">Características</h2>
             <div class="specs-list-mobile" style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.8rem 1.5rem;">
               ${todasLasEspecificaciones.map(item => {
                 const valor = propiedad[item.key];
                 
-                // For currency, we want to show it even if it's 0. For others, only if truthy.
                 if (!valor && !(valor === true || valor === 'Sí') && item.type !== 'currency') return '';
 
                 const iconHtml = item.icon ? `<span style='display:inline-flex; align-items:center; justify-content:center; width:32px; height:32px; background:#f5f5f5; border-radius:50%;'>${item.icon}</span>` : ``;
@@ -496,43 +489,15 @@ async function renderizarDetallePropiedad(propiedad) {
                     valorDisplay = formatearPrecioCLP(valor || 0).replace('CLP ', '');
                 }
                 else {
-                    return ''; // Do not render if there is no value to display
+                    return ''; 
                 }
 
                 return `<div class="spec-row-mobile" style="display:flex; align-items:center; gap:0.6rem; font-size:0.9rem; color:var(--color-text-primary);">${iconHtml} ${item.label}: <span style='font-weight:700; margin-left:auto;'>${valorDisplay}</span></div>`;
               }).join('')}
             </div>
           </div>
-          
-          <div class="ficha-caracteristicas-desktop" style="margin-top:2.5rem;">
-            <div class="technical-specs-section ficha-desktop" style="display:block;">
-              <h2 class="section-title" style="font-size:1.2rem; text-align:left; margin-bottom:1rem;">Características</h2>
-              <div class="specs-list" style="width:100%; display:grid; grid-template-columns:repeat(3, 1fr); gap:0.7rem 2.5rem; margin-bottom:0.5rem;">
-                ${todasLasEspecificaciones.map(item => {
-                  const valor = propiedad[item.key];
-                  
-                  if (!valor && !(valor === true || valor === 'Sí') && item.type !== 'currency') return '';
-
-                  const iconHtml = item.icon ? `<span style='display:inline-flex; align-items:center; justify-content:center; width:32px; height:32px; background:#f5f5f5; border-radius:50%;'>${item.icon}</span>` : ``;
-                  let valorDisplay = '';
-
-                  if (item.type === 'spec' && valor) {
-                      valorDisplay = `${valor}${item.unit || ''}`;
-                  } else if (item.type === 'feature' && (valor === true || valor === 'Sí')) {
-                      valorDisplay = 'Sí';
-                  } else if (item.type === 'currency') {
-                    valorDisplay = formatearPrecioCLP(valor || 0).replace('CLP ', '');
-                  }
-                  else {
-                      return ''; // Do not render if there is no value to display
-                  }
-
-                  return `<div class="spec-row" style="display:flex; align-items:center; gap:0.7rem; font-size:1.08rem; color:var(--color-text-primary);">${iconHtml} ${item.label}: <span style='font-weight:700; margin-left:0.3rem;'>${valorDisplay}</span></div>`;
-                }).join('')}
-              </div>
-            </div>
-          </div>
         </div>
+
         <aside class="detalle-sidebar" style="flex:1; min-width:320px; max-width:400px; display:flex; flex-direction:column; gap:2.5rem; margin-top:0;">
           <div class="info-box" style="background:var(--color-background); border:1px solid var(--color-text-primary); border-radius:14px; box-shadow:0 2px 8px var(--color-shadow); padding:2rem; display:flex; flex-direction:column; gap:1.5rem; height:fit-content; margin-top:0;">
             ${propiedad.Tipo && propiedad.Objetivo ? `<div class="property-type" style="font-size:0.9rem; color:var(--color-text-secondary); font-weight:500; margin:0; text-transform:capitalize;">${propiedad.Tipo} en ${propiedad.Objetivo}</div>` : ''}
@@ -549,17 +514,48 @@ async function renderizarDetallePropiedad(propiedad) {
               ${propiedad.M2utiles ? `<span class="feature-item" style="display:flex; align-items:center; gap:0.5rem; font-size:0.95rem; color:var(--color-text-primary); font-weight:500; grid-column:1/-1;">📏 ${propiedad.M2utiles} m² útiles</span>` : ''}
             </div>
           </div>
-          
-          ${(propiedad.Region || propiedad.Ubicacion) ? `<div class="location-section"><h2 class="section-title">Ubicación</h2><div class="location-info">${propiedad.Region ? `<div class="location-region">${propiedad.Region}</div>` : ''}${propiedad.Ubicacion ? `<div class="location-area">${propiedad.Ubicacion}</div>` : ''}</div><div class="location-map"><iframe src="https://www.google.com/maps?q=${encodeURIComponent(propiedad.Ubicacion || propiedad.Region)}&z=13&output=embed" width="100%" height="300" style="border:0; border-radius:12px;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe></div></div>` : ''}
-
         </aside>
       </div>
+      
+      <div class="ficha-caracteristicas-desktop" style="margin-top:2.5rem;">
+            <div class="technical-specs-section ficha-desktop" style="display:block;">
+              <h2 class="section-title">Características</h2>
+              <div class="specs-list" style="width:100%; display:grid; grid-template-columns:repeat(4, 1fr); gap:0.7rem 2.5rem; margin-bottom:0.5rem;">
+                ${todasLasEspecificaciones.map(item => {
+                  const valor = propiedad[item.key];
+                  
+                  if (!valor && !(valor === true || valor === 'Sí') && item.type !== 'currency') return '';
+
+                  const iconHtml = item.icon ? `<span style='display:inline-flex; align-items:center; justify-content:center; width:32px; height:32px; background:#f5f5f5; border-radius:50%;'>${item.icon}</span>` : ``;
+                  let valorDisplay = '';
+
+                  if (item.type === 'spec' && valor) {
+                      valorDisplay = `${valor}${item.unit || ''}`;
+                  } else if (item.type === 'feature' && (valor === true || valor === 'Sí')) {
+                      valorDisplay = 'Sí';
+                  } else if (item.type === 'currency') {
+                    valorDisplay = formatearPrecioCLP(valor || 0).replace('CLP ', '');
+                  }
+                  else {
+                      return '';
+                  }
+
+                  return `<div class="spec-row" style="display:flex; align-items:center; gap:0.7rem; font-size:1.08rem; color:var(--color-text-primary);">${iconHtml} ${item.label}: <span style='font-weight:700; margin-left:0.3rem;'>${valorDisplay}</span></div>`;
+                }).join('')}
+              </div>
+            </div>
+          </div>
+
       <div class="detalle-inferior" style="margin-top:3rem;">
         ${propiedad.Descripcion ? `<div class="description-section"><h2 class="section-title">Descripción</h2><div class="description-content">${propiedad.Descripcion}</div></div>` : ''}
+        
+        ${(propiedad.Region || propiedad.Ubicacion) ? `<div class="location-section" style="margin-top:3rem;"><h2 class="section-title">Ubicación</h2><div class="location-info">${propiedad.Region ? `<div class="location-region">${propiedad.Region}</div>` : ''}${propiedad.Ubicacion ? `<div class="location-area">${propiedad.Ubicacion}</div>` : ''}</div><div class="location-map"><iframe src="https://www.google.com/maps?q=${encodeURIComponent(propiedad.Ubicacion || propiedad.Region)}&z=13&output=embed" width="100%" height="300" style="border:0; border-radius:12px;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe></div></div>` : ''}
+
         ${(propiedad.Gastos_comunes || propiedad.Contribuciones) ? `<div class="expenses-section"><h2 class="section-title">Gastos de Mantención</h2><div class="expenses-list">${propiedad.Gastos_comunes ? `<div class="expense-item"><span class="expense-label">Gastos Comunes:</span><span class="expense-value">${formatearPrecioCLP(propiedad.Gastos_comunes)}</span></div>` : ''}${propiedad.Contribuciones ? `<div class="expense-item"><span class="expense-label">Contribuciones:</span><span class="expense-value">${formatearPrecioCLP(propiedad.Contribuciones)}</span></div>` : ''}</div></div>` : ''}
         
         <div class="contact-section"><a id="whatsapp-link" href="#" class="contact-button" target="_blank" rel="noopener"><span class="contact-icon">💬</span><span class="contact-text">Contactar por esta propiedad</span></a></div>
       </div>
+
        <div id="bottom-destacadas" style="margin-top: 3rem;"></div>
     `;
   }
@@ -567,12 +563,10 @@ async function renderizarDetallePropiedad(propiedad) {
   configurarWhatsApp(propiedad.Titulo);
   cargarSidebarDestacadas(propiedad);
   
-  // Inicializar galería si hay más de una imagen
   if (imagenes.length > 1) {
     setTimeout(() => { inicializarGaleria(imagenes); }, 100);
   }
   
-  // Mostrar ficha técnica y características en desktop/móvil según tamaño de pantalla
   function ajustarFichaTecnicaYCaracteristicas() {
     const fichaDesktop = document.querySelector('.ficha-desktop');
     const fichaMobile = document.querySelector('.ficha-mobile');
@@ -580,13 +574,11 @@ async function renderizarDetallePropiedad(propiedad) {
     const infoBoxMobile = document.querySelector('.info-box-mobile');
     
     if (window.innerWidth >= 1024) {
-      // Desktop
       if (fichaDesktop) fichaDesktop.style.display = 'block';
       if (fichaMobile) fichaMobile.style.display = 'none';
       if (infoBoxDesktop) infoBoxDesktop.style.display = 'flex';
       if (infoBoxMobile) infoBoxMobile.style.display = 'none';
     } else {
-      // Móvil
       if (fichaDesktop) fichaDesktop.style.display = 'none';
       if (fichaMobile) fichaMobile.style.display = 'block';
       if (infoBoxDesktop) infoBoxDesktop.style.display = 'none';
