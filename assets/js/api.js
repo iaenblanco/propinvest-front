@@ -395,6 +395,8 @@ async function renderizarDetallePropiedad(propiedad) {
       { key: 'Banos', label: 'Baños', type: 'spec', icon: `<svg width='20' height='20' fill='none' stroke='#222' stroke-width='1.7' viewBox='0 0 24 24'><path d='M7 10v6a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2v-6'/><circle cx='12' cy='7' r='3'/></svg>` },
       { key: 'Superficie', label: 'Mt2 Totales', type: 'spec', unit: ' m²', icon: `<svg width='20' height='20' fill='none' stroke='#222' stroke-width='1.7' viewBox='0 0 24 24'><rect x='3' y='3' width='18' height='18' rx='2'/></svg>` },
       { key: 'M2utiles', label: 'Mt2 Útiles', type: 'spec', unit: ' m²', icon: `<svg width='20' height='20' fill='none' stroke='#222' stroke-width='1.7' viewBox='0 0 24 24'><rect x='3' y='3' width='18' height='18' rx='2'/><path d='M3 9h18'/></svg>` },
+      { key: 'Gastos_comunes', label: 'Gastos Comunes', type: 'currency', icon: `<svg width='20' height='20' fill='none' stroke='#222' stroke-width='1.7' viewBox='0 0 24 24'><path d='M3 21h18M5 21V7l7-4 7 4v14'/><path d='M9 21v-8h6v8'/></svg>` },
+      { key: 'Contribuciones', label: 'Contribuciones', type: 'currency', icon: `<svg width='20' height='20' fill='none' stroke='#222' stroke-width='1.7' viewBox='0 0 24 24'><path d='M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z'/><path d='M14 2v6h6M12 18h-1v-4h-1M16 18h-2'/></svg>` },
       { key: 'suites', label: 'Suites', type: 'spec', icon: `<svg width='20' height='20' fill='none' stroke='#222' stroke-width='1.7' viewBox='0 0 24 24'><circle cx='12' cy='8' r='4'/><path d='M2 20c0-4 8-6 10-6s10 2 10 6'/></svg>` },
       { key: 'Servicio', label: 'Servicio', type: 'spec', icon: `<svg width='20' height='20' fill='none' stroke='#222' stroke-width='1.7' viewBox='0 0 24 24'><rect x='4' y='4' width='16' height='16' rx='2'/><path d='M8 4v16'/></svg>` },
       { key: 'Estacionamientos', label: 'Estacionamientos', type: 'spec', icon: `<svg width='20' height='20' fill='none' stroke='#222' stroke-width='1.7' viewBox='0 0 24 24'><rect x='2' y='7' width='20' height='10' rx='2'/><circle cx='7' cy='17' r='2'/><circle cx='17' cy='17' r='2'/></svg>` },
@@ -479,7 +481,9 @@ async function renderizarDetallePropiedad(propiedad) {
             <div class="specs-list-mobile" style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.8rem 1.5rem;">
               ${todasLasEspecificaciones.map(item => {
                 const valor = propiedad[item.key];
-                if (!valor && !(valor === true || valor === 'Sí')) return '';
+                
+                // For currency, we want to show it even if it's 0. For others, only if truthy.
+                if (!valor && !(valor === true || valor === 'Sí') && item.type !== 'currency') return '';
 
                 const iconHtml = item.icon ? `<span style='display:inline-flex; align-items:center; justify-content:center; width:32px; height:32px; background:#f5f5f5; border-radius:50%;'>${item.icon}</span>` : ``;
                 let valorDisplay = '';
@@ -488,11 +492,13 @@ async function renderizarDetallePropiedad(propiedad) {
                     valorDisplay = `${valor}${item.unit || ''}`;
                 } else if (item.type === 'feature' && (valor === true || valor === 'Sí')) {
                     valorDisplay = 'Sí';
-                } else {
-                    return ''; // No renderizar si no hay valor que mostrar
+                } else if (item.type === 'currency') {
+                    valorDisplay = formatearPrecioCLP(valor || 0).replace('CLP ', '');
+                }
+                else {
+                    return ''; // Do not render if there is no value to display
                 }
 
-                // Se elimina el fondo, padding y bordes para un look más limpio.
                 return `<div class="spec-row-mobile" style="display:flex; align-items:center; gap:0.6rem; font-size:0.9rem; color:var(--color-text-primary);">${iconHtml} ${item.label}: <span style='font-weight:700; margin-left:auto;'>${valorDisplay}</span></div>`;
               }).join('')}
             </div>
@@ -504,7 +510,8 @@ async function renderizarDetallePropiedad(propiedad) {
               <div class="specs-list" style="width:100%; display:grid; grid-template-columns:repeat(3, 1fr); gap:0.7rem 2.5rem; margin-bottom:0.5rem;">
                 ${todasLasEspecificaciones.map(item => {
                   const valor = propiedad[item.key];
-                  if (!valor && !(valor === true || valor === 'Sí')) return '';
+                  
+                  if (!valor && !(valor === true || valor === 'Sí') && item.type !== 'currency') return '';
 
                   const iconHtml = item.icon ? `<span style='display:inline-flex; align-items:center; justify-content:center; width:32px; height:32px; background:#f5f5f5; border-radius:50%;'>${item.icon}</span>` : ``;
                   let valorDisplay = '';
@@ -513,8 +520,11 @@ async function renderizarDetallePropiedad(propiedad) {
                       valorDisplay = `${valor}${item.unit || ''}`;
                   } else if (item.type === 'feature' && (valor === true || valor === 'Sí')) {
                       valorDisplay = 'Sí';
-                  } else {
-                      return ''; // No renderizar si no hay valor que mostrar
+                  } else if (item.type === 'currency') {
+                    valorDisplay = formatearPrecioCLP(valor || 0).replace('CLP ', '');
+                  }
+                  else {
+                      return ''; // Do not render if there is no value to display
                   }
 
                   return `<div class="spec-row" style="display:flex; align-items:center; gap:0.7rem; font-size:1.08rem; color:var(--color-text-primary);">${iconHtml} ${item.label}: <span style='font-weight:700; margin-left:0.3rem;'>${valorDisplay}</span></div>`;
