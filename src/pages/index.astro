@@ -16,8 +16,30 @@ try {
 
     // Verificamos que 'todasDestacadas' sea un arreglo antes de filtrarlo
     if (Array.isArray(todasDestacadas)) {
-      const propiedadesVentaBruto = todasDestacadas.filter(p => p && p.attributes && p.attributes.Objetivo === 'Venta');
-      const propiedadesArriendoBruto = todasDestacadas.filter(p => p && p.attributes && p.attributes.Objetivo === 'Arriendo');
+      // AGREGAMOS LOGS DETALLADOS PARA VER LOS DATOS
+      console.log('🔍 Investigando datos de Strapi:');
+      todasDestacadas.forEach((prop, index) => {
+        console.log(`   Propiedad ${index + 1}:`, {
+          id: prop.id,
+          titulo: prop.attributes?.Titulo,
+          objetivo: prop.attributes?.Objetivo,
+          objetivoType: typeof prop.attributes?.Objetivo,
+          destacado: prop.attributes?.Destacado,
+          publicado: prop.attributes?.Publicado
+        });
+      });
+
+      const propiedadesVentaBruto = todasDestacadas.filter(p => {
+        const objetivo = p?.attributes?.Objetivo;
+        console.log(`🔍 Filtrando venta - Objetivo: "${objetivo}" (tipo: ${typeof objetivo})`);
+        return p && p.attributes && objetivo === 'Venta';
+      });
+      
+      const propiedadesArriendoBruto = todasDestacadas.filter(p => {
+        const objetivo = p?.attributes?.Objetivo;
+        console.log(`🔍 Filtrando arriendo - Objetivo: "${objetivo}" (tipo: ${typeof objetivo})`);
+        return p && p.attributes && objetivo === 'Arriendo';
+      });
       
       console.log('🏠 Propiedades venta encontradas:', propiedadesVentaBruto.length);
       console.log('🏘️ Propiedades arriendo encontradas:', propiedadesArriendoBruto.length);
