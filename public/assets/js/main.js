@@ -1,111 +1,19 @@
 // =============================
-// Carga dinámica de componentes (header y footer)
+// Inicialización principal - Solo funciones de UI
 // =============================
 
-// La carga dinámica de header/footer ya no es necesaria, Astro se encarga de eso.
 document.addEventListener('DOMContentLoaded', () => {
-  /*
-  // Cargar Header
-  fetch('/components/header.html')
-    .then(res => res.text())
-    .then(html => {
-      document.body.insertAdjacentHTML('afterbegin', html);
-      inicializarMenuMovil();
-      inicializarMenuDesplegable();
-    });
-
-  // Cargar Footer
-  fetch('/components/footer.html')
-    .then(res => res.text())
-    .then(html => {
-      document.body.insertAdjacentHTML('beforeend', html);
-    });
-  */
-    
-  // ¡ESTA LÓGICA TODAVÍA ES NECESARIA!
-  // Necesitamos que el menú y otras funciones se inicialicen.
-  // Como el header ya está en la página, podemos llamar a las funciones directamente.
+  // Inicializar funciones de UI básicas
   inicializarMenuMovil();
   inicializarMenuDesplegable();
-
-  // Cargar propiedades dinámicamente según la página (sin timeout)
-  cargarPropiedadesSegunPagina();
+  
+  // Inicializar barra UF si existe
+  if (typeof inicializarBarraUF === 'function') {
+    inicializarBarraUF();
+  }
+  
+  console.log('✅ PropInvest - UI inicializada correctamente');
 });
-
-// =============================
-// Carga dinámica de propiedades según la página
-// =============================
-
-function cargarPropiedadesSegunPagina() {
-  const currentPath = window.location.pathname;
-  
-  // Verificar si estamos en la página principal
-  if (currentPath === '/' || currentPath === '/index.html') {
-    // Cargar ambas propiedades destacadas en paralelo
-    cargarPropiedadesDestacadasParalelo();
-  }
-  
-  // Verificar si estamos en la página de propiedades general
-  else if (currentPath === '/propiedades.html' || currentPath === '/propiedades') {
-    if (typeof cargarTodasPropiedades === 'function') {
-      console.log('Llamando a cargarTodasPropiedades()');
-      cargarTodasPropiedades();
-    } else {
-      console.error('No existe la función cargarTodasPropiedades');
-    }
-  }
-  
-  // Verificar si estamos en una página de categoría específica
-  else if (currentPath.includes('/propiedades/')) {
-    if (typeof cargarPropiedadesPorCategoria === 'function') {
-      console.log('Llamando a cargarPropiedadesPorCategoria()');
-      cargarPropiedadesPorCategoria(currentPath);
-    } else {
-      console.error('No existe la función cargarPropiedadesPorCategoria');
-    }
-  }
-  
-  // Verificar si estamos en una página de detalle de propiedad
-  else if (currentPath.includes('/propiedades/') && currentPath.endsWith('.html')) {
-    // La página de detalle se maneja en propiedad-dinamica.html
-    // No necesitamos hacer nada aquí
-  }
-}
-
-/**
- * Carga las propiedades destacadas de venta y arriendo en paralelo
- * para optimizar el rendimiento
- */
-async function cargarPropiedadesDestacadasParalelo() {
-  try {
-    console.log('🚀 Iniciando carga paralela de propiedades destacadas...');
-    
-    const api = new StrapiAPI();
-    
-    // Cargar todas las propiedades destacadas en una sola llamada
-    const todasPropiedades = await api.getTodasPropiedadesDestacadas();
-    
-    // Renderizar propiedades de venta
-    if (typeof cargarPropiedadesDestacadasCarousel === 'function') {
-      console.log('Llamando a cargarPropiedadesDestacadasCarousel()');
-      cargarPropiedadesDestacadasCarousel('.featured-properties-carousel', todasPropiedades.venta);
-    } else {
-      console.error('No existe la función cargarPropiedadesDestacadasCarousel');
-    }
-    
-    // Renderizar propiedades de arriendo
-    if (typeof cargarPropiedadesDestacadasArriendoCarousel === 'function') {
-      console.log('Llamando a cargarPropiedadesDestacadasArriendoCarousel()');
-      cargarPropiedadesDestacadasArriendoCarousel('.featured-rental-properties-carousel', todasPropiedades.arriendo);
-    } else {
-      console.error('No existe la función cargarPropiedadesDestacadasArriendoCarousel');
-    }
-    
-    console.log('✅ Propiedades destacadas cargadas exitosamente');
-  } catch (error) {
-    console.error('Error al cargar propiedades destacadas en paralelo:', error);
-  }
-}
 
 // =============================
 // Menú móvil (hamburguesa)
@@ -198,14 +106,14 @@ function mostrarError(mensaje, mostrarEnUI = false) {
       padding: 1rem;
       border-radius: 8px;
       z-index: 1000;
-      max-width: 300px;
+      font-family: system-ui, -apple-system, sans-serif;
       box-shadow: 0 4px 12px rgba(0,0,0,0.15);
     `;
     errorDiv.textContent = mensaje;
     
     document.body.appendChild(errorDiv);
     
-    // Remover después de 5 segundos
+    // Remover automáticamente después de 5 segundos
     setTimeout(() => {
       if (errorDiv.parentNode) {
         errorDiv.parentNode.removeChild(errorDiv);
@@ -219,8 +127,11 @@ function mostrarError(mensaje, mostrarEnUI = false) {
  * @param {string} mensaje - Mensaje de éxito
  */
 function mostrarExito(mensaje) {
-  const successDiv = document.createElement('div');
-  successDiv.style.cssText = `
+  console.log('PropInvest Éxito:', mensaje);
+  
+  // Crear un elemento de notificación de éxito
+  const exitoDiv = document.createElement('div');
+  exitoDiv.style.cssText = `
     position: fixed;
     top: 20px;
     right: 20px;
@@ -229,28 +140,28 @@ function mostrarExito(mensaje) {
     padding: 1rem;
     border-radius: 8px;
     z-index: 1000;
-    max-width: 300px;
+    font-family: system-ui, -apple-system, sans-serif;
     box-shadow: 0 4px 12px rgba(0,0,0,0.15);
   `;
-  successDiv.textContent = mensaje;
+  exitoDiv.textContent = mensaje;
   
-  document.body.appendChild(successDiv);
+  document.body.appendChild(exitoDiv);
   
-  // Remover después de 3 segundos
+  // Remover automáticamente después de 3 segundos
   setTimeout(() => {
-    if (successDiv.parentNode) {
-      successDiv.parentNode.removeChild(successDiv);
+    if (exitoDiv.parentNode) {
+      exitoDiv.parentNode.removeChild(exitoDiv);
     }
   }, 3000);
 }
 
 // =============================
-// Funciones de utilidad para SEO y metadatos
+// Funciones de SEO y metadatos
 // =============================
 
 /**
  * Actualiza los metadatos de la página dinámicamente
- * @param {Object} metadata - Objeto con título, descripción, etc.
+ * @param {Object} metadata - Objeto con title, description, keywords, etc.
  */
 function actualizarMetadatos(metadata) {
   if (metadata.title) {
@@ -258,77 +169,90 @@ function actualizarMetadatos(metadata) {
   }
   
   if (metadata.description) {
-    const metaDesc = document.querySelector('meta[name="description"]');
-    if (metaDesc) {
-      metaDesc.content = metadata.description;
+    let metaDescription = document.querySelector('meta[name="description"]');
+    if (metaDescription) {
+      metaDescription.setAttribute('content', metadata.description);
     }
   }
   
-  if (metadata.image) {
-    const metaImage = document.querySelector('meta[property="og:image"]');
-    if (metaImage) {
-      metaImage.content = metadata.image;
+  if (metadata.keywords) {
+    let metaKeywords = document.querySelector('meta[name="keywords"]');
+    if (metaKeywords) {
+      metaKeywords.setAttribute('content', metadata.keywords);
     }
   }
 }
 
 // =============================
-// UF en tiempo real y barra superior
+// Funciones para la barra de UF (solo si está disponible)
 // =============================
 
+/**
+ * Muestra la barra UF con el valor actual
+ */
 function mostrarUF() {
-  fetch('https://mindicador.cl/api/uf')
-    .then(res => res.json())
-    .then(data => {
-      const uf = data.serie[0].valor;
-      const ufBarra = document.getElementById('uf-barra');
-      if (ufBarra) {
-        ufBarra.innerText = `UF $${uf.toLocaleString('es-CL', {minimumFractionDigits:2})}`;
-      }
-      window.valorUF = uf;
-    })
-    .catch(() => {
-      const ufBarra = document.getElementById('uf-barra');
-      if (ufBarra) {
-        ufBarra.innerText = 'No se pudo cargar el valor de la UF';
-      }
-    });
+  const barraUF = document.querySelector('.uf-bar');
+  if (barraUF && typeof obtenerTasaUF === 'function') {
+    barraUF.style.display = 'flex';
+    
+    // Actualizar valor UF
+    obtenerTasaUF()
+      .then(valor => {
+        const valorElement = barraUF.querySelector('.uf-value');
+        if (valorElement) {
+          valorElement.textContent = `UF: $${valor.toLocaleString('es-CL')}`;
+        }
+      })
+      .catch(error => {
+        console.error('Error al mostrar UF:', error);
+      });
+  }
 }
 
-// Ocultar barra UF al hacer scroll
+/**
+ * Oculta la barra UF al hacer scroll
+ */
 function ocultarBarraUFAlScroll() {
-  let lastScroll = 0;
-  window.addEventListener('scroll', function() {
-    const topBar = document.getElementById('top-bar-uf');
-    if (!topBar) return;
-    if (window.scrollY > 10) {
-      topBar.style.top = '-50px';
-    } else {
-      topBar.style.top = '0';
+  const barraUF = document.querySelector('.uf-bar');
+  if (!barraUF) return;
+  
+  let lastScrollTop = 0;
+  window.addEventListener('scroll', () => {
+    const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+    
+    if (scrollTop > lastScrollTop && scrollTop > 100) {
+      // Scrolling hacia abajo y más de 100px
+      barraUF.style.transform = 'translateY(-100%)';
+    } else if (scrollTop < lastScrollTop) {
+      // Scrolling hacia arriba
+      barraUF.style.transform = 'translateY(0)';
     }
+    
+    lastScrollTop = scrollTop;
   });
 }
 
-// Ejecutar después de cargar el header
+/**
+ * Inicializa la barra UF si existe en la página
+ */
 function inicializarBarraUF() {
-  mostrarUF();
-  ocultarBarraUFAlScroll();
+  const barraUF = document.querySelector('.uf-bar');
+  if (barraUF) {
+    mostrarUF();
+    ocultarBarraUFAlScroll();
+  }
 }
 
-// Esperar a que el header esté en el DOM
-const observer = new MutationObserver(() => {
-  if (document.getElementById('top-bar-uf')) {
-    inicializarBarraUF();
-    observer.disconnect();
-  }
-});
-observer.observe(document.body, { childList: true, subtree: true });
+// =============================
+// Exportar funciones globales
+// =============================
+window.inicializarMenuMovil = inicializarMenuMovil;
+window.inicializarMenuDesplegable = inicializarMenuDesplegable;
+window.animarContador = animarContador;
+window.mostrarError = mostrarError;
+window.mostrarExito = mostrarExito;
+window.actualizarMetadatos = actualizarMetadatos;
+window.mostrarUF = mostrarUF;
+window.inicializarBarraUF = inicializarBarraUF;
 
-// Exportar utilidades globales
-window.PropInvestUtils = {
-  animarContador,
-  mostrarError,
-  mostrarExito,
-  actualizarMetadatos,
-  cargarPropiedadesSegunPagina
-}; 
+console.log('✅ PropInvest Main - Solo funciones de UI, sin llamadas a Strapi'); 

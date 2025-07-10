@@ -1,40 +1,13 @@
 // =============================
-// Configuración de la API de Strapi
+// Configuración y utilidades para sitio estático
 // =============================
 
-const STRAPI_CONFIG = {
-  // URL base de la API de Strapi
-  API_BASE_URL: 'https://truthful-rhythm-e8bcafa766.strapiapp.com/api',
-  
-  // Endpoints optimizados (solo campos necesarios para listado)
-  ENDPOINTS: {
-    PROPIEDADES: '/propiedads?populate=Imagenes&fields[0]=Titulo&fields[1]=Slug&fields[2]=Precio&fields[3]=Ubicacion&fields[4]=Dormitorios&fields[5]=Banos&fields[6]=Superficie&fields[7]=Objetivo&fields[8]=Destacado&fields[9]=Publicado',
-    PROPIEDAD_BY_SLUG: '/propiedads?populate=*&filters[Slug][$eq]=',
-    PROPIEDADES_DESTACADAS: '/propiedads?populate=Imagenes&filters[Destacado][$eq]=true&filters[Publicado][$eq]=true&fields[0]=Titulo&fields[1]=Slug&fields[2]=Precio&fields[3]=Ubicacion&fields[4]=Dormitorios&fields[5]=Banos&fields[6]=Superficie&fields[7]=Objetivo&fields[8]=Destacado&fields[9]=Publicado',
-    PROPIEDADES_DESTACADAS_ARRIENDO: '/propiedads?populate=Imagenes&filters[Destacado][$eq]=true&filters[Publicado][$eq]=true&filters[Objetivo][$eq]=Arriendo&fields[0]=Titulo&fields[1]=Slug&fields[2]=Precio&fields[3]=Ubicacion&fields[4]=Dormitorios&fields[5]=Banos&fields[6]=Superficie&fields[7]=Objetivo&fields[8]=Destacado&fields[9]=Publicado',
-    PROPIEDADES_PUBLICADAS: '/propiedads?populate=Imagenes&filters[Publicado][$eq]=true&fields[0]=Titulo&fields[1]=Slug&fields[2]=Precio&fields[3]=Ubicacion&fields[4]=Dormitorios&fields[5]=Banos&fields[6]=Superficie&fields[7]=Objetivo&fields[8]=Destacado&fields[9]=Publicado'
-  },
-  
-  // Configuración de imágenes optimizada
-  IMAGE_CONFIG: {
-    // URL base para las imágenes de Strapi
-    BASE_URL: 'https://truthful-rhythm-e8bcafa766.strapiapp.com',
-    // Tamaños de imagen disponibles
-    SIZES: {
-      thumbnail: 'thumbnail',
-      small: 'small',
-      medium: 'medium',
-      large: 'large'
-    }
-  }
-};
-
 // =============================
-// Funciones de utilidad para la API
+// Funciones de utilidad para imágenes
 // =============================
 
 /**
- * Construye la URL completa para una imagen de Strapi
+ * Construye la URL completa para una imagen de Strapi (solo para datos ya pre-cargados)
  * @param {string} imageUrl - URL de la imagen desde Strapi
  * @param {string} size - Tamaño de imagen (thumbnail, small, medium, large)
  * @returns {string} URL completa de la imagen
@@ -47,8 +20,9 @@ function getStrapiImageUrl(imageUrl, size = 'medium') {
     return imageUrl;
   }
   
-  // Construir URL completa con el tamaño especificado
-  return `${STRAPI_CONFIG.IMAGE_CONFIG.BASE_URL}${imageUrl}?format=${size}`;
+  // Construir URL completa con el dominio de Strapi
+  const STRAPI_BASE_URL = 'https://truthful-rhythm-e8bcafa766.strapiapp.com';
+  return `${STRAPI_BASE_URL}${imageUrl}?format=${size}`;
 }
 
 /**
@@ -67,12 +41,19 @@ function formatearPrecio(precio) {
  * @returns {string} URL de la imagen
  */
 function getPrimeraImagen(propiedad) {
-  if (!propiedad.attributes.Imagenes || !propiedad.attributes.Imagenes.data || propiedad.attributes.Imagenes.data.length === 0) {
-    return '/assets/images/propiedad-default.jpg';
+  // Manejar formato con attributes (Strapi v4)
+  if (propiedad.attributes?.Imagenes?.data?.length > 0) {
+    const imagen = propiedad.attributes.Imagenes.data[0];
+    return getStrapiImageUrl(imagen.attributes.url);
   }
   
-  const primeraImagen = propiedad.attributes.Imagenes.data[0];
-  return getStrapiImageUrl(primeraImagen.attributes.url);
+  // Manejar formato simplificado
+  if (propiedad.Imagenes?.length > 0) {
+    const imagen = propiedad.Imagenes[0];
+    return getStrapiImageUrl(imagen.url || imagen);
+  }
+  
+  return '/assets/images/propiedad-default.jpg';
 }
 
 /**
@@ -81,29 +62,64 @@ function getPrimeraImagen(propiedad) {
  * @returns {Array} Array de URLs de imágenes
  */
 function getTodasImagenes(propiedad) {
-  if (!propiedad.attributes.Imagenes || !propiedad.attributes.Imagenes.data) {
-    return ['/assets/images/propiedad-default.jpg'];
+  // Manejar formato con attributes (Strapi v4)
+  if (propiedad.attributes?.Imagenes?.data) {
+    return propiedad.attributes.Imagenes.data.map(imagen => 
+      getStrapiImageUrl(imagen.attributes.url, 'large')
+    );
   }
   
-  return propiedad.attributes.Imagenes.data.map(imagen => 
-    getStrapiImageUrl(imagen.attributes.url, 'large')
-  );
+  // Manejar formato simplificado
+  if (propiedad.Imagenes?.length > 0) {
+    return propiedad.Imagenes.map(imagen => 
+      getStrapiImageUrl(imagen.url || imagen, 'large')
+    );
+  }
+  
+  return ['/assets/images/propiedad-default.jpg'];
 }
 
 // =============================
-// Validación de configuración
+// Funciones de utilidad para números y fechas
 // =============================
 
-// Verificar que las URLs estén configuradas correctamente
-console.log('✅ Configuración de Strapi cargada correctamente');
-console.log('🌐 API URL:', STRAPI_CONFIG.API_BASE_URL);
-console.log('🖼️ Imágenes URL:', STRAPI_CONFIG.IMAGE_CONFIG.BASE_URL);
+/**
+ * Formatea números grandes con separadores de miles
+ * @param {number} numero - Número a formatear
+ * @returns {string} Número formateado
+ */
+function formatearNumero(numero) {
+  if (!numero) return '0';
+  return numero.toLocaleString('es-CL');
+}
 
-// Exportar configuración y funciones
-window.STRAPI_CONFIG = STRAPI_CONFIG;
+/**
+ * Trunca texto a un número determinado de caracteres
+ * @param {string} texto - Texto a truncar
+ * @param {number} limite - Número máximo de caracteres
+ * @returns {string} Texto truncado
+ */
+function truncarTexto(texto, limite = 100) {
+  if (!texto || texto.length <= limite) return texto;
+  return texto.substring(0, limite).trim() + '...';
+}
+
+// =============================
+// Exportar funciones globales
+// =============================
 window.StrapiUtils = {
   getStrapiImageUrl,
   formatearPrecio,
   getPrimeraImagen,
-  getTodasImagenes
-}; 
+  getTodasImagenes,
+  formatearNumero,
+  truncarTexto
+};
+
+// También exportar individualmente para compatibilidad
+window.getStrapiImageUrl = getStrapiImageUrl;
+window.formatearPrecio = formatearPrecio;
+window.getPrimeraImagen = getPrimeraImagen;
+window.getTodasImagenes = getTodasImagenes;
+
+console.log('✅ Utilidades estáticas cargadas correctamente - Sin configuración de API'); 

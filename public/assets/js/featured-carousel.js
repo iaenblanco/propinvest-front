@@ -1,18 +1,17 @@
 // =============================
-// CARRUSEL DE PROPIEDADES DESTACADAS
-// Componente modular y reutilizable
+// CARRUSEL DE PROPIEDADES DESTACADAS - VERSION ESTÁTICA
+// Componente modular que trabaja solo con datos pre-cargados
 // =============================
 
-class FeaturedPropertiesCarousel {
+class StaticPropertiesCarousel {
   constructor(containerSelector, options = {}) {
     this.container = document.querySelector(containerSelector);
     this.options = {
-      autoPlay: options.autoPlay !== false, // Por defecto activado
-      autoPlayInterval: options.autoPlayInterval || 5000, // 5 segundos
-      showIndicators: options.showIndicators !== false, // Por defecto activado
-      showArrows: options.showArrows !== false, // Por defecto activado
-      itemsPerView: options.itemsPerView || this.getItemsPerView(), // Detectar automáticamente
-      propertyType: options.propertyType || 'venta', // Tipo de propiedades: 'venta' o 'arriendo'
+      autoPlay: options.autoPlay !== false,
+      autoPlayInterval: options.autoPlayInterval || 5000,
+      showIndicators: options.showIndicators !== false,
+      showArrows: options.showArrows !== false,
+      itemsPerView: options.itemsPerView || this.getItemsPerView(),
       ...options
     };
     
@@ -21,25 +20,23 @@ class FeaturedPropertiesCarousel {
     this.autoPlayTimer = null;
     this.isAnimating = false;
     
-    if (this.container) {
-      this.init();
-    } else {
+    if (!this.container) {
       console.error(`Contenedor no encontrado: ${containerSelector}`);
     }
   }
 
-  async init() {
+  /**
+   * Inicializa el carrusel con datos pre-cargados
+   * @param {Array} propiedades - Array de propiedades ya cargadas desde Astro
+   */
+  initWithData(propiedades) {
     try {
-      // Mostrar estado de carga
-      this.showLoading();
-      
-      // Cargar propiedades destacadas
-      const propiedades = await this.loadFeaturedProperties();
-      
-      if (propiedades.length === 0) {
+      if (!propiedades || propiedades.length === 0) {
         this.showEmptyState();
         return;
       }
+      
+      console.log(`🎠 Inicializando carrusel con ${propiedades.length} propiedades pre-cargadas`);
       
       // Renderizar el carrusel
       this.renderCarousel(propiedades);
@@ -58,43 +55,6 @@ class FeaturedPropertiesCarousel {
     }
   }
 
-  async loadFeaturedProperties() {
-    try {
-      const api = new StrapiAPI();
-      
-      // Cargar propiedades según el tipo especificado
-      if (this.options.propertyType === 'arriendo') {
-        return await api.getPropiedadesDestacadasArriendo();
-      } else {
-        return await api.getPropiedadesDestacadas();
-      }
-    } catch (error) {
-      console.error('Error al cargar propiedades destacadas:', error);
-      return [];
-    }
-  }
-
-  /**
-   * Carga propiedades destacadas con datos pre-cargados opcionales
-   * @param {Array} propiedadesPreCargadas - Propiedades ya cargadas (opcional)
-   */
-  async loadFeaturedPropertiesOptimized(propiedadesPreCargadas = null) {
-    if (propiedadesPreCargadas && propiedadesPreCargadas.length > 0) {
-      console.log('📦 Usando propiedades pre-cargadas:', propiedadesPreCargadas.length);
-      return propiedadesPreCargadas;
-    }
-    
-    return await this.loadFeaturedProperties();
-  }
-
-  showLoading() {
-    this.container.innerHTML = `
-      <div class="featured-loading">
-        Cargando propiedades destacadas...
-      </div>
-    `;
-  }
-
   showEmptyState() {
     this.container.innerHTML = `
       <div class="featured-loading">
@@ -106,7 +66,7 @@ class FeaturedPropertiesCarousel {
   showErrorState() {
     this.container.innerHTML = `
       <div class="featured-loading">
-        Error al cargar las propiedades destacadas. Por favor, intenta de nuevo.
+        Error al cargar las propiedades destacadas.
       </div>
     `;
   }
@@ -170,22 +130,24 @@ class FeaturedPropertiesCarousel {
   }
 
   createPropertyCard(propiedad) {
-    const imagen = this.getPrimeraImagen(propiedad);
-    const precio = this.formatearPrecio(propiedad.Precio);
+    // Manejar datos tanto del formato de Strapi como del formato simplificado
+    const datos = propiedad.attributes || propiedad;
+    const imagen = this.getPrimeraImagen(datos);
+    const precio = this.formatearPrecio(datos.Precio);
     
     return `
       <div class="featured-property-card">
-        <img src="${imagen}" alt="${propiedad.Titulo}" class="featured-property-image" />
+        <img src="${imagen}" alt="${datos.Titulo}" class="featured-property-image" />
         <div class="featured-property-content">
-          <h3 class="featured-property-title">${propiedad.Titulo}</h3>
-          <div class="featured-property-location">${propiedad.Ubicacion}</div>
+          <h3 class="featured-property-title">${datos.Titulo}</h3>
+          <div class="featured-property-location">${datos.Ubicacion}</div>
           <div class="featured-property-price">${precio}</div>
           <div class="featured-property-features">
-            <span>🛏 ${propiedad.Dormitorios}</span>
-            <span>🚿 ${propiedad.Banos}</span>
-            <span>🏡 ${propiedad.Superficie} m²</span>
+            <span>🛏 ${datos.Dormitorios || 'N/A'}</span>
+            <span>🚿 ${datos.Banos || 'N/A'}</span>
+            <span>🏡 ${datos.Superficie || 'N/A'} m²</span>
           </div>
-          <a href="/propiedades/${propiedad.Slug}" class="featured-property-btn">
+          <a href="/propiedades/${datos.Slug}" class="featured-property-btn">
             Ver Propiedad
           </a>
         </div>
@@ -202,108 +164,80 @@ class FeaturedPropertiesCarousel {
     if (this.nextArrow) {
       this.nextArrow.addEventListener('click', () => this.next());
     }
-    
+
     // Event listeners para indicadores
     this.indicators.forEach((indicator, index) => {
       indicator.addEventListener('click', () => this.goToSlide(index));
     });
-    
-    // Event listeners para teclado
-    document.addEventListener('keydown', (e) => {
-      if (this.container.contains(document.activeElement)) {
-        if (e.key === 'ArrowLeft') {
-          e.preventDefault();
-          this.prev();
-        } else if (e.key === 'ArrowRight') {
-          e.preventDefault();
-          this.next();
-        }
-      }
-    });
-    
-    // Pausar autoplay al hacer hover
-    if (this.options.autoPlay) {
+
+    // Pausar autoplay en hover
+    if (this.container) {
       this.container.addEventListener('mouseenter', () => this.pauseAutoPlay());
       this.container.addEventListener('mouseleave', () => this.resumeAutoPlay());
     }
-    
-    // Event listener para cambios de tamaño de ventana
-    window.addEventListener('resize', () => {
-      // Debounce para evitar demasiadas actualizaciones
-      clearTimeout(this.resizeTimer);
-      this.resizeTimer = setTimeout(() => {
-        this.updateItemsPerView();
-      }, 250);
-    });
+
+    // Responsive
+    window.addEventListener('resize', () => this.updateItemsPerView());
   }
 
   prev() {
     if (this.isAnimating) return;
-    
     const maxIndex = Math.ceil(this.totalItems / this.options.itemsPerView) - 1;
-    this.currentIndex = this.currentIndex > 0 ? this.currentIndex - 1 : maxIndex;
-    this.updateCarousel();
+    this.goToSlide(this.currentIndex > 0 ? this.currentIndex - 1 : maxIndex);
   }
 
   next() {
     if (this.isAnimating) return;
-    
     const maxIndex = Math.ceil(this.totalItems / this.options.itemsPerView) - 1;
-    this.currentIndex = this.currentIndex < maxIndex ? this.currentIndex + 1 : 0;
-    this.updateCarousel();
+    this.goToSlide(this.currentIndex < maxIndex ? this.currentIndex + 1 : 0);
   }
 
   goToSlide(index) {
-    if (this.isAnimating) return;
+    if (this.isAnimating || index === this.currentIndex) return;
     
     this.currentIndex = index;
     this.updateCarousel();
+    this.updateControls();
+    this.resetAutoPlay();
   }
 
   updateCarousel() {
+    if (!this.track) return;
+    
     this.isAnimating = true;
+    const translateX = -(this.currentIndex * 100);
+    this.track.style.transform = `translateX(${translateX}%)`;
     
-    // Calcular el desplazamiento
-    const cardWidth = this.track.querySelector('.featured-property-card').offsetWidth;
-    const gap = 32; // 2rem en píxeles
-    const translateX = -(this.currentIndex * (cardWidth + gap) * this.options.itemsPerView);
-    
-    // Aplicar transformación
-    this.track.style.transform = `translateX(${translateX}px)`;
-    
-    // Actualizar controles
-    this.updateControls();
-    
-    // Resetear autoplay
-    if (this.options.autoPlay) {
-      this.resetAutoPlay();
-    }
-    
-    // Marcar animación como completada
     setTimeout(() => {
       this.isAnimating = false;
-    }, 500);
+    }, 300);
   }
 
   updateControls() {
+    // Actualizar indicadores
+    this.indicators.forEach((indicator, index) => {
+      if (index === this.currentIndex) {
+        indicator.classList.add('active');
+      } else {
+        indicator.classList.remove('active');
+      }
+    });
+
+    // Actualizar flechas (opcional: deshabilitar en extremos)
     const maxIndex = Math.ceil(this.totalItems / this.options.itemsPerView) - 1;
     
-    // Actualizar flechas
     if (this.prevArrow) {
-      this.prevArrow.disabled = this.currentIndex === 0;
+      this.prevArrow.style.opacity = this.currentIndex === 0 ? '0.5' : '1';
     }
     
     if (this.nextArrow) {
-      this.nextArrow.disabled = this.currentIndex === maxIndex;
+      this.nextArrow.style.opacity = this.currentIndex === maxIndex ? '0.5' : '1';
     }
-    
-    // Actualizar indicadores
-    this.indicators.forEach((indicator, index) => {
-      indicator.classList.toggle('active', index === this.currentIndex);
-    });
   }
 
   startAutoPlay() {
+    if (!this.options.autoPlay) return;
+    
     this.autoPlayTimer = setInterval(() => {
       this.next();
     }, this.options.autoPlayInterval);
@@ -323,171 +257,120 @@ class FeaturedPropertiesCarousel {
   }
 
   resetAutoPlay() {
-    this.pauseAutoPlay();
-    this.resumeAutoPlay();
+    if (this.options.autoPlay) {
+      this.pauseAutoPlay();
+      this.startAutoPlay();
+    }
   }
 
-  // Métodos de utilidad
   getPrimeraImagen(propiedad) {
-    if (propiedad.Imagenes && propiedad.Imagenes.length > 0) {
-      return propiedad.Imagenes[0].url;
+    // Manejar formato de Strapi (con attributes)
+    if (propiedad.attributes?.Imagenes?.data?.length > 0) {
+      const imagen = propiedad.attributes.Imagenes.data[0];
+      const url = imagen.attributes?.url || imagen.url;
+      return url.startsWith('http') ? url : `https://truthful-rhythm-e8bcafa766.strapiapp.com${url}`;
     }
+    
+    // Manejar formato simplificado
+    if (propiedad.Imagenes?.length > 0) {
+      const imagen = propiedad.Imagenes[0];
+      const url = imagen.url || imagen;
+      return url.startsWith('http') ? url : `https://truthful-rhythm-e8bcafa766.strapiapp.com${url}`;
+    }
+    
     return '/assets/images/propiedad-default.jpg';
   }
 
   formatearPrecio(precio) {
-    if (!precio) return 'Consultar';
-    
-    // Usar la función global que formatea en UF
-    if (typeof window.StrapiUtils !== 'undefined' && window.StrapiUtils.formatearPrecio) {
-      return window.StrapiUtils.formatearPrecio(precio);
-    }
-    
-    // Fallback: formateo básico en UF
+    if (!precio) return 'UF 0';
     return `UF ${precio.toLocaleString('es-CL')}`;
   }
 
-  // Método público para destruir el carrusel
   destroy() {
+    // Limpiar event listeners y timers
     this.pauseAutoPlay();
     
-    if (this.prevArrow) {
-      this.prevArrow.removeEventListener('click', this.prev);
+    if (this.container) {
+      this.container.removeEventListener('mouseenter', () => this.pauseAutoPlay());
+      this.container.removeEventListener('mouseleave', () => this.resumeAutoPlay());
     }
     
-    if (this.nextArrow) {
-      this.nextArrow.removeEventListener('click', this.next);
-    }
+    window.removeEventListener('resize', () => this.updateItemsPerView());
     
-    this.indicators.forEach(indicator => {
-      indicator.removeEventListener('click', this.goToSlide);
-    });
+    // Limpiar referencias
+    this.container = null;
+    this.track = null;
+    this.indicators = null;
+    this.prevArrow = null;
+    this.nextArrow = null;
   }
 
-  // Método para detectar automáticamente el número de elementos por vista
   getItemsPerView() {
-    const width = window.innerWidth;
-    if (width <= 480) return 2; // Móvil pequeño: 2 elementos
-    if (width <= 768) return 2; // Móvil: 2 elementos
-    if (width <= 1024) return 2; // Tablet: 2 elementos
-    return 3; // Desktop: 3 elementos
+    if (window.innerWidth >= 1200) return 3;
+    if (window.innerWidth >= 768) return 2;
+    return 1;
   }
 
-  // Método para actualizar la configuración cuando cambia el tamaño de pantalla
   updateItemsPerView() {
     const newItemsPerView = this.getItemsPerView();
     if (newItemsPerView !== this.options.itemsPerView) {
       this.options.itemsPerView = newItemsPerView;
-      this.currentIndex = 0; // Resetear al primer slide
+      this.currentIndex = 0;
       this.updateCarousel();
-    }
-  }
-
-  /**
-   * Inicializa el carrusel con propiedades pre-cargadas
-   * @param {Array} propiedadesPreCargadas - Propiedades ya cargadas
-   */
-  async initWithData(propiedadesPreCargadas) {
-    try {
-      // Mostrar estado de carga
-      this.showLoading();
-      
-      if (!propiedadesPreCargadas || propiedadesPreCargadas.length === 0) {
-        this.showEmptyState();
-        return;
-      }
-      
-      // Renderizar el carrusel
-      this.renderCarousel(propiedadesPreCargadas);
-      
-      // Inicializar controles
-      this.initControls();
-      
-      // Iniciar autoplay si está habilitado
-      if (this.options.autoPlay) {
-        this.startAutoPlay();
-      }
-      
-    } catch (error) {
-      console.error('Error al inicializar el carrusel con datos:', error);
-      this.showErrorState();
+      this.updateControls();
     }
   }
 }
 
 // =============================
-// FUNCIÓN GLOBAL PARA INICIALIZAR EL CARRUSEL
+// Funciones de conveniencia para usar desde Astro
 // =============================
 
 /**
- * Inicializa el carrusel de propiedades destacadas
+ * Inicializa un carrusel de propiedades destacadas con datos pre-cargados
  * @param {string} containerSelector - Selector del contenedor
- * @param {Object} options - Opciones de configuración
- * @returns {FeaturedPropertiesCarousel} Instancia del carrusel
+ * @param {Array} propiedadesPreCargadas - Propiedades ya cargadas desde Astro
+ * @param {Object} options - Opciones del carrusel
  */
-function initFeaturedCarousel(containerSelector = '.featured-properties-carousel', options = {}) {
-  return new FeaturedPropertiesCarousel(containerSelector, options);
-}
+function cargarPropiedadesDestacadasCarousel(containerSelector = '.featured-properties-carousel', propiedadesPreCargadas = null, options = {}) {
+  if (!propiedadesPreCargadas || propiedadesPreCargadas.length === 0) {
+    console.warn('No se proporcionaron propiedades pre-cargadas para el carrusel de venta');
+    return;
+  }
 
-// =============================
-// FUNCIÓN PARA CARGAR PROPIEDADES DESTACADAS (COMPATIBILIDAD)
-// =============================
+  console.log(`🎠 Inicializando carrusel de venta con ${propiedadesPreCargadas.length} propiedades`);
+  
+  const carousel = new StaticPropertiesCarousel(containerSelector, options);
+  carousel.initWithData(propiedadesPreCargadas);
+  
+  return carousel;
+}
 
 /**
- * Carga propiedades destacadas en el carrusel (versión optimizada)
- * @param {string} containerSelector - Selector del contenedor
- * @param {Array} propiedadesPreCargadas - Propiedades ya cargadas (opcional)
+ * Inicializa un carrusel de propiedades destacadas en arriendo con datos pre-cargados
+ * @param {string} containerSelector - Selector del contenedor  
+ * @param {Array} propiedadesPreCargadas - Propiedades ya cargadas desde Astro
+ * @param {Object} options - Opciones del carrusel
  */
-async function cargarPropiedadesDestacadasCarousel(containerSelector = '.featured-properties-carousel', propiedadesPreCargadas = null) {
-  try {
-    const carousel = new FeaturedPropertiesCarousel(containerSelector, {
-      propertyType: 'venta',
-      autoPlay: true,
-      autoPlayInterval: 5000
-    });
-    
-    if (propiedadesPreCargadas) {
-      await carousel.initWithData(propiedadesPreCargadas);
-    } else {
-      await carousel.init();
-    }
-  } catch (error) {
-    console.error('Error al cargar carrusel de propiedades destacadas:', error);
+function cargarPropiedadesDestacadasArriendoCarousel(containerSelector = '.featured-rental-properties-carousel', propiedadesPreCargadas = null, options = {}) {
+  if (!propiedadesPreCargadas || propiedadesPreCargadas.length === 0) {
+    console.warn('No se proporcionaron propiedades pre-cargadas para el carrusel de arriendo');
+    return;
   }
+
+  console.log(`🎠 Inicializando carrusel de arriendo con ${propiedadesPreCargadas.length} propiedades`);
+  
+  const carousel = new StaticPropertiesCarousel(containerSelector, options);
+  carousel.initWithData(propiedadesPreCargadas);
+  
+  return carousel;
 }
 
 // =============================
-// FUNCIÓN PARA CARGAR PROPIEDADES DESTACADAS EN ARRIENDO
+// Exportar funciones globales
 // =============================
-
-/**
- * Carga propiedades destacadas en arriendo en el carrusel (versión optimizada)
- * @param {string} containerSelector - Selector del contenedor
- * @param {Array} propiedadesPreCargadas - Propiedades ya cargadas (opcional)
- */
-async function cargarPropiedadesDestacadasArriendoCarousel(containerSelector = '.featured-rental-properties-carousel', propiedadesPreCargadas = null) {
-  try {
-    const carousel = new FeaturedPropertiesCarousel(containerSelector, {
-      propertyType: 'arriendo',
-      autoPlay: true,
-      autoPlayInterval: 5000
-    });
-    
-    if (propiedadesPreCargadas) {
-      await carousel.initWithData(propiedadesPreCargadas);
-    } else {
-      await carousel.init();
-    }
-  } catch (error) {
-    console.error('Error al cargar carrusel de propiedades destacadas en arriendo:', error);
-  }
-}
-
-// =============================
-// EXPORTAR FUNCIONES GLOBALMENTE
-// =============================
-
-// Hacer las funciones disponibles globalmente
+window.StaticPropertiesCarousel = StaticPropertiesCarousel;
 window.cargarPropiedadesDestacadasCarousel = cargarPropiedadesDestacadasCarousel;
 window.cargarPropiedadesDestacadasArriendoCarousel = cargarPropiedadesDestacadasArriendoCarousel;
-window.initFeaturedCarousel = initFeaturedCarousel; 
+
+console.log('✅ Carrusel estático cargado correctamente - Sin llamadas a Strapi'); 
