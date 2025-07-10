@@ -1,31 +1,11 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-  <meta charset="UTF-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Asesorías Inmobiliarias | PropInvest</title>
-  <meta name="description" content="Recibe asesoría personalizada en inversiones inmobiliarias. Más de 15 años de experiencia en el mercado de lujo con PropInvest." />
-  <link rel="stylesheet" href="/assets/css/style.css">
-  <link rel="icon" href="/assets/images/favicon.png" type="image/png">
-  <!-- Datos estructurados JSON-LD -->
-  <script type="application/ld+json">
-    {
-      "@context": "https://schema.org",
-      "@type": "Service",
-      "name": "Asesorías Inmobiliarias",
-      "description": "Asesoría personalizada en inversiones inmobiliarias de lujo",
-      "provider": {
-        "@type": "Organization",
-        "name": "PropInvest"
-      }
-    }
-  </script>
-</head>
-<body>
-  <!-- Header inyectado dinámicamente -->
+---
+import Layout from '../layouts/Layout.astro';
+---
+<Layout
+  title="Asesorías Inmobiliarias | PropInvest"
+  description="Recibe asesoría personalizada en inversiones inmobiliarias. Más de 15 años de experiencia en el mercado de lujo con PropInvest."
+>
   <main>
-    <!-- Hero Section -->
     <section class="hero" style="background: linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.4)), url('/assets/images/hero-banner.jpg');">
       <div class="hero-content">
         <h1 class="hero-title">Asesorías Inmobiliarias</h1>
@@ -33,7 +13,6 @@
       </div>
     </section>
 
-    <!-- Servicios de Asesoría -->
     <section class="container" style="margin: 4rem auto;">
       <div class="section-title">Nuestros Servicios</div>
       <div class="section-subtitle">Brindamos asesoría integral en todas las etapas de tu inversión inmobiliaria</div>
@@ -89,7 +68,6 @@
       </div>
     </section>
 
-    <!-- Proceso de Asesoría -->
     <section class="container" style="margin: 4rem auto;">
       <div class="section-title">Nuestro Proceso</div>
       <div class="section-subtitle">Un enfoque sistemático para garantizar el éxito de tus inversiones</div>
@@ -121,7 +99,6 @@
       </div>
     </section>
 
-    <!-- CTA Section -->
     <section class="cta-banner" style="background: linear-gradient(135deg, var(--color-primary-accent), #8c6b3b); color: white; text-align: center; padding: 4rem 0; margin: 4rem 0;">
       <div class="container">
         <h2 style="font-size: 2.5rem; margin-bottom: 1rem; font-family: var(--font-secondary);">¿Listo para Invertir?</h2>
@@ -130,11 +107,4 @@
       </div>
     </section>
   </main>
-  <!-- Footer inyectado dinámicamente -->
-  
-  <!-- Scripts necesarios -->
-  <script src="/assets/js/config.js"></script>
-  <script src="/assets/js/api.js"></script>
-  <script src="/assets/js/main.js" defer></script>
-</body>
-</html> 
+</Layout>

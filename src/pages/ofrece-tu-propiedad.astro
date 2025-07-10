@@ -1,30 +1,11 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-  <meta charset="UTF-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Ofrece tu Propiedad | PropInvest</title>
-  <meta name="description" content="¿Quieres vender o arrendar tu propiedad? PropInvest se encarga de todo el proceso de venta o arriendo de tu inmueble, con la máxima confianza y profesionalismo." />
-  <link rel="stylesheet" href="/assets/css/style.css">
-  <link rel="icon" href="/assets/images/favicon.png" type="image/png">
-  <script type="application/ld+json">
-    {
-      "@context": "https://schema.org",
-      "@type": "Service",
-      "name": "Ofrece tu Propiedad",
-      "description": "Servicio de gestión de venta y arriendo de propiedades de lujo en Chile.",
-      "provider": {
-        "@type": "Organization",
-        "name": "PropInvest"
-      }
-    }
-  </script>
-</head>
-<body>
-  <!-- Header inyectado dinámicamente -->
+---
+import Layout from '../layouts/Layout.astro';
+---
+<Layout
+  title="Ofrece tu Propiedad | PropInvest"
+  description="¿Quieres vender o arrendar tu propiedad? PropInvest se encarga de todo el proceso de venta o arriendo de tu inmueble, con la máxima confianza y profesionalismo."
+>
   <main>
-    <!-- Hero Section -->
     <section class="hero" style="background: linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.4)), url('/assets/images/hero-banner.jpg');">
       <div class="hero-content">
         <h1 class="hero-title">Ofrece tu Propiedad</h1>
@@ -32,7 +13,6 @@
       </div>
     </section>
 
-    <!-- Beneficios de ofrecer tu propiedad con PropInvest -->
     <section class="container" style="margin: 4rem auto;">
       <div class="section-title">¿Por qué confiar en PropInvest?</div>
       <div class="section-subtitle">Gestionamos la venta o arriendo de tu propiedad con máxima dedicación y resultados comprobados.</div>
@@ -61,7 +41,6 @@
       </div>
     </section>
 
-    <!-- Proceso de gestión -->
     <section class="container" style="margin: 4rem auto;">
       <div class="section-title">¿Cómo funciona?</div>
       <div class="section-subtitle">Así gestionamos la venta o arriendo de tu propiedad</div>
@@ -84,7 +63,6 @@
       </div>
     </section>
 
-    <!-- CTA y datos de contacto directo -->
     <section class="container" style="margin-bottom:4rem;">
       <div class="section-title">¿Listo para ofrecer tu propiedad?</div>
       <div class="section-subtitle">Contáctanos directamente y comienza el proceso hoy mismo.</div>
@@ -117,7 +95,4 @@
       </div>
     </section>
   </main>
-  <!-- Footer inyectado dinámicamente -->
-  <script src="/assets/js/main.js" defer></script>
-</body>
-</html> 
+</Layout>

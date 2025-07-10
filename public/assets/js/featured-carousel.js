@@ -185,7 +185,7 @@ class FeaturedPropertiesCarousel {
             <span>🚿 ${propiedad.Banos}</span>
             <span>🏡 ${propiedad.Superficie} m²</span>
           </div>
-          <a href="/propiedad-dinamica.html?slug=${propiedad.Slug}" class="featured-property-btn">
+          <a href="/propiedades/${propiedad.Slug}" class="featured-property-btn">
             Ver Propiedad
           </a>
         </div>

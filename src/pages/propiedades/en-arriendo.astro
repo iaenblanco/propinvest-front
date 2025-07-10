@@ -1,0 +1,50 @@
+---
+// src/pages/propiedades/en-arriendo.astro
+import Layout from '../../layouts/Layout.astro';
+
+const API_URL = 'https://truthful-rhythm-e8bcafa766.strapiapp.com/api';
+const response = await fetch(`${API_URL}/propiedads?populate=*&filters[Publicado][$eq]=true&filters[Objetivo][$eq]=Arriendo`);
+
+// LÍNEA AÑADIDA: Extraemos los datos y los guardamos en la variable `propiedades`.
+const { data: propiedades } = await response.json();
+
+const propiedadesValidas = Array.isArray(propiedades) ? propiedades.filter(prop => prop && prop.attributes) : [];
+---
+<Layout
+  title="Propiedades en Arriendo | PropInvest"
+  description="Explora nuestra selección de propiedades de lujo en arriendo."
+>
+  <main>
+    <section class="container" style="margin-top:3rem;">
+      <div class="section-title">Propiedades en Arriendo</div>
+      <div class="section-subtitle">Elige entre las mejores residencias de lujo en arriendo en Chile.</div>
+      <div class="property-grid">
+        {propiedadesValidas.length > 0 ? (
+          propiedadesValidas.map(prop => {
+            const p = prop.attributes;
+            const imagenUrl = p.Imagenes?.data?.[0]?.attributes?.url || '/assets/images/propiedad-default.jpg';
+            const precioFormateado = `UF ${p.Precio ? p.Precio.toLocaleString('es-CL') : 'Consultar'}`;
+            return (
+              <article class="property-card">
+                <img src={imagenUrl} alt={p.Titulo} />
+                <div class="property-card-content">
+                  <h2 class="property-title">{p.Titulo || 'Propiedad sin título'}</h2>
+                  <div class="property-location">{p.Ubicacion || 'Sin ubicación'}</div>
+                  <div class="property-price">{precioFormateado}</div>
+                  <div class="property-features">
+                    <span>🛏 {p.Dormitorios || 'N/A'}</span>
+                    <span>🚿 {p.Banos || 'N/A'}</span>
+                    <span>🏡 {p.Superficie || 'N/A'} m²</span>
+                  </div>
+                  <a href={`/propiedades/${p.Slug}`} class="btn">Ver Propiedad</a>
+                </div>
+              </article>
+            )
+          })
+        ) : (
+          <p>No hay propiedades en arriendo disponibles en este momento.</p>
+        )}
+      </div>
+    </section>
+  </main>
+</Layout>

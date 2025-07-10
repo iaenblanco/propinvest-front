@@ -1,0 +1,47 @@
+---
+import Layout from '../../layouts/Layout.astro';
+
+const API_URL = 'https://truthful-rhythm-e8bcafa766.strapiapp.com/api';
+const response = await fetch(`${API_URL}/propiedads?populate=*&filters[Publicado][$eq]=true`);
+const { data: propiedades } = await response.json();
+
+// CORRECCIÓN: Filtro de seguridad para ignorar propiedades incompletas
+const propiedadesValidas = propiedades.filter(prop => prop && prop.attributes);
+---
+<Layout
+  title="Todas las Propiedades | PropInvest"
+  description="Explora nuestra completa selección de residencias de lujo en Chile."
+>
+  <main>
+    <section class="container" style="margin-top:3rem;">
+      <div class="section-title">Todas las Propiedades</div>
+      <div class="section-subtitle">Explora nuestra completa selección de residencias de lujo en Chile.</div>
+      <div class="property-grid">
+        {/* Usamos la lista ya filtrada y segura */}
+        {propiedadesValidas.map(prop => {
+          const p = prop.attributes;
+          // Hacemos el acceso a la imagen más seguro también
+          const imagenUrl = p.Imagenes?.data?.[0]?.attributes?.url || '/assets/images/propiedad-default.jpg';
+          const precioFormateado = `UF ${p.Precio ? p.Precio.toLocaleString('es-CL') : 'Consultar'}`;
+
+          return (
+            <article class="property-card">
+              <img src={imagenUrl} alt={p.Titulo} />
+              <div class="property-card-content">
+                <h2 class="property-title">{p.Titulo || 'Propiedad sin título'}</h2>
+                <div class="property-location">{p.Ubicacion || 'Sin ubicación'}</div>
+                <div class="property-price">{precioFormateado}</div>
+                <div class="property-features">
+                  <span>🛏 {p.Dormitorios || 'N/A'}</span>
+                  <span>🚿 {p.Banos || 'N/A'}</span>
+                  <span>🏡 {p.Superficie || 'N/A'} m²</span>
+                </div>
+                <a href={`/propiedades/${p.Slug}`} class="btn">Ver Propiedad</a>
+              </div>
+            </article>
+          )
+        })}
+      </div>
+    </section>
+  </main>
+</Layout>

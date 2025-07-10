@@ -1,38 +1,11 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-  <meta charset="UTF-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Sobre Nosotros | PropInvest</title>
-  <meta name="description" content="Conoce la historia, misión y equipo de PropInvest, la inmobiliaria líder en propiedades de lujo en Chile." />
-  <link rel="stylesheet" href="/assets/css/style.css">
-  <link rel="icon" href="/assets/images/favicon.png" type="image/png">
-  <!-- Datos estructurados JSON-LD para la empresa -->
-  <script type="application/ld+json">
-    {
-      "@context": "https://schema.org",
-      "@type": "RealEstateAgent",
-      "name": "PropInvest",
-      "url": "https://propinvest.cl/",
-      "logo": "https://propinvest.cl/assets/images/logo.png",
-      "description": "Propiedades exclusivas y de lujo en Chile.",
-      "address": {
-        "@type": "PostalAddress",
-        "streetAddress": "Av. Las Condes 12345",
-        "addressLocality": "Santiago",
-        "addressRegion": "RM",
-        "postalCode": "7550000",
-        "addressCountry": "CL"
-      },
-      "telephone": "+56 9 1234 5678"
-    }
-  </script>
-</head>
-<body>
-  <!-- Header inyectado dinámicamente -->
+---
+import Layout from '../layouts/Layout.astro';
+---
+<Layout
+  title="Sobre Nosotros | PropInvest"
+  description="Conoce la historia, misión y equipo de PropInvest, la inmobiliaria líder en propiedades de lujo en Chile."
+>
   <main>
-    <!-- Sección Historia -->
     <section class="container" style="margin-top:3rem;">
       <div class="section-title">Nuestra Historia</div>
       <div class="section-subtitle">Más de una década redefiniendo el lujo inmobiliario en Chile.</div>
@@ -41,7 +14,6 @@
       </p>
     </section>
 
-    <!-- Misión y Visión -->
     <section class="container" style="margin-bottom:3rem;">
       <div style="display:flex; flex-wrap:wrap; gap:2rem; justify-content:center;">
         <div class="info-box" style="max-width:400px;">
@@ -61,7 +33,6 @@
       </div>
     </section>
 
-    <!-- Sección de Estadísticas Animadas -->
     <section class="stats-section">
       <div class="stats-grid">
         <div class="stat">
@@ -75,7 +46,6 @@
       </div>
     </section>
 
-    <!-- Equipo -->
     <section class="container" style="margin:4rem auto 3rem auto;">
       <div class="section-title">Nuestro Equipo</div>
       <div class="section-subtitle">Profesionales apasionados por el lujo y la excelencia.</div>
@@ -93,33 +63,28 @@
       </div>
     </section>
   </main>
-  <!-- Footer inyectado dinámicamente -->
-  <script src="/assets/js/main.js" defer></script>
-  <!-- Script para animar estadísticas con Intersection Observer -->
+
   <script>
-    // Espera a que el header/footer estén cargados
     document.addEventListener('DOMContentLoaded', function() {
-      // Selecciona los elementos de los contadores
       const casas = document.getElementById('casas-vendidas');
       const clientes = document.getElementById('clientes-satisfechos');
       let animado = false;
-      // Callback para Intersection Observer
       function animarStats(entries, observer) {
         entries.forEach(entry => {
           if (entry.isIntersecting && !animado) {
             animado = true;
-            // Utiliza la función global definida en main.js
+            // La función animarContador está en main.js, que ya cargamos en el Layout
             window.PropInvestUtils.animarContador(casas, 450);
             window.PropInvestUtils.animarContador(clientes, 250);
             observer.disconnect();
           }
         });
       }
-      // Configura el observer
       const observer = new IntersectionObserver(animarStats, { threshold: 0.5 });
-      observer.observe(casas);
-      observer.observe(clientes);
+      if (casas && clientes) {
+        observer.observe(casas);
+        observer.observe(clientes);
+      }
     });
   </script>
-</body>
-</html> 
+</Layout>

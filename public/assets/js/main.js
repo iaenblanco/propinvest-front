@@ -2,8 +2,9 @@
 // Carga dinámica de componentes (header y footer)
 // =============================
 
-// Función para cargar un componente HTML y colocarlo en el DOM
+// La carga dinámica de header/footer ya no es necesaria, Astro se encarga de eso.
 document.addEventListener('DOMContentLoaded', () => {
+  /*
   // Cargar Header
   fetch('/components/header.html')
     .then(res => res.text())
@@ -19,7 +20,14 @@ document.addEventListener('DOMContentLoaded', () => {
     .then(html => {
       document.body.insertAdjacentHTML('beforeend', html);
     });
+  */
     
+  // ¡ESTA LÓGICA TODAVÍA ES NECESARIA!
+  // Necesitamos que el menú y otras funciones se inicialicen.
+  // Como el header ya está en la página, podemos llamar a las funciones directamente.
+  inicializarMenuMovil();
+  inicializarMenuDesplegable();
+
   // Cargar propiedades dinámicamente según la página (sin timeout)
   cargarPropiedadesSegunPagina();
 });

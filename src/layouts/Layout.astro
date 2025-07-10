@@ -1,0 +1,27 @@
+---
+import Header from '../components_html/header.html?raw';
+import Footer from '../components_html/footer.html?raw';
+
+const { title, description } = Astro.props;
+---
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{title}</title>
+  <meta name="description" content={description} />
+
+  <link rel="stylesheet" href="/assets/css/style.css">
+  <link rel="icon" href="/assets/images/favicon.png" type="image/png">
+</head>
+<body>
+  <Fragment set:html={Header} />
+  <slot />
+  <Fragment set:html={Footer} />
+
+  <script is:inline src="/assets/js/config.js"></script>
+  <script is:inline src="/assets/js/api.js"></script>
+  <script is:inline src="/assets/js/main.js" defer></script>
+</body>
+</html>

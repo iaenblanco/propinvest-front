@@ -1,48 +1,48 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-  <meta charset="UTF-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>PropInvest | Propiedades que definen un legado</title>
-  <meta name="description" content="Propiedades exclusivas y de lujo en Chile. Descubre tu próxima inversión inmobiliaria con PropInvest." />
-  <link rel="stylesheet" href="/assets/css/style.css">
-  <link rel="icon" href="/assets/images/favicon.png" type="image/png">
-  <!-- Datos estructurados JSON-LD para la empresa -->
-  <script type="application/ld+json">
-    {
-      "@context": "https://schema.org",
-      "@type": "RealEstateAgent",
-      "name": "PropInvest",
-      "url": "https://propinvest.cl/",
-      "logo": "https://propinvest.cl/assets/images/logo.png",
-      "description": "Propiedades exclusivas y de lujo en Chile.",
-      "address": {
-        "@type": "PostalAddress",
-        "streetAddress": "Av. Las Condes 12345",
-        "addressLocality": "Santiago",
-        "addressRegion": "RM",
-        "postalCode": "7550000",
-        "addressCountry": "CL"
-      },
-      "telephone": "+56 9 1234 5678"
+---
+import Layout from '../layouts/Layout.astro';
+
+// Inicializamos las variables como arreglos vacíos por seguridad
+let propiedadesVenta = [];
+let propiedadesArriendo = [];
+
+try {
+  const API_URL = 'https://truthful-rhythm-e8bcafa766.strapiapp.com/api';
+  const response = await fetch(`${API_URL}/propiedads?populate=*&filters[Destacado][$eq]=true&filters[Publicado][$eq]=true`);
+  
+  if (response.ok) {
+    const { data: todasDestacadas } = await response.json();
+
+    // SOLUCIÓN: Verificamos que 'todasDestacadas' sea un arreglo antes de filtrarlo.
+    // Si la API no devuelve nada o hay un error, no se caerá la página.
+    if (Array.isArray(todasDestacadas)) {
+      propiedadesVenta = todasDestacadas.filter(p => p && p.attributes && p.attributes.Objetivo === 'Venta');
+      propiedadesArriendo = todasDestacadas.filter(p => p && p.attributes && p.attributes.Objetivo === 'Arriendo');
     }
-  </script>
-</head>
-<body>
-  <!-- El header se inyecta dinámicamente -->
+  } else {
+    // Si la respuesta de la API no es exitosa, lo mostramos en la consola del servidor
+    console.error('Error al obtener propiedades destacadas:', response.statusText);
+  }
+} catch (error) {
+  // Si hay un error de red o de otro tipo, también lo capturamos
+  console.error('Error en el fetch de propiedades destacadas:', error);
+}
+---
+<Layout
+  title="PropInvest | Propiedades que definen un legado"
+  description="Propiedades exclusivas y de lujo en Chile. Descubre tu próxima inversión inmobiliaria con PropInvest."
+>
+  {/* Este script es necesario para que los carruseles funcionen en esta página */}
+  <script is:inline src="/assets/js/featured-carousel.js"></script>
 
   <main>
-    <!-- Hero Banner -->
     <section class="hero">
       <div class="hero-content">
         <h1 class="hero-title">Propiedades que definen un legado</h1>
         <p class="hero-subtitle">Inversiones inmobiliarias exclusivas para quienes buscan lo extraordinario.</p>
-        <a href="/propiedades.html" class="cta">Ver Propiedades</a>
+        <a href="/propiedades" class="cta">Ver Propiedades</a>
       </div>
     </section>
 
-    <!-- Sección de Info Boxes (ventajas) -->
     <section class="container" style="margin-top:3rem;">
       <div class="section-title">¿Por qué elegir PropInvest?</div>
       <div class="section-subtitle">Experiencia, confianza y una selección inigualable de propiedades de lujo.</div>
@@ -71,33 +71,22 @@
       </div>
     </section>
 
-    <!-- Propiedades Destacadas -->
     <section class="container" style="margin-top:4rem;">
       <div class="section-title">Propiedades Destacadas en Venta</div>
       <div class="section-subtitle">Descubre una selección de residencias únicas y exclusivas en venta.</div>
       <div class="featured-properties-carousel">
-        <!-- El carrusel se cargará dinámicamente -->
+        {/* El carrusel se llenará con JavaScript */}
       </div>
     </section>
 
-    <!-- Propiedades Destacadas en Arriendo -->
     <section class="container" style="margin-top:4rem;">
       <div class="section-title">Propiedades Destacadas en Arriendo</div>
       <div class="section-subtitle">Descubre residencias exclusivas disponibles para arriendo.</div>
       <div class="featured-rental-properties-carousel">
-        <!-- El carrusel se cargará dinámicamente -->
+        {/* El carrusel se llenará con JavaScript */}
       </div>
     </section>
 
-    <!-- Banner de Llamada a la Acción (CTA) -->
-    <section class="container">
-      <div class="cta-banner">
-        <div style="font-size:1.5rem; font-family:var(--font-secondary); font-weight:600;">¿Listo para invertir en tu próximo legado?</div>
-        <a href="/contacto.html" class="cta">Contáctanos</a>
-      </div>
-    </section>
-
-    <!-- Testimonios de Clientes -->
     <section class="container" style="margin-bottom:4rem;">
       <div class="section-title">Lo que dicen nuestros clientes</div>
       <div class="section-subtitle">Experiencias reales de quienes confiaron en PropInvest</div>
@@ -116,13 +105,14 @@
     </section>
   </main>
 
-  <!-- El footer se inyecta dinámicamente -->
-  
-  <!-- Scripts necesarios -->
-  <script src="/assets/js/performance.js"></script>
-  <script src="/assets/js/config.js"></script>
-  <script src="/assets/js/api.js"></script>
-  <script src="/assets/js/featured-carousel.js"></script>
-  <script src="/assets/js/main.js" defer></script>
-</body>
-</html> 
+  <script define:vars={{ propiedadesVenta, propiedadesArriendo }}>
+    document.addEventListener('DOMContentLoaded', () => {
+      if (typeof cargarPropiedadesDestacadasCarousel === 'function') {
+        cargarPropiedadesDestacadasCarousel('.featured-properties-carousel', propiedadesVenta);
+      }
+      if (typeof cargarPropiedadesDestacadasArriendoCarousel === 'function') {
+        cargarPropiedadesDestacadasArriendoCarousel('.featured-rental-properties-carousel', propiedadesArriendo);
+      }
+    });
+  </script>
+</Layout>
