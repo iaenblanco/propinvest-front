@@ -2,8 +2,8 @@
 import Layout from '../layouts/Layout.astro';
 
 // Inicializamos las variables como arreglos vacíos por seguridad
-let propiedadesVenta = [];
-let propiedadesArriendo = [];
+let propiedadesVenta: any[] = [];
+let propiedadesArriendo: any[] = [];
 
 try {
   const API_URL = 'https://truthful-rhythm-e8bcafa766.strapiapp.com/api';
@@ -18,56 +18,35 @@ try {
 
     // Verificamos que 'todasDestacadas' sea un arreglo antes de filtrarlo
     if (Array.isArray(todasDestacadas)) {
-      // AGREGAMOS LOGS DETALLADOS PARA VER LA ESTRUCTURA REAL
-      console.log('🔍 Investigando estructura completa de datos:');
-      todasDestacadas.forEach((prop, index) => {
-        console.log(`   Propiedad ${index + 1} (estructura completa):`, JSON.stringify(prop, null, 2));
-      });
-
-      // Intentamos diferentes estructuras de datos
+      // Filtrar propiedades usando la estructura correcta (datos directos, no en attributes)
       const propiedadesVentaBruto = todasDestacadas.filter(p => {
-        // Intentar diferentes ubicaciones del campo Objetivo
-        const objetivoAttr = p?.attributes?.Objetivo;
-        const objetivoDirecto = p?.Objetivo;
-        const objetivo = objetivoAttr || objetivoDirecto;
-        
-        console.log(`🔍 Filtrando venta - ID: ${p?.id}, Objetivo (attr): "${objetivoAttr}", Objetivo (directo): "${objetivoDirecto}", Final: "${objetivo}"`);
-        return p && (objetivo === 'Venta' || objetivo === 'venta' || objetivo === 'VENTA');
+        return p && 
+               p.Objetivo === 'Venta' && 
+               p.Destacado === true && 
+               p.Publicado === true;
       });
       
       const propiedadesArriendoBruto = todasDestacadas.filter(p => {
-        // Intentar diferentes ubicaciones del campo Objetivo
-        const objetivoAttr = p?.attributes?.Objetivo;
-        const objetivoDirecto = p?.Objetivo;
-        const objetivo = objetivoAttr || objetivoDirecto;
-        
-        console.log(`🔍 Filtrando arriendo - ID: ${p?.id}, Objetivo (attr): "${objetivoAttr}", Objetivo (directo): "${objetivoDirecto}", Final: "${objetivo}"`);
-        return p && (objetivo === 'Arriendo' || objetivo === 'arriendo' || objetivo === 'ARRIENDO');
+        return p && 
+               p.Objetivo === 'Arriendo' && 
+               p.Destacado === true && 
+               p.Publicado === true;
       });
       
-      console.log('🏠 Propiedades venta encontradas:', propiedadesVentaBruto.length);
-      console.log('🏘️ Propiedades arriendo encontradas:', propiedadesArriendoBruto.length);
-      
       // Transformar datos de Strapi al formato que espera el carrusel
-      // IMPORTANTE: Adaptar a la estructura real encontrada
       propiedadesVenta = propiedadesVentaBruto.map(prop => {
-        const attrs = prop.attributes || prop; // Usar estructura que funcione
         return {
           id: prop.id,
-          Titulo: attrs.Titulo || attrs.titulo,
-          Slug: attrs.Slug || attrs.slug,
-          Precio: attrs.Precio || attrs.precio,
-          Ubicacion: attrs.Ubicacion || attrs.ubicacion,
-          Dormitorios: attrs.Dormitorios || attrs.dormitorios,
-          Banos: attrs.Banos || attrs.banos,
-          Superficie: attrs.Superficie || attrs.superficie,
-          Objetivo: attrs.Objetivo || attrs.objetivo,
-          Destacado: attrs.Destacado || attrs.destacado,
-          Imagenes: attrs.Imagenes?.data?.map(img => ({
-            url: img.attributes?.url?.startsWith('http') 
-              ? img.attributes.url 
-              : `https://truthful-rhythm-e8bcafa766.strapiapp.com${img.attributes?.url || img.url || ''}`
-          })) || attrs.Imagenes?.map(img => ({
+          Titulo: prop.Titulo,
+          Slug: prop.Slug,
+          Precio: prop.Precio,
+          Ubicacion: prop.Ubicacion,
+          Dormitorios: prop.Dormitorios,
+          Banos: prop.Banos,
+          Superficie: prop.Superficie,
+          Objetivo: prop.Objetivo,
+          Destacado: prop.Destacado,
+          Imagenes: prop.Imagenes?.map((img: any) => ({
             url: img.url?.startsWith('http') 
               ? img.url 
               : `https://truthful-rhythm-e8bcafa766.strapiapp.com${img.url || ''}`
@@ -76,23 +55,18 @@ try {
       });
       
       propiedadesArriendo = propiedadesArriendoBruto.map(prop => {
-        const attrs = prop.attributes || prop; // Usar estructura que funcione
         return {
           id: prop.id,
-          Titulo: attrs.Titulo || attrs.titulo,
-          Slug: attrs.Slug || attrs.slug,
-          Precio: attrs.Precio || attrs.precio,
-          Ubicacion: attrs.Ubicacion || attrs.ubicacion,
-          Dormitorios: attrs.Dormitorios || attrs.dormitorios,
-          Banos: attrs.Banos || attrs.banos,
-          Superficie: attrs.Superficie || attrs.superficie,
-          Objetivo: attrs.Objetivo || attrs.objetivo,
-          Destacado: attrs.Destacado || attrs.destacado,
-          Imagenes: attrs.Imagenes?.data?.map(img => ({
-            url: img.attributes?.url?.startsWith('http') 
-              ? img.attributes.url 
-              : `https://truthful-rhythm-e8bcafa766.strapiapp.com${img.attributes?.url || img.url || ''}`
-          })) || attrs.Imagenes?.map(img => ({
+          Titulo: prop.Titulo,
+          Slug: prop.Slug,
+          Precio: prop.Precio,
+          Ubicacion: prop.Ubicacion,
+          Dormitorios: prop.Dormitorios,
+          Banos: prop.Banos,
+          Superficie: prop.Superficie,
+          Objetivo: prop.Objetivo,
+          Destacado: prop.Destacado,
+          Imagenes: prop.Imagenes?.map((img: any) => ({
             url: img.url?.startsWith('http') 
               ? img.url 
               : `https://truthful-rhythm-e8bcafa766.strapiapp.com${img.url || ''}`
@@ -100,7 +74,7 @@ try {
         };
       });
       
-      console.log('✅ Propiedades transformadas - Venta:', propiedadesVenta.length, 'Arriendo:', propiedadesArriendo.length);
+
     }
   } else {
     console.error('❌ Error al obtener propiedades destacadas:', response.statusText);
@@ -189,30 +163,16 @@ try {
 
   <script define:vars={{ propiedadesVenta, propiedadesArriendo }}>
     document.addEventListener('DOMContentLoaded', () => {
-      console.log('🎠 Datos recibidos en cliente:');
-      console.log('   - Propiedades venta:', propiedadesVenta?.length || 0);
-      console.log('   - Propiedades arriendo:', propiedadesArriendo?.length || 0);
-      
       if (typeof cargarPropiedadesDestacadasCarousel === 'function') {
         if (propiedadesVenta && propiedadesVenta.length > 0) {
-          console.log('🎯 Inicializando carrusel de venta con', propiedadesVenta.length, 'propiedades');
           cargarPropiedadesDestacadasCarousel('.featured-properties-carousel', propiedadesVenta);
-        } else {
-          console.warn('⚠️ No hay propiedades de venta para mostrar');
         }
-      } else {
-        console.error('❌ Función cargarPropiedadesDestacadasCarousel no disponible');
       }
       
       if (typeof cargarPropiedadesDestacadasArriendoCarousel === 'function') {
         if (propiedadesArriendo && propiedadesArriendo.length > 0) {
-          console.log('🎯 Inicializando carrusel de arriendo con', propiedadesArriendo.length, 'propiedades');
           cargarPropiedadesDestacadasArriendoCarousel('.featured-rental-properties-carousel', propiedadesArriendo);
-        } else {
-          console.warn('⚠️ No hay propiedades de arriendo para mostrar');
         }
-      } else {
-        console.error('❌ Función cargarPropiedadesDestacadasArriendoCarousel no disponible');
       }
     });
   </script>

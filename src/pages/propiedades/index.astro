@@ -5,8 +5,8 @@ const API_URL = 'https://truthful-rhythm-e8bcafa766.strapiapp.com/api';
 const response = await fetch(`${API_URL}/propiedads?populate=*&filters[Publicado][$eq]=true`);
 const { data: propiedades } = await response.json();
 
-// CORRECCIÓN: Filtro de seguridad para ignorar propiedades incompletas
-const propiedadesValidas = propiedades.filter(prop => prop && prop.attributes);
+// CORREGIDO: Los datos vienen directamente, no en prop.attributes
+const propiedadesValidas = Array.isArray(propiedades) ? propiedades.filter(prop => prop && prop.Publicado === true) : [];
 ---
 <Layout
   title="Todas las Propiedades | PropInvest"
@@ -19,24 +19,25 @@ const propiedadesValidas = propiedades.filter(prop => prop && prop.attributes);
       <div class="property-grid">
         {/* Usamos la lista ya filtrada y segura */}
         {propiedadesValidas.map(prop => {
-          const p = prop.attributes;
-          // Hacemos el acceso a la imagen más seguro también
-          const imagenUrl = p.Imagenes?.data?.[0]?.attributes?.url || '/assets/images/propiedad-default.jpg';
-          const precioFormateado = `UF ${p.Precio ? p.Precio.toLocaleString('es-CL') : 'Consultar'}`;
+          // CORREGIDO: Acceso directo a las propiedades, no prop.attributes
+          const imagenUrl = prop.Imagenes?.[0]?.url?.startsWith('http') 
+            ? prop.Imagenes[0].url 
+            : `https://truthful-rhythm-e8bcafa766.strapiapp.com${prop.Imagenes?.[0]?.url || '/assets/images/propiedad-default.jpg'}`;
+          const precioFormateado = `UF ${prop.Precio ? prop.Precio.toLocaleString('es-CL') : 'Consultar'}`;
 
           return (
             <article class="property-card">
-              <img src={imagenUrl} alt={p.Titulo} />
+              <img src={imagenUrl} alt={prop.Titulo} />
               <div class="property-card-content">
-                <h2 class="property-title">{p.Titulo || 'Propiedad sin título'}</h2>
-                <div class="property-location">{p.Ubicacion || 'Sin ubicación'}</div>
+                <h2 class="property-title">{prop.Titulo || 'Propiedad sin título'}</h2>
+                <div class="property-location">{prop.Ubicacion || 'Sin ubicación'}</div>
                 <div class="property-price">{precioFormateado}</div>
                 <div class="property-features">
-                  <span>🛏 {p.Dormitorios || 'N/A'}</span>
-                  <span>🚿 {p.Banos || 'N/A'}</span>
-                  <span>🏡 {p.Superficie || 'N/A'} m²</span>
+                  <span>🛏 {prop.Dormitorios || 'N/A'}</span>
+                  <span>🚿 {prop.Banos || 'N/A'}</span>
+                  <span>🏡 {prop.Superficie || 'N/A'} m²</span>
                 </div>
-                <a href={`/propiedades/${p.Slug}`} class="btn">Ver Propiedad</a>
+                <a href={`/propiedades/${prop.Slug}`} class="btn">Ver Propiedad</a>
               </div>
             </article>
           )
