@@ -12,19 +12,66 @@ try {
   if (response.ok) {
     const { data: todasDestacadas } = await response.json();
 
-    // SOLUCIÓN: Verificamos que 'todasDestacadas' sea un arreglo antes de filtrarlo.
-    // Si la API no devuelve nada o hay un error, no se caerá la página.
+    console.log('📦 Propiedades destacadas obtenidas:', todasDestacadas?.length || 0);
+
+    // Verificamos que 'todasDestacadas' sea un arreglo antes de filtrarlo
     if (Array.isArray(todasDestacadas)) {
-      propiedadesVenta = todasDestacadas.filter(p => p && p.attributes && p.attributes.Objetivo === 'Venta');
-      propiedadesArriendo = todasDestacadas.filter(p => p && p.attributes && p.attributes.Objetivo === 'Arriendo');
+      const propiedadesVentaBruto = todasDestacadas.filter(p => p && p.attributes && p.attributes.Objetivo === 'Venta');
+      const propiedadesArriendoBruto = todasDestacadas.filter(p => p && p.attributes && p.attributes.Objetivo === 'Arriendo');
+      
+      console.log('🏠 Propiedades venta encontradas:', propiedadesVentaBruto.length);
+      console.log('🏘️ Propiedades arriendo encontradas:', propiedadesArriendoBruto.length);
+      
+      // Transformar datos de Strapi al formato que espera el carrusel
+      propiedadesVenta = propiedadesVentaBruto.map(prop => {
+        const attrs = prop.attributes;
+        return {
+          id: prop.id,
+          Titulo: attrs.Titulo,
+          Slug: attrs.Slug,
+          Precio: attrs.Precio,
+          Ubicacion: attrs.Ubicacion,
+          Dormitorios: attrs.Dormitorios,
+          Banos: attrs.Banos,
+          Superficie: attrs.Superficie,
+          Objetivo: attrs.Objetivo,
+          Destacado: attrs.Destacado,
+          Imagenes: attrs.Imagenes?.data?.map(img => ({
+            url: img.attributes.url.startsWith('http') 
+              ? img.attributes.url 
+              : `https://truthful-rhythm-e8bcafa766.strapiapp.com${img.attributes.url}`
+          })) || []
+        };
+      });
+      
+      propiedadesArriendo = propiedadesArriendoBruto.map(prop => {
+        const attrs = prop.attributes;
+        return {
+          id: prop.id,
+          Titulo: attrs.Titulo,
+          Slug: attrs.Slug,
+          Precio: attrs.Precio,
+          Ubicacion: attrs.Ubicacion,
+          Dormitorios: attrs.Dormitorios,
+          Banos: attrs.Banos,
+          Superficie: attrs.Superficie,
+          Objetivo: attrs.Objetivo,
+          Destacado: attrs.Destacado,
+          Imagenes: attrs.Imagenes?.data?.map(img => ({
+            url: img.attributes.url.startsWith('http') 
+              ? img.attributes.url 
+              : `https://truthful-rhythm-e8bcafa766.strapiapp.com${img.attributes.url}`
+          })) || []
+        };
+      });
+      
+      console.log('✅ Propiedades transformadas - Venta:', propiedadesVenta.length, 'Arriendo:', propiedadesArriendo.length);
     }
   } else {
-    // Si la respuesta de la API no es exitosa, lo mostramos en la consola del servidor
-    console.error('Error al obtener propiedades destacadas:', response.statusText);
+    console.error('❌ Error al obtener propiedades destacadas:', response.statusText);
   }
 } catch (error) {
-  // Si hay un error de red o de otro tipo, también lo capturamos
-  console.error('Error en el fetch de propiedades destacadas:', error);
+  console.error('❌ Error en el fetch de propiedades destacadas:', error);
 }
 ---
 <Layout
@@ -107,11 +154,30 @@ try {
 
   <script define:vars={{ propiedadesVenta, propiedadesArriendo }}>
     document.addEventListener('DOMContentLoaded', () => {
+      console.log('🎠 Datos recibidos en cliente:');
+      console.log('   - Propiedades venta:', propiedadesVenta?.length || 0);
+      console.log('   - Propiedades arriendo:', propiedadesArriendo?.length || 0);
+      
       if (typeof cargarPropiedadesDestacadasCarousel === 'function') {
-        cargarPropiedadesDestacadasCarousel('.featured-properties-carousel', propiedadesVenta);
+        if (propiedadesVenta && propiedadesVenta.length > 0) {
+          console.log('🎯 Inicializando carrusel de venta con', propiedadesVenta.length, 'propiedades');
+          cargarPropiedadesDestacadasCarousel('.featured-properties-carousel', propiedadesVenta);
+        } else {
+          console.warn('⚠️ No hay propiedades de venta para mostrar');
+        }
+      } else {
+        console.error('❌ Función cargarPropiedadesDestacadasCarousel no disponible');
       }
+      
       if (typeof cargarPropiedadesDestacadasArriendoCarousel === 'function') {
-        cargarPropiedadesDestacadasArriendoCarousel('.featured-rental-properties-carousel', propiedadesArriendo);
+        if (propiedadesArriendo && propiedadesArriendo.length > 0) {
+          console.log('🎯 Inicializando carrusel de arriendo con', propiedadesArriendo.length, 'propiedades');
+          cargarPropiedadesDestacadasArriendoCarousel('.featured-rental-properties-carousel', propiedadesArriendo);
+        } else {
+          console.warn('⚠️ No hay propiedades de arriendo para mostrar');
+        }
+      } else {
+        console.error('❌ Función cargarPropiedadesDestacadasArriendoCarousel no disponible');
       }
     });
   </script>
