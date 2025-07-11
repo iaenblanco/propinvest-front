@@ -383,6 +383,83 @@ a:hover, a:focus {
   border-color: #000;
 }
 
+/* Estilos adicionales para CTAs de propiedades */
+.contact-property-cta {
+  width: 100%;
+  justify-content: center;
+  margin-top: 1rem;
+}
+
+/* Estilos para iconos SVG en CTAs */
+.cta-icon svg {
+  width: 20px;
+  height: 20px;
+  stroke: currentColor;
+  fill: none;
+  stroke-width: 2;
+}
+
+/* Mejoras para el banner de CTA existente */
+.cta-banner {
+  background: linear-gradient(135deg, #000000 0%, #2c2c2c 100%);
+  color: white;
+  border-radius: 20px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
+  padding: 3rem 2rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.5rem;
+  margin: 3rem 0;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.cta-banner::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.05) 100%);
+  border-radius: 20px;
+  z-index: 1;
+}
+
+.cta-banner:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.2);
+}
+
+.cta-banner > * {
+  position: relative;
+  z-index: 2;
+}
+
+.cta-banner .cta {
+  background: rgba(255, 255, 255, 0.95);
+  color: #000000;
+  border: 2px solid #000000;
+  backdrop-filter: blur(15px);
+  -webkit-backdrop-filter: blur(15px);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  font-weight: 600;
+  padding: 1rem 2rem;
+  border-radius: 12px;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.cta-banner .cta:hover {
+  background: rgba(255, 255, 255, 1);
+  color: #000000;
+  border-color: #000000;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+}
+
 /* =============================
    Grid de Propiedades
 ============================= */
@@ -2043,7 +2120,6 @@ img.lazy.loaded {
   text-align: center;
   margin-top: 3rem;
   padding: 2rem;
-  background: var(--color-accent-light);
   border-radius: 12px;
 }
 

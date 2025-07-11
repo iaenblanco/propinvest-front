@@ -1,6 +1,8 @@
 ---
 // Importamos el Layout principal para encapsular la página
 import Layout from '../../layouts/Layout.astro';
+import CTAButton from '../../components/CTAButton.astro';
+import CTABanner from '../../components/CTABanner.astro';
 
 // 1. getStaticPaths: Fetch de datos y definición de rutas (sin cambios)
 export async function getStaticPaths() {
@@ -336,10 +338,16 @@ const pageDescription = propiedad.Descripcion || `Propiedad en ${Ubicacion}. ${D
             )}
 
             <div class="contact-section">
-                <a id="whatsapp-link" href={whatsappLink} class="contact-button" target="_blank" rel="noopener">
-                    <span class="contact-icon">💬</span>
-                    <span class="contact-text">Contactar por esta propiedad</span>
-                </a>
+                <CTABanner
+                    title="¿Te interesa esta propiedad?"
+                    subtitle="Contáctanos directamente y recibe información detallada, visitas personalizadas y asesoría especializada"
+                    ctaText="Contactar por esta propiedad"
+                    ctaHref={whatsappLink}
+                    variant="elegant"
+                    ctaVariant="outline"
+                    ctaSize="large"
+                    iconSvg='<svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>'
+                />
             </div>
         </div>
 
