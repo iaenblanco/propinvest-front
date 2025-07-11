@@ -49,6 +49,10 @@ import Layout from '../layouts/Layout.astro';
           <div class="stat-label">Casas Vendidas</div>
         </div>
         <div class="stat">
+          <div class="stat-number" id="casas-arrendadas">0</div>
+          <div class="stat-label">Casas Arrendadas</div>
+        </div>
+        <div class="stat">
           <div class="stat-number" id="clientes-satisfechos">0</div>
           <div class="stat-label">Clientes Satisfechos</div>
         </div>
@@ -75,23 +79,28 @@ import Layout from '../layouts/Layout.astro';
 
   <script>
     document.addEventListener('DOMContentLoaded', function() {
-      const casas = document.getElementById('casas-vendidas');
+      const casasVendidas = document.getElementById('casas-vendidas');
+      const casasArrendadas = document.getElementById('casas-arrendadas');
       const clientes = document.getElementById('clientes-satisfechos');
       let animado = false;
+      
       function animarStats(entries, observer) {
         entries.forEach(entry => {
           if (entry.isIntersecting && !animado) {
             animado = true;
-            // La función animarContador está en main.js, que ya cargamos en el Layout
-            window.PropInvestUtils.animarContador(casas, 450);
-            window.PropInvestUtils.animarContador(clientes, 250);
+            // Animar los tres contadores con los valores especificados
+            window.animarContador(casasVendidas, 150);
+            window.animarContador(casasArrendadas, 435);
+            window.animarContador(clientes, 500);
             observer.disconnect();
           }
         });
       }
+      
       const observer = new IntersectionObserver(animarStats, { threshold: 0.5 });
-      if (casas && clientes) {
-        observer.observe(casas);
+      if (casasVendidas && casasArrendadas && clientes) {
+        observer.observe(casasVendidas);
+        observer.observe(casasArrendadas);
         observer.observe(clientes);
       }
     });
