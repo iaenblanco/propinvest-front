@@ -420,7 +420,7 @@ const pageDescription = propiedad.Descripcion || `Propiedad en ${Ubicacion}. ${D
     /* COMPORTAMIENTO PARA MOBILE (con barra de scroll) */
     overflow-x: auto;          /* Habilita la barra de scroll horizontal */
     flex-wrap: nowrap;         /* Mantiene las imágenes en una sola línea */
-    justify-content: flex-start; /* Las alinea al inicio */
+    justify-content: center;    /* Las centra cuando no hay scroll */
     padding-bottom: 8px;       /* Espacio para que la barra de scroll no se pegue al borde */
     
     /* Scroll más suave en iOS */
@@ -472,10 +472,10 @@ const pageDescription = propiedad.Descripcion || `Propiedad en ${Ubicacion}. ${D
   /* Cuando la pantalla sea de 1024px o más ancha... */
   @media (min-width: 1024px) {
     .gallery-thumbnails {
-      justify-content: center; /* ¡Centra las imágenes! */
-      flex-wrap: wrap;         /* Permite que se envuelvan si son muchas */
-      overflow-x: hidden;      /* Oculta el scroll horizontal que ya no se necesita */
-      padding-bottom: 0;       /* Quita el espacio extra en desktop */
+      justify-content: center; /* Centra las imágenes cuando no hay scroll */
+      flex-wrap: nowrap;         /* Mantiene las imágenes en una sola línea horizontal */
+      overflow-x: auto;          /* Mantiene el scroll horizontal en desktop */
+      padding-bottom: 8px;       /* Mantiene el espacio para la barra de scroll */
     }
   }
 </style>
