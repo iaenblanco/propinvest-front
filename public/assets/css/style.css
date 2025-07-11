@@ -934,6 +934,42 @@ input:focus, textarea:focus {
     color: #000;
     border: 1px solid #000;
   }
+  
+  /* Estilos para el sidebar móvil más compacto */
+  .detalle-sidebar .info-box {
+    height: auto !important;
+    min-height: auto !important;
+    max-height: none !important;
+    padding: 1.5rem !important;
+    gap: 1rem !important;
+  }
+  
+  .info-box-mobile {
+    height: auto !important;
+    min-height: auto !important;
+    max-height: none !important;
+    padding: 1rem !important;
+    gap: 0.8rem !important;
+  }
+  
+  /* Layout específico para móvil */
+  .detalle-layout {
+    flex-direction: column !important;
+    gap: 1.5rem !important;
+  }
+  
+  .detalle-main {
+    flex: 1 !important;
+    min-width: auto !important;
+    width: 100% !important;
+  }
+  
+  .detalle-sidebar {
+    flex: 1 !important;
+    min-width: auto !important;
+    max-width: none !important;
+    width: 100% !important;
+  }
 }
 
 @media (max-width: 480px) {
@@ -1011,6 +1047,52 @@ input:focus, textarea:focus {
     font-size: 0.8rem;
     margin-top: auto;
     flex-shrink: 0;
+  }
+  
+  /* Estilos específicos para el sidebar móvil de propiedades */
+  .info-box-mobile {
+    height: auto !important;
+    min-height: auto !important;
+    max-height: none !important;
+    padding: 1rem !important;
+    gap: 0.8rem !important;
+  }
+  
+  .info-box-mobile .property-type-mobile {
+    order: 1;
+    margin-bottom: 0.3rem !important;
+  }
+  
+  .info-box-mobile .price-uf-mobile {
+    order: 2;
+    margin-bottom: 0.5rem !important;
+  }
+  
+  .info-box-mobile .property-main-title-mobile {
+    order: 3;
+    margin-bottom: 0.5rem !important;
+  }
+  
+  .info-box-mobile .property-location-mobile {
+    order: 4;
+    margin-bottom: 0.5rem !important;
+  }
+  
+  .info-box-mobile .price-clp-mobile {
+    order: 5;
+    margin-bottom: 0.5rem !important;
+  }
+  
+  .info-box-mobile .property-key-features-mobile {
+    order: 6;
+    margin-top: 0.5rem !important;
+  }
+  
+  /* Asegurar que el sidebar móvil se vea completo */
+  .detalle-sidebar .info-box {
+    height: auto !important;
+    min-height: auto !important;
+    max-height: none !important;
   }
 }
 
