@@ -47,7 +47,7 @@ a {
   transition: color 0.3s ease;
 }
 a:hover, a:focus {
-  color: #8c6b3b;
+  color: var(--color-accent-light);
 }
 .container {
   width: 90%;
@@ -216,7 +216,7 @@ a:hover, a:focus {
 }
 
 .mobile-dropdown-menu a:hover {
-  color: var(--color-primary-accent);
+  color: var(--color-accent-light);
 }
 
 /* =============================
@@ -306,7 +306,7 @@ a:hover, a:focus {
   transition: color 0.3s;
 }
 .mobile-nav-list li a:hover {
-  color: #8c6b3b;
+  color: var(--color-accent-light);
 }
 .close-mobile-nav {
   display: none !important;
@@ -867,8 +867,8 @@ input:focus, textarea:focus {
   }
   
   .mobile-dropdown-menu a:hover {
-    color: var(--color-primary-accent);
-    background: rgba(185, 151, 103, 0.1);
+    color: var(--color-accent-light);
+    background: rgba(133, 125, 113, 0.1);
   }
   
   /* Ocultar menú desplegable desktop en móvil */
