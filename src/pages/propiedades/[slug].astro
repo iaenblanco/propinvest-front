@@ -226,7 +226,7 @@ const pageDescription = propiedad.Descripcion || `Propiedad en ${Ubicacion}. ${D
             </div>
 
             <aside class="detalle-sidebar" style="flex:1; min-width:320px; max-width:400px; display:flex; flex-direction:column; gap:2.5rem; margin-top:0;">
-                <div class="info-box" style="background:var(--color-background); border:1px solid var(--color-text-primary); border-radius:14px; box-shadow:0 2px 8px var(--color-shadow); padding:2rem; display:flex; flex-direction:column; gap:1.5rem; height:fit-content; margin-top:0;">
+                <div class="info-box" style="background:var(--color-background); border:1px solid var(--color-text-primary); border-radius:14px; box-shadow:0 2px 8px var(--color-shadow); padding:2rem; display:flex; flex-direction:column; gap:1.5rem; height:470px; margin-top:0;">
                     {Tipo && Objetivo && <div class="property-type" style="font-size:0.9rem; color:var(--color-text-secondary); font-weight:500; margin:0; text-transform:capitalize;">{Tipo} en {Objetivo}</div>}
                     <h1 class="property-main-title" style="font-size:1.6rem; margin:0; line-height:1.2; color:var(--color-text-primary);">{Titulo}</h1>
                     {Ubicacion && <div class="property-location" style="font-size:1rem; color:var(--color-text-secondary); margin:0;">📍 {Ubicacion}</div>}
@@ -476,6 +476,13 @@ const pageDescription = propiedad.Descripcion || `Propiedad en ${Ubicacion}. ${D
       flex-wrap: nowrap;         /* Mantiene las imágenes en una sola línea horizontal */
       overflow-x: auto;          /* Mantiene el scroll horizontal en desktop */
       padding-bottom: 8px;       /* Mantiene el espacio para la barra de scroll */
+    }
+    
+    /* Asegurar que el recuadro de información tenga exactamente la misma altura que la foto principal */
+    .detalle-sidebar .info-box {
+      height: 470px !important;
+      display: flex !important;
+      flex-direction: column !important;
     }
   }
 </style>
