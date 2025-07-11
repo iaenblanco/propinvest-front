@@ -198,10 +198,32 @@ const pageDescription = propiedad.Descripcion || `Propiedad en ${Ubicacion}. ${D
                         {precioCLP && <div class="price-clp-mobile" style="font-size:0.9rem; color:var(--color-text-secondary); text-align:right; flex-shrink:0;">{precioCLP}</div>}
                     </div>
                     <div class="property-key-features-mobile" style="display:grid; grid-template-columns:repeat(4, 1fr); gap:0.5rem; margin-top:0.5rem;">
-                        {Dormitorios && <span class="feature-item-mobile" style="display:flex; flex-direction:column; align-items:center; gap:0.2rem; font-size:0.75rem; color:var(--color-text-primary); font-weight:500; text-align:center;"><span style="font-size:1rem;">🛏</span><span>{Dormitorios}</span></span>}
-                        {Banos && <span class="feature-item-mobile" style="display:flex; flex-direction:column; align-items:center; gap:0.2rem; font-size:0.75rem; color:var(--color-text-primary); font-weight:500; text-align:center;"><span style="font-size:1rem;">🚿</span><span>{Banos}</span></span>}
-                        {Superficie && <span class="feature-item-mobile" style="display:flex; flex-direction:column; align-items:center; gap:0.2rem; font-size:0.75rem; color:var(--color-text-primary); font-weight:500; text-align:center;"><span style="font-size:1rem;">🏡</span><span>{Superficie}m²</span></span>}
-                        {M2utiles && <span class="feature-item-mobile" style="display:flex; flex-direction:column; align-items:center; gap:0.2rem; font-size:0.75rem; color:var(--color-text-primary); font-weight:500; text-align:center;"><span style="font-size:1rem;">📏</span><span>{M2utiles}m²</span></span>}
+                        {Dormitorios && <span class="feature-item-mobile" style="display:flex; flex-direction:column; align-items:center; gap:0.2rem; font-size:0.75rem; color:var(--color-text-primary); font-weight:500; text-align:center;">
+                          <svg width="16" height="16" fill="none" stroke="#000000" stroke-width="1.5" viewBox="0 0 24 24" style="font-size:1rem;">
+                            <path d="M3 10h18M6 10V7a3 3 0 0 1 6 0v3m-6 0v7m12-7v7m-6 0v-4a2 2 0 0 1 4 0v4"/>
+                          </svg>
+                          <span>{Dormitorios}</span>
+                        </span>}
+                        {Banos && <span class="feature-item-mobile" style="display:flex; flex-direction:column; align-items:center; gap:0.2rem; font-size:0.75rem; color:var(--color-text-primary); font-weight:500; text-align:center;">
+                          <svg width="16" height="16" fill="none" stroke="#000000" stroke-width="1.5" viewBox="0 0 24 24" style="font-size:1rem;">
+                            <path d="M7 10v6a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2v-6"/>
+                            <circle cx="12" cy="7" r="3"/>
+                          </svg>
+                          <span>{Banos}</span>
+                        </span>}
+                        {Superficie && <span class="feature-item-mobile" style="display:flex; flex-direction:column; align-items:center; gap:0.2rem; font-size:0.75rem; color:var(--color-text-primary); font-weight:500; text-align:center;">
+                          <svg width="16" height="16" fill="none" stroke="#000000" stroke-width="1.5" viewBox="0 0 24 24" style="font-size:1rem;">
+                            <rect x="3" y="3" width="18" height="18" rx="2"/>
+                          </svg>
+                          <span>{Superficie}m²</span>
+                        </span>}
+                        {M2utiles && <span class="feature-item-mobile" style="display:flex; flex-direction:column; align-items:center; gap:0.2rem; font-size:0.75rem; color:var(--color-text-primary); font-weight:500; text-align:center;">
+                          <svg width="16" height="16" fill="none" stroke="#000000" stroke-width="1.5" viewBox="0 0 24 24" style="font-size:1rem;">
+                            <rect x="3" y="3" width="18" height="18" rx="2"/>
+                            <path d="M3 9h18"/>
+                          </svg>
+                          <span>{M2utiles}m²</span>
+                        </span>}
                     </div>
                 </div>
                 <div class="technical-specs-section ficha-mobile" style="display:block; margin-top: 2rem;">
@@ -238,10 +260,32 @@ const pageDescription = propiedad.Descripcion || `Propiedad en ${Ubicacion}. ${D
                         </div>
                     )}
                     <div class="property-key-features" style="display:grid; grid-template-columns:1fr 1fr; gap:1rem; margin-top:0.5rem;">
-                        {Dormitorios && <span class="feature-item" style="display:flex; align-items:center; gap:0.5rem; font-size:0.95rem; color:var(--color-text-primary); font-weight:500;">🛏 {Dormitorios}</span>}
-                        {Banos && <span class="feature-item" style="display:flex; align-items:center; gap:0.5rem; font-size:0.95rem; color:var(--color-text-primary); font-weight:500;">🚿 {Banos}</span>}
-                        {Superficie && <span class="feature-item" style="display:flex; align-items:center; gap:0.5rem; font-size:0.95rem; color:var(--color-text-primary); font-weight:500; grid-column:1/-1;">🏡 {Superficie} m² totales</span>}
-                        {M2utiles && <span class="feature-item" style="display:flex; align-items:center; gap:0.5rem; font-size:0.95rem; color:var(--color-text-primary); font-weight:500; grid-column:1/-1;">📏 {M2utiles} m² útiles</span>}
+                        {Dormitorios && <span class="feature-item" style="display:flex; align-items:center; gap:0.5rem; font-size:0.95rem; color:var(--color-text-primary); font-weight:500;">
+                          <svg width="16" height="16" fill="none" stroke="#000000" stroke-width="1.5" viewBox="0 0 24 24">
+                            <path d="M3 10h18M6 10V7a3 3 0 0 1 6 0v3m-6 0v7m12-7v7m-6 0v-4a2 2 0 0 1 4 0v4"/>
+                          </svg>
+                          {Dormitorios}
+                        </span>}
+                        {Banos && <span class="feature-item" style="display:flex; align-items:center; gap:0.5rem; font-size:0.95rem; color:var(--color-text-primary); font-weight:500;">
+                          <svg width="16" height="16" fill="none" stroke="#000000" stroke-width="1.5" viewBox="0 0 24 24">
+                            <path d="M7 10v6a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2v-6"/>
+                            <circle cx="12" cy="7" r="3"/>
+                          </svg>
+                          {Banos}
+                        </span>}
+                        {Superficie && <span class="feature-item" style="display:flex; align-items:center; gap:0.5rem; font-size:0.95rem; color:var(--color-text-primary); font-weight:500; grid-column:1/-1;">
+                          <svg width="16" height="16" fill="none" stroke="#000000" stroke-width="1.5" viewBox="0 0 24 24">
+                            <rect x="3" y="3" width="18" height="18" rx="2"/>
+                          </svg>
+                          {Superficie} m² totales
+                        </span>}
+                        {M2utiles && <span class="feature-item" style="display:flex; align-items:center; gap:0.5rem; font-size:0.95rem; color:var(--color-text-primary); font-weight:500; grid-column:1/-1;">
+                          <svg width="16" height="16" fill="none" stroke="#000000" stroke-width="1.5" viewBox="0 0 24 24">
+                            <rect x="3" y="3" width="18" height="18" rx="2"/>
+                            <path d="M3 9h18"/>
+                          </svg>
+                          {M2utiles} m² útiles
+                        </span>}
                     </div>
                 </div>
             </aside>
@@ -484,6 +528,7 @@ const pageDescription = propiedad.Descripcion || `Propiedad en ${Ubicacion}. ${D
       height: 470px !important;
       display: flex !important;
       flex-direction: column !important;
+      align-items: flex-start !important;
     }
   }
 </style>

@@ -419,6 +419,7 @@ a:hover, a:focus {
   flex-direction: column;
   min-height: 0;
   padding: 1.5rem;
+  align-items: flex-start;
 }
 .property-title, .featured-property-title {
   font-size: 1.2rem;
@@ -1029,7 +1030,7 @@ input:focus, textarea:focus {
   box-shadow: 0 2px 8px var(--color-shadow);
   padding: 1.5rem 1.2rem;
   display: flex;
-  align-items: flex-start;
+  align-items: center; /* Cambiado de flex-start a center */
   gap: 1.2rem;
   margin-bottom: 1.5rem;
 }
@@ -2199,4 +2200,49 @@ img.lazy.loaded {
     width: 100%;
     box-sizing: border-box;
   }
+} 
+
+/* =============================
+   Estilos para Iconos SVG Formales
+============================= */
+.info-icon svg {
+  width: 48px;
+  height: 48px;
+  stroke: #000000;
+  stroke-width: 1.5;
+  fill: none;
+  transition: all 0.3s ease;
+}
+
+.info-icon svg:hover {
+  transform: scale(1.05);
+  stroke-width: 2;
+}
+
+.property-features svg {
+  width: 16px;
+  height: 16px;
+  stroke: #000000;
+  stroke-width: 1.5;
+  fill: none;
+  vertical-align: middle;
+  margin-right: 4px;
+}
+
+.feature-item svg {
+  width: 16px;
+  height: 16px;
+  stroke: #000000;
+  stroke-width: 1.5;
+  fill: none;
+  flex-shrink: 0;
+}
+
+.feature-item-mobile svg {
+  width: 16px;
+  height: 16px;
+  stroke: #000000;
+  stroke-width: 1.5;
+  fill: none;
+  flex-shrink: 0;
 } 
