@@ -30,6 +30,22 @@ async function obtenerTasaUF() {
 }
 
 /**
+ * Actualiza la barra UF en el header
+ */
+async function actualizarBarraUF() {
+  const ufBarra = document.getElementById('uf-barra');
+  if (!ufBarra) return;
+  
+  try {
+    const tasaUF = await obtenerTasaUF();
+    ufBarra.textContent = `UF: $${tasaUF.toLocaleString('es-CL')}`;
+  } catch (error) {
+    console.error('Error al actualizar barra UF:', error);
+    ufBarra.textContent = 'UF: $37.000';
+  }
+}
+
+/**
  * Formatea el precio en CLP con separadores de miles
  * @param {number} precio - Precio en CLP
  * @returns {string} Precio formateado
@@ -247,6 +263,7 @@ function getTodasImagenes(propiedad) {
 // Exportar funciones globales
 // =============================
 window.obtenerTasaUF = obtenerTasaUF;
+window.actualizarBarraUF = actualizarBarraUF;
 window.formatearPrecioCLP = formatearPrecioCLP;
 window.actualizarPrecioCLP = actualizarPrecioCLP;
 window.renderizarDetallePropiedad = renderizarDetallePropiedad;
@@ -255,5 +272,12 @@ window.inicializarGaleria = inicializarGaleria;
 window.configurarWhatsApp = configurarWhatsApp;
 window.getPrimeraImagen = getPrimeraImagen;
 window.getTodasImagenes = getTodasImagenes;
+
+// Inicializar barra UF cuando se carga la página
+document.addEventListener('DOMContentLoaded', () => {
+  if (typeof actualizarBarraUF === 'function') {
+    actualizarBarraUF();
+  }
+});
 
 console.log('✅ API estática cargada correctamente - Solo UF en tiempo real')
