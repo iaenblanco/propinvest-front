@@ -213,10 +213,11 @@ function inicializarGaleria(imagenes) {
  */
 function configurarWhatsApp(nombrePropiedad) {
   const whatsappButtons = document.querySelectorAll('a[href*="wa.me"]');
-  const mensaje = `Hola, me interesa la propiedad ${nombrePropiedad} que vi en su sitio web.`;
+  const currentUrl = window.location.href;
+  const mensaje = `Hola, quiero más información de esta propiedad: ${nombrePropiedad}. Enlace: ${currentUrl}`;
   
   whatsappButtons.forEach(button => {
-    button.href = `https://wa.me/56912345678?text=${encodeURIComponent(mensaje)}`;
+    button.href = `https://wa.me/56974954413?text=${encodeURIComponent(mensaje)}`;
   });
 }
 
