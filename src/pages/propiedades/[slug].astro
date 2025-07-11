@@ -233,7 +233,7 @@ const pageDescription = propiedad.Descripcion || `Propiedad en ${Ubicacion}. ${D
                 <div class="technical-specs-section ficha-mobile" style="display:block; margin-top: 2rem;">
                     <h2 class="section-title">Características</h2>
                     <div class="specs-list-mobile" style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.8rem 1.5rem;">
-                        {todasLasEspecificaciones.map(item => {
+                        {todasLasEspecificaciones.map((item, index) => {
                             const valor = propiedad[item.key];
                             if (!valor && !(valor === true || valor === 'Sí') && item.type !== 'currency') return null;
                             let valorDisplay = '';
@@ -242,12 +242,20 @@ const pageDescription = propiedad.Descripcion || `Propiedad en ${Ubicacion}. ${D
                             else if (item.type === 'currency' && valor) { valorDisplay = formatearPrecioCLP(valor).replace('CLP ', ''); } 
                             else { return null; }
                             return (
-                                <div class="spec-row-mobile" style="display:flex; align-items:center; gap:0.6rem; font-size:0.9rem; color:var(--color-text-primary);">
+                                <div class="spec-row-mobile" style="display:flex; align-items:center; gap:0.6rem; font-size:0.9rem; color:var(--color-text-primary);" data-index={index}>
                                     <span style='display:inline-flex; align-items:center; justify-content:center; width:32px; height:32px; background:#f5f5f5; border-radius:50%;' set:html={item.icon}></span>
                                     {item.label}: <span style='font-weight:700; margin-left:auto;'>{valorDisplay}</span>
                                 </div>
                             );
                         })}
+                    </div>
+                    <div class="ver-mas-container">
+                        <button class="ver-mas-btn" id="ver-mas-mobile" style="display: none;">
+                            <span>Ver más características</span>
+                            <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                <polyline points="6,9 12,15 18,9"></polyline>
+                            </svg>
+                        </button>
                     </div>
                 </div>
             </div>
@@ -299,7 +307,7 @@ const pageDescription = propiedad.Descripcion || `Propiedad en ${Ubicacion}. ${D
             <div class="technical-specs-section ficha-desktop" style="display:block;">
                 <h2 class="section-title">Características</h2>
                 <div class="specs-list" style="width:100%; display:grid; grid-template-columns:repeat(4, 1fr); gap:0.7rem 2.5rem; margin-bottom:0.5rem;">
-                    {todasLasEspecificaciones.map(item => {
+                    {todasLasEspecificaciones.map((item, index) => {
                         const valor = propiedad[item.key];
                          if (!valor && !(valor === true || valor === 'Sí') && item.type !== 'currency') return null;
                         let valorDisplay = '';
@@ -308,12 +316,20 @@ const pageDescription = propiedad.Descripcion || `Propiedad en ${Ubicacion}. ${D
                         else if (item.type === 'currency' && valor) { valorDisplay = formatearPrecioCLP(valor).replace('CLP ', ''); }
                         else { return null; }
                         return (
-                            <div class="spec-row" style="display:flex; align-items:center; gap:0.7rem; font-size:1.08rem; color:var(--color-text-primary);">
+                            <div class="spec-row" style="display:flex; align-items:center; gap:0.7rem; font-size:1.08rem; color:var(--color-text-primary);" data-index={index}>
                                 <span style='display:inline-flex; align-items:center; justify-content:center; width:32px; height:32px; background:#f5f5f5; border-radius:50%;' set:html={item.icon}></span>
                                 {item.label}: <span style='font-weight:700; margin-left:0.3rem;'>{valorDisplay}</span>
                             </div>
                         );
                     })}
+                </div>
+                <div class="ver-mas-container">
+                    <button class="ver-mas-btn" id="ver-mas-desktop" style="display: none;">
+                        <span>Ver más características</span>
+                        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                            <polyline points="6,9 12,15 18,9"></polyline>
+                        </svg>
+                    </button>
                 </div>
             </div>
         </div>
@@ -403,6 +419,79 @@ const pageDescription = propiedad.Descripcion || `Propiedad en ${Ubicacion}. ${D
         }
         ajustarFichaTecnicaYCaracteristicas();
         window.addEventListener('resize', ajustarFichaTecnicaYCaracteristicas);
+
+        // Funcionalidad de "Ver más/Ver menos" para características
+        function inicializarVerMas() {
+            const specsListDesktop = document.querySelector('.specs-list');
+            const specsListMobile = document.querySelector('.specs-list-mobile');
+            const btnDesktop = document.getElementById('ver-mas-desktop');
+            const btnMobile = document.getElementById('ver-mas-mobile');
+            
+            // Función para configurar límites y mostrar botón
+            function configurarVerMas(lista, boton, limite) {
+                if (!lista || !boton) return;
+                
+                const caracteristicas = Array.from(lista.querySelectorAll('.spec-row, .spec-row-mobile')).filter(el => {
+                    const valor = el.querySelector('span:last-child');
+                    return valor && valor.textContent.trim() !== '';
+                });
+                
+                if (caracteristicas.length > limite) {
+                    boton.style.display = 'inline-flex';
+                    
+                    // Ocultar características que exceden el límite
+                    caracteristicas.forEach((caract, index) => {
+                        if (index >= limite) {
+                            caract.style.display = 'none';
+                        } else {
+                            caract.style.display = 'flex';
+                        }
+                    });
+                    
+                    // Configurar evento click
+                    boton.onclick = function() {
+                        const estaExpandido = lista.classList.contains('expandido');
+                        
+                        if (estaExpandido) {
+                            // Contraer
+                            lista.classList.remove('expandido');
+                            this.innerHTML = '<span>Ver más características</span><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="6,9 12,15 18,9"></polyline></svg>';
+                            this.classList.remove('activo');
+                            
+                            // Ocultar características excedentes
+                            caracteristicas.forEach((caract, index) => {
+                                if (index >= limite) {
+                                    caract.style.display = 'none';
+                                }
+                            });
+                            this.blur(); // <-- Agregado para quitar el foco
+                        } else {
+                            // Expandir
+                            lista.classList.add('expandido');
+                            this.innerHTML = '<span>Ver menos características</span><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="6,9 12,15 18,9"></polyline></svg>';
+                            this.classList.add('activo');
+                            
+                            // Mostrar todas las características
+                            caracteristicas.forEach(caract => {
+                                caract.style.display = 'flex';
+                            });
+                            this.blur(); // <-- Agregado para quitar el foco
+                        }
+                    };
+                } else {
+                    boton.style.display = 'none';
+                }
+            }
+            
+            // Configurar para desktop (8 características = 2 filas de 4)
+            configurarVerMas(specsListDesktop, btnDesktop, 8);
+            
+            // Configurar para móvil (6 características)
+            configurarVerMas(specsListMobile, btnMobile, 6);
+        }
+        
+        // Inicializar después de que el DOM esté listo
+        setTimeout(inicializarVerMas, 100);
 
         // Lógica de la Galería
         if (imagenes && imagenes.length > 1) {

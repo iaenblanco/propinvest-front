@@ -970,6 +970,154 @@ input:focus, textarea:focus {
     max-width: none !important;
     width: 100% !important;
   }
+  
+  /* Estilos para el botón ver más/ver menos */
+  .ver-mas-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    padding: 0.75rem 1.5rem;
+    background: transparent;
+    border: 1px solid var(--color-text-primary);
+    border-radius: 8px;
+    color: var(--color-text-primary);
+    font-size: 0.9rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    margin-top: 1rem;
+    font-family: var(--font-primary);
+    text-align: center;
+    width: 100%;
+    max-width: 300px;
+  }
+  
+  .ver-mas-btn:hover {
+    background: var(--color-text-primary);
+    color: var(--color-background);
+  }
+  
+  .ver-mas-btn svg {
+    width: 16px;
+    height: 16px;
+    transition: transform 0.3s ease;
+  }
+  
+  .ver-mas-btn.activo svg {
+    transform: rotate(180deg);
+  }
+  
+  /* Contenedor centrado para el botón */
+  .ver-mas-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    margin-top: 1rem;
+  }
+  
+  /* Estilos específicos para el botón en desktop */
+  .ficha-desktop .ver-mas-btn {
+    background: transparent !important;
+    border: 1px solid var(--color-text-primary) !important;
+    border-radius: 8px !important;
+    color: var(--color-text-primary) !important;
+    font-size: 0.9rem !important;
+    font-weight: 500 !important;
+    padding: 0.75rem 1.5rem !important;
+    transition: all 0.3s ease !important;
+  }
+  
+  .ficha-desktop .ver-mas-btn:hover {
+    background: var(--color-text-primary) !important;
+    color: var(--color-background) !important;
+  }
+  
+  /* Contenedor de características con altura limitada */
+  .specs-container {
+    overflow: hidden;
+    transition: max-height 0.4s ease;
+  }
+  
+  .specs-container.colapsado {
+    max-height: 0;
+  }
+  
+  /* Estilos específicos para desktop */
+  @media (min-width: 1024px) {
+    .specs-list {
+      max-height: 120px; /* Altura para mostrar 2 filas */
+      overflow: hidden;
+      transition: max-height 0.4s ease;
+    }
+    
+    .specs-list.expandido {
+      max-height: none;
+    }
+    
+    /* Asegurar que el botón de desktop tenga el mismo estilo que móvil */
+    .ver-mas-btn {
+      display: inline-flex !important;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      padding: 0.75rem 1.5rem;
+      background: transparent;
+      border: 1px solid var(--color-text-primary);
+      border-radius: 8px;
+      color: var(--color-text-primary);
+      font-size: 0.9rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      margin-top: 1rem;
+      font-family: var(--font-primary);
+      text-align: center;
+      width: 100%;
+      max-width: 300px;
+    }
+    
+    .ver-mas-btn:hover {
+      background: var(--color-text-primary);
+      color: var(--color-background);
+    }
+    
+    .ver-mas-container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      width: 100%;
+      margin-top: 1rem;
+    }
+    
+    /* Forzar el centrado en desktop */
+    .ficha-desktop .ver-mas-container {
+      display: flex !important;
+      justify-content: center !important;
+      align-items: center !important;
+      width: 100% !important;
+      margin-top: 1rem !important;
+    }
+    
+    .ficha-desktop .ver-mas-btn {
+      display: inline-flex !important;
+      margin: 0 auto !important;
+    }
+  }
+  
+  /* Estilos específicos para móvil */
+  @media (max-width: 1023px) {
+    .specs-list-mobile {
+      max-height: 180px; /* Altura para mostrar 6 características */
+      overflow: hidden;
+      transition: max-height 0.4s ease;
+    }
+    
+    .specs-list-mobile.expandido {
+      max-height: none;
+    }
+  }
 }
 
 @media (max-width: 480px) {
@@ -2404,3 +2552,126 @@ img.lazy.loaded {
   fill: none;
   flex-shrink: 0;
 } 
+
+/* Estilos para el botón ver más/ver menos (unificado para mobile y desktop) */
+.ver-mas-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  margin-top: 1rem;
+}
+
+.ver-mas-btn {
+  display: block;
+  margin: 0 auto;
+  padding: 0.75rem 1.5rem;
+  background: transparent;
+  border: 1.5px solid var(--color-text-primary);
+  border-radius: 10px;
+  color: var(--color-text-primary);
+  font-size: 1rem;
+  font-family: var(--font-primary);
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-align: center;
+  box-shadow: none;
+  outline: none;
+  max-width: 320px;
+}
+
+.ver-mas-btn:hover, .ver-mas-btn:focus {
+  background: var(--color-text-primary);
+  color: var(--color-background);
+  border-color: var(--color-text-primary);
+}
+
+.ver-mas-btn svg {
+  width: 18px;
+  height: 18px;
+  transition: transform 0.3s ease;
+  vertical-align: middle;
+}
+
+.ver-mas-btn.activo svg {
+  transform: rotate(180deg);
+}
+
+/* Elimina reglas específicas para desktop que sobrescriban el estilo unificado */
+@media (min-width: 1024px) {
+  .ficha-desktop .ver-mas-btn {
+    display: block !important;
+    margin: 0 auto !important;
+    background: transparent !important;
+    border: 1.5px solid var(--color-text-primary) !important;
+    border-radius: 10px !important;
+    color: var(--color-text-primary) !important;
+    font-size: 1rem !important;
+    font-family: var(--font-primary) !important;
+    font-weight: 500 !important;
+    box-shadow: none !important;
+    outline: none !important;
+    max-width: 320px !important;
+    text-align: center !important;
+    padding: 0.75rem 1.5rem !important;
+    transition: all 0.3s ease !important;
+  }
+  .ficha-desktop .ver-mas-btn:hover, .ficha-desktop .ver-mas-btn:focus {
+    background: var(--color-text-primary) !important;
+    color: var(--color-background) !important;
+    border-color: var(--color-text-primary) !important;
+  }
+  .ficha-desktop .ver-mas-container {
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+    width: 100% !important;
+    margin-top: 1rem !important;
+  }
+} 
+
+/* ...otros estilos previos... */
+.ver-mas-btn.activo svg {
+  transform: rotate(180deg);
+}
+
+/* Elimina cualquier color de fondo/texto para .activo (solo rotación de flecha) */
+.ver-mas-btn.activo,
+.ficha-desktop .ver-mas-btn.activo {
+  background: transparent !important;
+  color: var(--color-text-primary) !important;
+  border-color: var(--color-text-primary) !important;
+}
+
+.ver-mas-btn:hover, .ver-mas-btn:focus, .ver-mas-btn.activo:hover, .ver-mas-btn.activo:focus {
+  background: var(--color-text-primary) !important;
+  color: var(--color-background) !important;
+  border-color: var(--color-text-primary) !important;
+}
+
+@media (min-width: 1024px) {
+  .ficha-desktop .ver-mas-container {
+    margin-top: 2rem !important;
+  }
+}
+
+@media (max-width: 1023px) {
+  .technical-specs-section.ficha-mobile {
+    margin-bottom: 0.25rem !important;
+  }
+  .ver-mas-container {
+    margin-bottom: 0 !important;
+  }
+  .ver-mas-btn {
+    margin-bottom: 0 !important;
+  }
+  .specs-list-mobile {
+    gap: 0.5rem 1rem !important;
+    margin-bottom: 0 !important;
+  }
+}
+
+.description-content {
+  text-align: justify;
+}
