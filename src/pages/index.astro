@@ -179,13 +179,13 @@ try {
     document.addEventListener('DOMContentLoaded', () => {
       if (typeof cargarPropiedadesDestacadasCarousel === 'function') {
         if (propiedadesVenta && propiedadesVenta.length > 0) {
-          cargarPropiedadesDestacadasCarousel('.featured-properties-carousel', propiedadesVenta);
+          cargarPropiedadesDestacadasCarousel('.featured-properties-carousel', propiedadesVenta, { autoPlay: false });
         }
       }
       
       if (typeof cargarPropiedadesDestacadasArriendoCarousel === 'function') {
         if (propiedadesArriendo && propiedadesArriendo.length > 0) {
-          cargarPropiedadesDestacadasArriendoCarousel('.featured-rental-properties-carousel', propiedadesArriendo);
+          cargarPropiedadesDestacadasArriendoCarousel('.featured-rental-properties-carousel', propiedadesArriendo, { autoPlay: false });
         }
       }
     });
