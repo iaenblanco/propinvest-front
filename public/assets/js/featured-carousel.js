@@ -183,15 +183,16 @@ class StaticPropertiesCarousel {
   }
 
   prev() {
-    if (this.isAnimating) return;
-    const maxIndex = Math.ceil(this.totalItems / this.options.itemsPerView) - 1;
-    this.goToSlide(this.currentIndex > 0 ? this.currentIndex - 1 : maxIndex);
+    if (this.isAnimating || this.currentIndex === 0) return;
+    this.goToSlide(this.currentIndex - 1);
   }
 
   next() {
     if (this.isAnimating) return;
     const maxIndex = Math.ceil(this.totalItems / this.options.itemsPerView) - 1;
-    this.goToSlide(this.currentIndex < maxIndex ? this.currentIndex + 1 : 0);
+    if (this.currentIndex < maxIndex) {
+      this.goToSlide(this.currentIndex + 1);
+    }
   }
 
   goToSlide(index) {
@@ -207,7 +208,20 @@ class StaticPropertiesCarousel {
     if (!this.track) return;
     
     this.isAnimating = true;
-    const translateX = -(this.currentIndex * 100);
+    
+    // Calcular el translateX basado en el tamaño de pantalla
+    let translateX;
+    if (window.innerWidth <= 480) {
+      // En móvil muy pequeño: mover de 2 en 2 tarjetas
+      translateX = -(this.currentIndex * 100);
+    } else if (window.innerWidth <= 768) {
+      // En móvil: mover de 2 en 2 tarjetas
+      translateX = -(this.currentIndex * 100);
+    } else {
+      // En desktop: usar el cálculo original
+      translateX = -(this.currentIndex * 100);
+    }
+    
     this.track.style.transform = `translateX(${translateX}%)`;
     
     setTimeout(() => {
@@ -225,15 +239,31 @@ class StaticPropertiesCarousel {
       }
     });
 
-    // Actualizar flechas (opcional: deshabilitar en extremos)
+    // Actualizar flechas - deshabilitar completamente en extremos
     const maxIndex = Math.ceil(this.totalItems / this.options.itemsPerView) - 1;
     
     if (this.prevArrow) {
-      this.prevArrow.style.opacity = this.currentIndex === 0 ? '0.5' : '1';
+      if (this.currentIndex === 0) {
+        this.prevArrow.style.opacity = '0.3';
+        this.prevArrow.style.cursor = 'not-allowed';
+        this.prevArrow.disabled = true;
+      } else {
+        this.prevArrow.style.opacity = '1';
+        this.prevArrow.style.cursor = 'pointer';
+        this.prevArrow.disabled = false;
+      }
     }
     
     if (this.nextArrow) {
-      this.nextArrow.style.opacity = this.currentIndex === maxIndex ? '0.5' : '1';
+      if (this.currentIndex === maxIndex) {
+        this.nextArrow.style.opacity = '0.3';
+        this.nextArrow.style.cursor = 'not-allowed';
+        this.nextArrow.disabled = true;
+      } else {
+        this.nextArrow.style.opacity = '1';
+        this.nextArrow.style.cursor = 'pointer';
+        this.nextArrow.disabled = false;
+      }
     }
   }
 
@@ -310,7 +340,7 @@ class StaticPropertiesCarousel {
   getItemsPerView() {
     if (window.innerWidth >= 1200) return 3;
     if (window.innerWidth >= 768) return 2;
-    return 1;
+    return 2; // Cambiado de 1 a 2 para móvil
   }
 
   updateItemsPerView() {

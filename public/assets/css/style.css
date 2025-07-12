@@ -1702,13 +1702,17 @@ input:focus, textarea:focus {
 
 @media (max-width: 768px) {
   .featured-property-card {
-    flex: 0 0 calc(50% - 0.5rem);
+    flex: 0 0 50%;
     min-width: 200px;
     height: 100%;
   }
   
   .featured-properties-container {
     padding: 0 40px;
+  }
+  
+  .featured-carousel-track {
+    gap: 0;
   }
   
   .carousel-arrow {
@@ -1777,13 +1781,17 @@ input:focus, textarea:focus {
     padding: 0 30px;
   }
   
+  .featured-carousel-track {
+    gap: 0;
+  }
+  
   .carousel-arrow {
     width: 36px;
     height: 36px;
   }
   
   .featured-property-card {
-    flex: 0 0 calc(50% - 0.5rem);
+    flex: 0 0 50%;
     min-width: 160px;
     height: 100%;
   }
