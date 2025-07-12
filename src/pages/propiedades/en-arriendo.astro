@@ -29,7 +29,9 @@ const propiedadesValidas = Array.isArray(propiedades) ? propiedades.filter(prop 
             const precioFormateado = `UF ${prop.Precio ? prop.Precio.toLocaleString('es-CL') : 'Consultar'}`;
             return (
               <article class="property-card">
-                <img src={imagenUrl} alt={prop.Titulo} />
+                <a href={`/propiedades/${prop.Slug}`} class="property-image-link">
+                  <img src={imagenUrl} alt={prop.Titulo} />
+                </a>
                 <div class="property-card-content">
                   <h2 class="property-title">{prop.Titulo || 'Propiedad sin título'}</h2>
                   <div class="property-location">{prop.Ubicacion || 'Sin ubicación'}</div>

@@ -137,7 +137,9 @@ class StaticPropertiesCarousel {
     
     return `
       <div class="featured-property-card">
-        <img src="${imagen}" alt="${datos.Titulo}" class="featured-property-image" />
+        <a href="/propiedades/${datos.Slug}" class="featured-property-image-link">
+          <img src="${imagen}" alt="${datos.Titulo}" class="featured-property-image" />
+        </a>
         <div class="featured-property-content">
           <h3 class="featured-property-title">${datos.Titulo}</h3>
           <div class="featured-property-location">${datos.Ubicacion}</div>

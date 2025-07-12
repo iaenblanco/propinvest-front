@@ -484,6 +484,19 @@ a:hover, a:focus {
   transform: translateY(-4px);
   box-shadow: 0 8px 24px var(--color-shadow);
 }
+
+.property-image-link {
+  display: block;
+  text-decoration: none;
+  color: inherit;
+  transition: transform 0.3s ease;
+  cursor: pointer;
+}
+
+.property-image-link:hover {
+  transform: scale(1.02);
+}
+
 .property-card img, .featured-property-image {
   width: 100%;
   height: 240px;
@@ -1477,6 +1490,18 @@ input:focus, textarea:focus {
 .featured-property-card:hover {
   transform: translateY(-8px);
   box-shadow: 0 16px 48px rgba(0, 0, 0, 0.15);
+}
+
+.featured-property-image-link {
+  display: block;
+  text-decoration: none;
+  color: inherit;
+  transition: transform 0.3s ease;
+  cursor: pointer;
+}
+
+.featured-property-image-link:hover {
+  transform: scale(1.02);
 }
 
 .featured-property-image {
