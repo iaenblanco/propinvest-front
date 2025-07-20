@@ -338,7 +338,18 @@ const pageDescription = propiedad.Descripcion || `Propiedad en ${Ubicacion}. ${D
             {Descripcion && (
                 <div class="description-section">
                     <h2 class="section-title">Descripción</h2>
-                    <div class="description-content" set:html={Descripcion}></div>
+                    <div class="description-content-wrapper" id="description-wrapper">
+                        <div class="description-content" id="description-text" set:html={Descripcion}></div>
+                        <div class="description-fade"></div>
+                    </div>
+                    <div class="ver-mas-container" style="text-align: center; margin-top: 1.5rem;">
+                        <button class="ver-mas-btn" id="leer-mas-btn" style="display: none;">
+                            <span>Leer más</span>
+                            <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                <polyline points="6,9 12,15 18,9"></polyline>
+                            </svg>
+                        </button>
+                    </div>
                 </div>
             )}
             
@@ -493,6 +504,37 @@ const pageDescription = propiedad.Descripcion || `Propiedad en ${Ubicacion}. ${D
         // Inicializar después de que el DOM esté listo
         setTimeout(inicializarVerMas, 100);
 
+        // Funcionalidad para "Leer más" en la descripción
+        function inicializarLeerMas() {
+            const wrapper = document.getElementById('description-wrapper');
+            const content = document.getElementById('description-text');
+            const btn = document.getElementById('leer-mas-btn');
+
+            if (!wrapper || !content || !btn) return;
+
+            // Usamos un pequeño timeout para asegurar que el CSS ha sido aplicado
+            setTimeout(() => {
+                const contentHeight = content.scrollHeight;
+                const wrapperHeight = wrapper.clientHeight;
+
+                if (contentHeight > wrapperHeight) {
+                    btn.style.display = 'inline-flex'; // Mostrar el botón
+                } else {
+                    wrapper.style.maxHeight = 'none'; // El contenido cabe, así que quitamos la restricción
+                    wrapper.querySelector('.description-fade').style.display = 'none'; // Ocultar el degradado
+                }
+            }, 100);
+
+            btn.addEventListener('click', () => {
+                wrapper.classList.toggle('expanded');
+                const isExpanded = wrapper.classList.contains('expanded');
+                btn.querySelector('span').textContent = isExpanded ? 'Leer menos' : 'Leer más';
+                btn.blur();
+            });
+        }
+
+        setTimeout(inicializarLeerMas, 100);
+
         // Lógica de la Galería
         if (imagenes && imagenes.length > 1) {
             let current = 0;
@@ -636,6 +678,53 @@ const pageDescription = propiedad.Descripcion || `Propiedad en ${Ubicacion}. ${D
     .description-content {
       padding-left: 1rem;
       padding-right: 1rem;
+    }
+  }
+
+  /* --- Funcionalidad Leer Más para Descripción --- */
+  .description-content-wrapper {
+    position: relative;
+    max-height: 10rem; /* Aprox. 5 líneas en móvil */
+    overflow: hidden;
+    transition: max-height 0.5s ease-in-out;
+  }
+
+  .description-content-wrapper.expanded {
+    max-height: 1000px; /* Un valor suficientemente grande */
+  }
+
+  .description-fade {
+    display: block;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 3rem;
+    background: linear-gradient(to bottom, transparent, var(--color-background));
+    pointer-events: none;
+    transition: opacity 0.3s;
+    opacity: 1;
+  }
+
+  .description-content-wrapper.expanded .description-fade {
+    opacity: 0;
+  }
+
+  #leer-mas-btn svg {
+    transition: transform 0.3s;
+  }
+
+  .description-content-wrapper.expanded + .ver-mas-container #leer-mas-btn svg {
+    transform: rotate(180deg);
+  }
+
+  /* --- Media Query para Desktop --- */
+  @media (min-width: 1024px) {
+    .description-content-wrapper {
+      max-height: 9.6rem; /* Aprox. 4 líneas en desktop */
+    }
+    .description-content-wrapper.expanded {
+      max-height: 1000px;
     }
   }
 </style>
