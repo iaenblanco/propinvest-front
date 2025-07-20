@@ -630,4 +630,12 @@ const pageDescription = propiedad.Descripcion || `Propiedad en ${Ubicacion}. ${D
       align-items: flex-start !important;
     }
   }
+
+  /* --- AJUSTE PARA DESCRIPCIÓN EN MOBILE --- */
+  @media (max-width: 1023px) {
+    .description-content {
+      padding-left: 1rem;
+      padding-right: 1rem;
+    }
+  }
 </style>
