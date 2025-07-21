@@ -28,6 +28,7 @@ const {
   Titulo,
   Ubicacion,
   Precio,
+  Precio_CLP,
   Dormitorios,
   Banos,
   Superficie,
@@ -258,10 +259,16 @@ const pageDescription = propiedad.Descripcion || `Propiedad en ${Ubicacion}. ${D
                     {Tipo && Objetivo && <div class="property-type" style="font-size:0.9rem; color:var(--color-text-secondary); font-weight:500; margin:0; text-transform:capitalize;">{Tipo} en {Objetivo}</div>}
                     <h1 class="property-main-title" style="font-size:1.6rem; margin:0; line-height:1.2; color:var(--color-text-primary);">{Titulo}</h1>
                     {Ubicacion && <div class="property-location" style="font-size:1rem; color:var(--color-text-secondary); margin:0;">📍 {Ubicacion}</div>}
-                    {Precio && (
+                    {(Precio || Precio_CLP) && (
                         <div class="property-price" style="margin:0.5rem 0;">
-                            <div class="price-uf" style="font-size:2rem; font-weight:700; color:var(--color-primary-accent); margin:0;">{precioUF}</div>
-                            {precioCLP && <div class="price-clp" style="font-size:1.1rem; color:var(--color-text-secondary); margin-top:0.2rem;">{precioCLP}</div>}
+                            {Precio ? (
+                                <>
+                                    <div class="price-uf" style="font-size:2rem; font-weight:700; color:var(--color-primary-accent); margin:0;">{precioUF}</div>
+                                    {precioCLP && <div class="price-clp" style="font-size:1.1rem; color:var(--color-text-secondary); margin-top:0.2rem;">{precioCLP}</div>}
+                                </>
+                            ) : (
+                                <div class="price-clp-main" style="font-size:2rem; font-weight:700; color:var(--color-primary-accent); margin:0;">{formatearPrecioCLP(Precio_CLP)}</div>
+                            )}
                         </div>
                     )}
                     <div class="property-key-features" style="display:grid; grid-template-columns:1fr 1fr; gap:1rem; margin-top:0.5rem;">
