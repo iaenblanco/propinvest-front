@@ -472,9 +472,10 @@ a:hover, a:focus {
 ============================= */
 .property-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  grid-template-columns: repeat(3, 1fr);
   gap: 2rem;
   margin: 2rem 0;
+  justify-content: start;
 }
 .property-card, .featured-property-card {
   display: flex;
@@ -820,10 +821,16 @@ input:focus, textarea:focus {
   }
   .property-grid {
     gap: 1.5rem;
+    grid-template-columns: repeat(2, 1fr);
   }
 }
 
 @media (max-width: 768px) {
+  .property-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+  }
+  
   .navbar {
     display: flex;
     align-items: center;
@@ -1244,6 +1251,10 @@ input:focus, textarea:focus {
 }
 
 @media (max-width: 480px) {
+  .property-grid {
+    grid-template-columns: 1fr;
+  }
+  
   .hero-title {
     font-size: 2rem;
   }
