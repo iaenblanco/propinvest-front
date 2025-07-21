@@ -57,10 +57,12 @@ const variantClasses = {
     position: relative;
     border-radius: 20px;
     padding: 3rem 2rem;
-    margin: 3rem 0;
+    margin: 3rem auto;
     overflow: hidden;
     box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    max-width: 600px;
+    width: fit-content;
   }
 
   .cta-banner-modular:hover {
@@ -148,6 +150,8 @@ const variantClasses = {
     .cta-banner-modular {
       padding: 2rem 1.5rem;
       margin: 2rem 0;
+      max-width: none;
+      width: 100%;
     }
 
     .cta-banner-title {
