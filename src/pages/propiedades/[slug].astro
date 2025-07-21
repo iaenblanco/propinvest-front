@@ -201,7 +201,7 @@ const pageDescription = propiedad.Descripcion || `Propiedad en ${Ubicacion}. ${D
                         <h1 class="property-main-title-mobile" style="font-size:1.2rem; margin:0; line-height:1.2; color:var(--color-text-primary); font-weight:600; flex:1;">{Titulo}</h1>
                         {precioCLP && <div class="price-clp-mobile" style="font-size:0.9rem; color:var(--color-text-secondary); text-align:right; flex-shrink:0;">{precioCLP}</div>}
                     </div>
-                    {Ubicacion && <div class="property-location-mobile" style="font-size:0.85rem; color:var(--color-text-secondary); flex:1;">📍 {Ubicacion}</div>}
+                    {Ubicacion && <div class="property-location-mobile" style="font-size:0.85rem; color:var(--color-text-secondary); flex:1; display:flex; align-items:center; gap:0.3rem;"><img src="/assets/icons/ubicacion.svg" alt="Ubicación" style="width:32px; height:32px;"> {Ubicacion}</div>}
                     <div class="property-key-features-mobile" style="display:grid; grid-template-columns:repeat(4, 1fr); gap:0.5rem; margin-top:0.5rem;">
                         {Dormitorios && <span class="feature-item-mobile" style="display:flex; flex-direction:column; align-items:center; gap:0.2rem; font-size:0.75rem; color:var(--color-text-primary); font-weight:500; text-align:center;">
                           <img src="/assets/icons/bed.svg" alt="Dormitorios" style="width:16px; height:16px;">
@@ -258,7 +258,7 @@ const pageDescription = propiedad.Descripcion || `Propiedad en ${Ubicacion}. ${D
                 <div class="info-box" style="background:var(--color-background); border:1px solid var(--color-text-primary); border-radius:14px; box-shadow:0 2px 8px var(--color-shadow); padding:2rem; display:flex; flex-direction:column; gap:1.5rem; height:470px; margin-top:0;">
                     {Tipo && Objetivo && <div class="property-type" style="font-size:0.9rem; color:var(--color-text-secondary); font-weight:500; margin:0; text-transform:capitalize;">{Tipo} en {Objetivo}</div>}
                     <h1 class="property-main-title" style="font-size:1.6rem; margin:0; line-height:1.2; color:var(--color-text-primary);">{Titulo}</h1>
-                    {Ubicacion && <div class="property-location" style="font-size:1rem; color:var(--color-text-secondary); margin:0;">📍 {Ubicacion}</div>}
+                    {Ubicacion && <div class="property-location" style="font-size:1rem; color:var(--color-text-secondary); margin:0; display:flex; align-items:center; gap:0.3rem;"><img src="/assets/icons/ubicacion.svg" alt="Ubicación" style="width:32px; height:32px;"> {Ubicacion}</div>}
                     {(Precio || Precio_CLP) && (
                         <div class="property-price" style="margin:0.5rem 0;">
                             {Precio ? (
