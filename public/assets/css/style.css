@@ -336,16 +336,103 @@ a:hover, a:focus {
   height: 40px;
   margin-bottom: 1rem;
 }
-.footer-nav ul {
+
+.footer-social {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.footer-social h4 {
+  margin: 0 0 0.5rem 0;
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--color-text-primary);
+}
+
+.social-links {
+  display: flex;
+  gap: 1rem;
+}
+
+.footer-contact-mobile {
+  margin-top: 1rem;
+}
+
+.footer-contact-desktop {
+  display: none;
+}
+
+.footer-nav-section ul li a svg {
+  display: inline-block;
+  margin-right: 0.5rem;
+  vertical-align: middle;
+}
+
+.contact-item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.5rem;
+  font-size: 0.9rem;
+  min-height: 20px;
+}
+
+.contact-item svg {
+  flex-shrink: 0;
+  color: var(--color-text-secondary);
+  width: 16px;
+  height: 16px;
+  min-width: 16px;
+  min-height: 16px;
+  overflow: visible;
+}
+
+.contact-item a {
+  color: var(--color-text-secondary);
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+.contact-item a:hover {
+  color: var(--color-primary-accent);
+}
+
+.footer-nav {
+  display: flex;
+  gap: 2rem;
+  flex-wrap: wrap;
+}
+
+.footer-nav-section {
+  min-width: 150px;
+}
+
+.footer-nav-section h4 {
+  margin: 0 0 0.75rem 0;
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--color-text-primary);
+}
+
+.footer-nav-section ul {
   list-style: none;
   padding: 0;
   margin: 0;
   display: flex;
-  gap: 1.5rem;
+  flex-direction: column;
+  gap: 0.5rem;
 }
-.footer-social {
-  display: flex;
-  gap: 1rem;
+
+.footer-nav-section ul li a {
+  color: var(--color-text-secondary);
+  text-decoration: none;
+  font-size: 0.9rem;
+  transition: color 0.3s ease;
+}
+
+.footer-nav-section ul li a:hover {
+  color: var(--color-primary-accent);
 }
 .footer-bottom {
   margin-top: 2rem;
@@ -865,7 +952,33 @@ input:focus, textarea:focus {
   .footer-content {
     flex-direction: column;
     align-items: flex-start;
+    gap: 2rem;
+  }
+
+  .footer-nav {
+    flex-direction: column;
     gap: 1.5rem;
+    width: 100%;
+  }
+
+  .footer-nav-section {
+    min-width: auto;
+  }
+
+  .footer-social {
+    align-items: flex-start;
+  }
+
+  .social-links {
+    justify-content: flex-start;
+  }
+
+  .footer-contact-mobile {
+    display: block;
+  }
+
+  .footer-contact-desktop {
+    display: none;
   }
   
   .hero-content {
@@ -1472,6 +1585,14 @@ input:focus, textarea:focus {
   /* Ocultar menú desplegable móvil en desktop */
   .mobile-dropdown-menu {
     display: none !important;
+  }
+
+  .footer-contact-mobile {
+    display: none;
+  }
+
+  .footer-contact-desktop {
+    display: block;
   }
 }
 
