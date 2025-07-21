@@ -130,10 +130,10 @@ try {
 }
 
 const todasLasEspecificaciones = [
-    { key: 'Dormitorios', label: 'Dormitorios', type: 'spec', icon: `<svg width='20' height='20' fill='none' stroke='#222' stroke-width='1.7' viewBox='0 0 24 24'><path d='M3 10h18M6 10V7a3 3 0 0 1 6 0v3m-6 0v7m12-7v7m-6 0v-4a2 2 0 0 1 4 0v4'/></svg>` },
-    { key: 'Banos', label: 'Baños', type: 'spec', icon: `<svg width='20' height='20' fill='none' stroke='#222' stroke-width='1.7' viewBox='0 0 24 24'><path d='M7 10v6a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2v-6'/><circle cx='12' cy='7' r='3'/></svg>` },
-    { key: 'Superficie', label: 'Mt2 Totales', type: 'spec', unit: ' m²', icon: `<svg width='20' height='20' fill='none' stroke='#222' stroke-width='1.7' viewBox='0 0 24 24'><rect x='3' y='3' width='18' height='18' rx='2'/></svg>` },
-    { key: 'M2utiles', label: 'Mt2 Útiles', type: 'spec', unit: ' m²', icon: `<svg width='20' height='20' fill='none' stroke='#222' stroke-width='1.7' viewBox='0 0 24 24'><rect x='3' y='3' width='18' height='18' rx='2'/><path d='M3 9h18'/></svg>` },
+    { key: 'Dormitorios', label: 'Dormitorios', type: 'spec', icon: `<img src="/assets/icons/bed.svg" alt="Dormitorios" style="width:20px; height:20px;">` },
+    { key: 'Banos', label: 'Baños', type: 'spec', icon: `<img src="/assets/icons/shower.svg" alt="Baños" style="width:20px; height:20px;">` },
+    { key: 'Superficie', label: 'Mt2 Totales', type: 'spec', unit: ' m²', icon: `<img src="/assets/icons/mt2.svg" alt="Metros cuadrados" style="width:20px; height:20px;">` },
+    { key: 'M2utiles', label: 'Mt2 Útiles', type: 'spec', unit: ' m²', icon: `<img src="/assets/icons/utiles.svg" alt="Metros cuadrados útiles" style="width:20px; height:20px;">` },
     { key: 'Estacionamientos', label: 'Estacionamientos', type: 'spec', icon: `<svg width='20' height='20' fill='none' stroke='#222' stroke-width='1.7' viewBox='0 0 24 24'><rect x='2' y='7' width='20' height='10' rx='2'/><circle cx='7' cy='17' r='2'/><circle cx='17' cy='17' r='2'/></svg>` },
     { key: 'Bodega', label: 'Bodega', type: 'spec', icon: `<svg width='20' height='20' fill='none' stroke='#222' stroke-width='1.7' viewBox='0 0 24 24'><rect x='3' y='3' width='18' height='18' rx='2'/><path d='M9 3v18'/></svg>` },
     { key: 'Gastos_comunes', label: 'GGCC', type: 'currency', icon: `<svg width='20' height='20' fill='none' stroke='#222' stroke-width='1.7' viewBox='0 0 24 24'><path d='M3 21h18M5 21V7l7-4 7 4v14'/><path d='M9 21v-8h6v8'/></svg>` },
@@ -203,22 +203,15 @@ const pageDescription = propiedad.Descripcion || `Propiedad en ${Ubicacion}. ${D
                     {Ubicacion && <div class="property-location-mobile" style="font-size:0.85rem; color:var(--color-text-secondary); flex:1;">📍 {Ubicacion}</div>}
                     <div class="property-key-features-mobile" style="display:grid; grid-template-columns:repeat(4, 1fr); gap:0.5rem; margin-top:0.5rem;">
                         {Dormitorios && <span class="feature-item-mobile" style="display:flex; flex-direction:column; align-items:center; gap:0.2rem; font-size:0.75rem; color:var(--color-text-primary); font-weight:500; text-align:center;">
-                          <svg width="16" height="16" fill="none" stroke="#000000" stroke-width="1.5" viewBox="0 0 24 24" style="font-size:1rem;">
-                            <path d="M3 10h18M6 10V7a3 3 0 0 1 6 0v3m-6 0v7m12-7v7m-6 0v-4a2 2 0 0 1 4 0v4"/>
-                          </svg>
+                          <img src="/assets/icons/bed.svg" alt="Dormitorios" style="width:16px; height:16px;">
                           <span>{Dormitorios}</span>
                         </span>}
                         {Banos && <span class="feature-item-mobile" style="display:flex; flex-direction:column; align-items:center; gap:0.2rem; font-size:0.75rem; color:var(--color-text-primary); font-weight:500; text-align:center;">
-                          <svg width="16" height="16" fill="none" stroke="#000000" stroke-width="1.5" viewBox="0 0 24 24" style="font-size:1rem;">
-                            <path d="M7 10v6a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2v-6"/>
-                            <circle cx="12" cy="7" r="3"/>
-                          </svg>
+                          <img src="/assets/icons/shower.svg" alt="Baños" style="width:16px; height:16px;">
                           <span>{Banos}</span>
                         </span>}
                         {Superficie && <span class="feature-item-mobile" style="display:flex; flex-direction:column; align-items:center; gap:0.2rem; font-size:0.75rem; color:var(--color-text-primary); font-weight:500; text-align:center;">
-                          <svg width="16" height="16" fill="none" stroke="#000000" stroke-width="1.5" viewBox="0 0 24 24" style="font-size:1rem;">
-                            <rect x="3" y="3" width="18" height="18" rx="2"/>
-                          </svg>
+                          <img src="/assets/icons/mt2.svg" alt="Metros cuadrados" style="width:16px; height:16px;">
                           <span>{Superficie}m²</span>
                         </span>}
                         {M2utiles && <span class="feature-item-mobile" style="display:flex; flex-direction:column; align-items:center; gap:0.2rem; font-size:0.75rem; color:var(--color-text-primary); font-weight:500; text-align:center;">
@@ -273,29 +266,19 @@ const pageDescription = propiedad.Descripcion || `Propiedad en ${Ubicacion}. ${D
                     )}
                     <div class="property-key-features" style="display:grid; grid-template-columns:1fr 1fr; gap:1rem; margin-top:0.5rem;">
                         {Dormitorios && <span class="feature-item" style="display:flex; align-items:center; gap:0.5rem; font-size:0.95rem; color:var(--color-text-primary); font-weight:500;">
-                          <svg width="16" height="16" fill="none" stroke="#000000" stroke-width="1.5" viewBox="0 0 24 24">
-                            <path d="M3 10h18M6 10V7a3 3 0 0 1 6 0v3m-6 0v7m12-7v7m-6 0v-4a2 2 0 0 1 4 0v4"/>
-                          </svg>
+                          <img src="/assets/icons/bed.svg" alt="Dormitorios" style="width:16px; height:16px;">
                           {Dormitorios}
                         </span>}
                         {Banos && <span class="feature-item" style="display:flex; align-items:center; gap:0.5rem; font-size:0.95rem; color:var(--color-text-primary); font-weight:500;">
-                          <svg width="16" height="16" fill="none" stroke="#000000" stroke-width="1.5" viewBox="0 0 24 24">
-                            <path d="M7 10v6a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2v-6"/>
-                            <circle cx="12" cy="7" r="3"/>
-                          </svg>
+                          <img src="/assets/icons/shower.svg" alt="Baños" style="width:16px; height:16px;">
                           {Banos}
                         </span>}
                         {Superficie && <span class="feature-item" style="display:flex; align-items:center; gap:0.5rem; font-size:0.95rem; color:var(--color-text-primary); font-weight:500; grid-column:1/-1;">
-                          <svg width="16" height="16" fill="none" stroke="#000000" stroke-width="1.5" viewBox="0 0 24 24">
-                            <rect x="3" y="3" width="18" height="18" rx="2"/>
-                          </svg>
+                          <img src="/assets/icons/mt2.svg" alt="Metros cuadrados" style="width:16px; height:16px;">
                           {Superficie} m² totales
                         </span>}
                         {M2utiles && <span class="feature-item" style="display:flex; align-items:center; gap:0.5rem; font-size:0.95rem; color:var(--color-text-primary); font-weight:500; grid-column:1/-1;">
-                          <svg width="16" height="16" fill="none" stroke="#000000" stroke-width="1.5" viewBox="0 0 24 24">
-                            <rect x="3" y="3" width="18" height="18" rx="2"/>
-                            <path d="M3 9h18"/>
-                          </svg>
+                          <img src="/assets/icons/utiles.svg" alt="Metros cuadrados útiles" style="width:16px; height:16px;">
                           {M2utiles} m² útiles
                         </span>}
                     </div>

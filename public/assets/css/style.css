@@ -383,6 +383,13 @@ a:hover, a:focus {
   border-color: #000;
 }
 
+.property-card .btn:hover, .featured-property-btn:hover {
+  background: rgba(255, 255, 255, 1);
+  color: #000;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
 /* Estilos adicionales para CTAs de propiedades */
 .contact-property-cta {
   width: 100%;
@@ -477,12 +484,13 @@ a:hover, a:focus {
   background: white;
   border-radius: 12px;
   overflow: hidden;
-  box-shadow: 0 2px 8px var(--color-shadow);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
   transition: transform 0.3s ease, box-shadow 0.3s ease;
+  position: relative;
 }
 .property-card:hover, .featured-property-card:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 8px 24px var(--color-shadow);
+  transform: translateY(-8px);
+  box-shadow: 0 16px 48px rgba(0, 0, 0, 0.15);
 }
 
 .property-image-link {
@@ -499,8 +507,9 @@ a:hover, a:focus {
 
 .property-card img, .featured-property-image {
   width: 100%;
-  height: 240px;
+  height: 250px;
   object-fit: cover;
+  background: linear-gradient(45deg, #f0f0f0, #e0e0e0);
   flex-shrink: 0;
 }
 .property-card-content, .featured-property-content {
@@ -512,7 +521,7 @@ a:hover, a:focus {
   align-items: flex-start;
 }
 .property-title, .featured-property-title {
-  font-size: 1.2rem;
+  font-size: 1.25rem;
   font-weight: 600;
   margin-bottom: 0.5rem;
   color: var(--color-text-primary);
@@ -544,18 +553,22 @@ a:hover, a:focus {
   font-weight: 700;
   color: var(--color-primary);
   font-family: var(--font-secondary);
-  margin-bottom: 0.2rem;
+  margin-bottom: 1rem;
+  flex-shrink: 0;
 }
 .property-features, .featured-property-features {
-  display: flex;
-  gap: 1rem;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0.75rem;
+  margin-bottom: 1.5rem;
   font-size: 0.85rem;
   color: var(--color-text-secondary);
+  flex-shrink: 0;
 }
 .property-features span, .featured-property-features span {
   display: flex;
   align-items: center;
-  gap: 0.3rem;
+  gap: 0.25rem;
 }
 
 .property-bottom, .featured-property-bottom {
@@ -566,8 +579,24 @@ a:hover, a:focus {
 }
 
 .property-card .btn, .featured-property-btn {
-  margin-top: 0.5rem;
+  display: inline-block;
+  background: rgba(255, 255, 255, 0.95);
+  color: #000;
+  padding: 0.75rem 1.5rem;
+  border-radius: 8px;
+  text-decoration: none;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  text-align: center;
+  width: 100%;
+  border: 1px solid #000;
+  cursor: pointer;
+  font-family: var(--font-primary);
+  margin-top: auto;
   flex-shrink: 0;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
 /* =============================
@@ -893,6 +922,68 @@ input:focus, textarea:focus {
     padding: 2rem 1rem;
   }
   
+  /* Estilos unificados para tarjetas de propiedades */
+  .property-card, .featured-property-card {
+    flex: 0 0 50%;
+    min-width: 200px;
+    height: 100%;
+  }
+  
+  .property-card img, .featured-property-image {
+    height: 160px;
+    flex-shrink: 0;
+  }
+  
+  .property-card-content, .featured-property-content {
+    padding: 0.75rem;
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    min-height: 0;
+  }
+  
+  .property-title, .featured-property-title {
+    font-size: 1rem;
+    margin-bottom: 0.25rem;
+    line-height: 1.3;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    min-height: 2.6em;
+  }
+  
+  .property-location, .featured-property-location {
+    font-size: 0.8rem;
+    margin-bottom: 0.5rem;
+    flex-shrink: 0;
+  }
+  
+  .property-price, .featured-property-price {
+    font-size: 1.1rem;
+    margin-bottom: 0.5rem;
+    flex-shrink: 0;
+  }
+  
+  .property-features, .featured-property-features {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+    font-size: 0.75rem;
+    flex-shrink: 0;
+  }
+  
+  .property-card .btn, .featured-property-btn {
+    padding: 0.5rem 1rem;
+    font-size: 0.85rem;
+    margin-top: auto;
+    flex-shrink: 0;
+    background: rgba(255, 255, 255, 0.95);
+    color: #000;
+    border: 1px solid #000;
+  }
+  
   .testimonial-card {
     padding: 1.2rem 0.7rem;
   }
@@ -1157,8 +1248,64 @@ input:focus, textarea:focus {
     font-size: 2rem;
   }
   
-  .property-card img {
-    height: 200px;
+  /* Estilos unificados para tarjetas de propiedades */
+  .property-card, .featured-property-card {
+    flex: 0 0 calc(50% - 0.5rem);
+    min-width: 160px;
+    height: 100%;
+  }
+  
+  .property-card img, .featured-property-image {
+    height: 140px;
+    flex-shrink: 0;
+  }
+  
+  .property-card-content, .featured-property-content {
+    padding: 0.5rem;
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    min-height: 0;
+  }
+  
+  .property-title, .featured-property-title {
+    font-size: 0.9rem;
+    margin-bottom: 0.25rem;
+    line-height: 1.3;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    min-height: 2.6em;
+  }
+  
+  .property-price, .featured-property-price {
+    font-size: 1rem;
+    margin-bottom: 0.5rem;
+    flex-shrink: 0;
+  }
+  
+  .property-features, .featured-property-features {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.25rem;
+    margin-bottom: 0.75rem;
+    font-size: 0.7rem;
+    flex-shrink: 0;
+  }
+  
+  .property-features span, .featured-property-features span {
+    gap: 0.1rem;
+  }
+  
+  .property-card .btn, .featured-property-btn {
+    padding: 0.4rem 0.75rem;
+    font-size: 0.8rem;
+    margin-top: auto;
+    flex-shrink: 0;
+    background: rgba(255, 255, 255, 0.95);
+    color: #000;
+    border: 1px solid #000;
   }
   
   .gallery-thumbnails img {
@@ -1476,20 +1623,6 @@ input:focus, textarea:focus {
 .featured-property-card {
   flex: 0 0 calc(33.333% - 1.33rem);
   min-width: 300px;
-  background: white;
-  border-radius: 12px;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
-  overflow: hidden;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  height: 100%;
-}
-
-.featured-property-card:hover {
-  transform: translateY(-8px);
-  box-shadow: 0 16px 48px rgba(0, 0, 0, 0.15);
 }
 
 .featured-property-image-link {
@@ -1504,103 +1637,7 @@ input:focus, textarea:focus {
   transform: scale(1.02);
 }
 
-.featured-property-image {
-  width: 100%;
-  height: 250px;
-  object-fit: cover;
-  background: linear-gradient(45deg, #f0f0f0, #e0e0e0);
-  flex-shrink: 0;
-}
 
-.featured-property-content {
-  padding: 1.5rem;
-  display: flex;
-  flex-direction: column;
-  flex: 1;
-  min-height: 0;
-}
-
-.featured-property-title {
-  font-size: 1.25rem;
-  font-weight: 600;
-  margin-bottom: 0.5rem;
-  color: var(--color-text-primary);
-  font-family: var(--font-secondary);
-  line-height: 1.3;
-  display: -webkit-box;
-  -webkit-line-clamp: 2;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  min-height: 2.6em; /* 2 líneas de altura */
-}
-
-.featured-property-location {
-  color: var(--color-text-secondary);
-  margin-bottom: 1rem;
-  font-size: 0.9rem;
-  flex-shrink: 0;
-  display: -webkit-box;
-  -webkit-line-clamp: 1;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  min-height: 1.3em;
-  max-height: 1.3em;
-}
-
-.featured-property-price {
-  font-size: 1.5rem;
-  font-weight: 700;
-  color: var(--color-primary);
-  margin-bottom: 1rem;
-  font-family: var(--font-secondary);
-  flex-shrink: 0;
-}
-
-.featured-property-features {
-  display: flex;
-  gap: 1rem;
-  margin-bottom: 1.5rem;
-  font-size: 0.85rem;
-  color: var(--color-text-secondary);
-  flex-shrink: 0;
-}
-
-.featured-property-features span {
-  display: flex;
-  align-items: center;
-  gap: 0.25rem;
-}
-
-.featured-property-btn {
-  display: inline-block;
-  background: rgba(255, 255, 255, 0.95);
-  color: #000;
-  padding: 0.75rem 1.5rem;
-  border-radius: 8px;
-  text-decoration: none;
-  font-weight: 600;
-  transition: all 0.3s ease;
-  text-align: center;
-  width: 100%;
-  border: 1px solid #000;
-  cursor: pointer;
-  font-family: var(--font-primary);
-  margin-top: auto;
-  flex-shrink: 0;
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-}
-
-.featured-property-btn:hover {
-  background: rgba(255, 255, 255, 1);
-  color: #000;
-  transform: translateY(-2px);
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
-  border-color: #000;
-}
 
 /* Flechas del carrusel */
 .carousel-arrow {

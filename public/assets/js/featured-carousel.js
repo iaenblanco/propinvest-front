@@ -130,10 +130,39 @@ class StaticPropertiesCarousel {
   }
 
   createPropertyCard(propiedad) {
-    // Manejar datos tanto del formato de Strapi como del formato simplificado
-    const datos = propiedad.attributes || propiedad;
+    // Usar la misma lógica que funciona en las páginas de propiedades
+    const datos = propiedad; // Acceso directo, no attributes
     const imagen = this.getPrimeraImagen(datos);
-    const precio = this.formatearPrecio(datos.Precio);
+    const precio = this.formatearPrecio(datos.Precio, datos.Precio_CLP);
+    
+    // Crear características condicionales usando la misma lógica que las páginas
+    const dormitorios = datos.Dormitorios ? `
+      <span>
+        <img src="/assets/icons/bed.svg" alt="Dormitorios" style="width:16px; height:16px; vertical-align:middle; margin-right:4px;">
+        ${datos.Dormitorios}
+      </span>
+    ` : '';
+    
+    const banos = datos.Banos ? `
+      <span>
+        <img src="/assets/icons/shower.svg" alt="Baños" style="width:16px; height:16px; vertical-align:middle; margin-right:4px;">
+        ${datos.Banos}
+      </span>
+    ` : '';
+    
+    const superficie = datos.Superficie ? `
+      <span>
+        <img src="/assets/icons/mt2.svg" alt="Metros cuadrados" style="width:16px; height:16px; vertical-align:middle; margin-right:4px;">
+        ${datos.Superficie} m²
+      </span>
+    ` : '';
+    
+    const m2utiles = datos.M2utiles ? `
+      <span>
+        <img src="/assets/icons/utiles.svg" alt="Metros útiles" style="width:16px; height:16px; vertical-align:middle; margin-right:4px;">
+        ${datos.M2utiles} m²
+      </span>
+    ` : '';
     
     return `
       <div class="featured-property-card">
@@ -145,9 +174,10 @@ class StaticPropertiesCarousel {
           <div class="featured-property-location">${datos.Ubicacion}</div>
           <div class="featured-property-price">${precio}</div>
           <div class="featured-property-features">
-            <span>🛏 ${datos.Dormitorios || 'N/A'}</span>
-            <span>🚿 ${datos.Banos || 'N/A'}</span>
-            <span>🏡 ${datos.Superficie || 'N/A'} m²</span>
+            ${dormitorios}
+            ${banos}
+            ${superficie}
+            ${m2utiles}
           </div>
           <a href="/propiedades/${datos.Slug}" class="featured-property-btn">
             Ver Propiedad
@@ -313,9 +343,14 @@ class StaticPropertiesCarousel {
     return '/assets/images/propiedad-default.jpg';
   }
 
-  formatearPrecio(precio) {
-    if (!precio) return 'UF 0';
-    return `UF ${precio.toLocaleString('es-CL')}`;
+  formatearPrecio(precio, precioCLP) {
+    if (precio) {
+      return `UF ${precio.toLocaleString('es-CL')}`;
+    } else if (precioCLP) {
+      return `CLP ${precioCLP.toLocaleString('es-CL')}`;
+    } else {
+      return 'Consultar';
+    }
   }
 
   destroy() {
