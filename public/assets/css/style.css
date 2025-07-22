@@ -1722,6 +1722,23 @@ input:focus, textarea:focus {
   padding: 2rem 0;
 }
 
+/* Ocultar barra de scroll en desktop para el carrusel */
+@media (min-width: 769px) {
+  .featured-carousel-track::-webkit-scrollbar {
+    display: none !important;
+  }
+  
+  .featured-carousel-track {
+    -ms-overflow-style: none !important; /* Para Internet Explorer y Edge */
+    scrollbar-width: none !important; /* Para Firefox */
+  }
+  
+  /* Asegurar que no haya scroll horizontal en desktop */
+  .featured-carousel-track {
+    overflow-x: hidden !important;
+  }
+}
+
 .featured-properties-container {
   position: relative;
   max-width: 1200px;
@@ -1750,16 +1767,6 @@ input:focus, textarea:focus {
   display: flex;
   transition: transform 0.5s ease-in-out;
   gap: 2rem;
-  user-select: none;
-  -webkit-user-select: none;
-  -moz-user-select: none;
-  -ms-user-select: none;
-  touch-action: pan-y pinch-zoom;
-  cursor: grab;
-}
-
-.featured-carousel-track:active {
-  cursor: grabbing;
 }
 
 .featured-property-card {
@@ -2021,6 +2028,170 @@ input:focus, textarea:focus {
     font-size: 0.8rem;
     margin-top: auto;
     flex-shrink: 0;
+  }
+}
+
+/* =============================
+   Estilos para Carrusel Mobile - Comportamiento "Propiedades Similares"
+============================= */
+
+@media (max-width: 768px) {
+  /* Estilos específicos para el carrusel en mobile */
+  .featured-carousel-track.mobile-similar-layout {
+    gap: 1.5rem !important; /* Gap consistente con destacada-card */
+    transition: transform 0.5s ease-in-out;
+  }
+  
+  /* Cards con estilo similar a "Propiedades Similares" */
+  .featured-property-card.mobile-similar-style {
+    flex: 0 0 300px !important; /* Ancho fijo como destacada-card */
+    min-width: 300px !important;
+    background: var(--color-background);
+    border-radius: 14px;
+    box-shadow: 0 2px 8px var(--color-shadow);
+    border: 1px solid var(--color-border);
+    overflow: hidden;
+    text-decoration: none;
+    color: inherit;
+  }
+  
+  /* Imagen con aspect-ratio 1:1 como destacada-card */
+  .featured-property-card.mobile-similar-style .featured-property-image-link {
+    display: block;
+    text-decoration: none;
+    color: inherit;
+  }
+  
+  .featured-property-card.mobile-similar-style .featured-property-image-link img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+  
+  /* Contenido con padding específico */
+  .featured-property-card.mobile-similar-style .featured-property-content {
+    padding: 1.1rem 1rem 1rem 1rem !important;
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 0.3rem !important;
+    align-items: flex-start !important;
+  }
+  
+  /* Título con estilo específico */
+  .featured-property-card.mobile-similar-style .featured-property-title {
+    font-family: var(--font-primary) !important;
+    font-weight: 600 !important;
+    font-size: 1.08rem !important;
+    color: var(--color-text-primary) !important;
+    margin-bottom: 0.2rem !important;
+    line-height: 1.2 !important;
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+    width: 100% !important;
+    display: block !important;
+    -webkit-line-clamp: unset !important;
+    -webkit-box-orient: unset !important;
+    min-height: unset !important;
+  }
+  
+  /* Precio con estilo específico */
+  .featured-property-card.mobile-similar-style .featured-property-price {
+    font-size: 1rem !important;
+    color: var(--color-primary-accent) !important;
+    font-weight: 600 !important;
+    flex-shrink: 0 !important;
+  }
+  
+  /* Ubicación con estilo específico */
+  .featured-property-card.mobile-similar-style .featured-property-location {
+    font-size: 0.95rem !important;
+    color: var(--color-text-secondary) !important;
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+    width: 100% !important;
+    flex-shrink: 0 !important;
+  }
+  
+  /* Características con estilo específico */
+  .featured-property-card.mobile-similar-style .featured-property-features.mobile-features {
+    display: flex !important;
+    gap: 0.5rem !important;
+    margin-top: 0.5rem !important;
+    flex-wrap: wrap !important;
+    flex-shrink: 0 !important;
+  }
+  
+  .featured-property-card.mobile-similar-style .featured-property-features.mobile-features span {
+    display: flex !important;
+    align-items: center !important;
+    gap: 0.25rem !important;
+    font-size: 0.8rem !important;
+    color: var(--color-text-secondary) !important;
+  }
+  
+  /* Botón con estilo específico */
+  .featured-property-card.mobile-similar-style .featured-property-btn.mobile-btn {
+    margin-top: 0.75rem !important;
+    padding: 0.5rem 1rem !important;
+    font-size: 0.85rem !important;
+    background: rgba(255, 255, 255, 0.95) !important;
+    color: #000 !important;
+    border: 1px solid #000 !important;
+    text-decoration: none !important;
+    border-radius: 6px !important;
+    text-align: center !important;
+    display: inline-block !important;
+    transition: all 0.3s ease !important;
+    flex-shrink: 0 !important;
+  }
+  
+  .featured-property-card.mobile-similar-style .featured-property-btn.mobile-btn:hover {
+    background: #000 !important;
+    color: #fff !important;
+  }
+  
+  /* Flechas más visibles en mobile */
+  .featured-properties-container .carousel-arrow {
+    width: 40px !important;
+    height: 40px !important;
+    background: rgba(255, 255, 255, 0.9) !important;
+    border: 1px solid var(--color-border) !important;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15) !important;
+    z-index: 10 !important;
+  }
+  
+  .featured-properties-container .carousel-arrow:hover {
+    background: var(--color-primary-accent) !important;
+    color: white !important;
+  }
+  
+  /* Mejorar experiencia de scroll en mobile */
+  .featured-carousel-track.mobile-similar-layout {
+    -webkit-overflow-scrolling: touch !important; /* Scroll suave en iOS */
+    scrollbar-width: thin !important; /* Para Firefox */
+    scrollbar-color: #ccc #f1f1f1 !important;
+  }
+  
+  /* Estilo de la barra de scroll para Chrome, Safari y Edge */
+  .featured-carousel-track.mobile-similar-layout::-webkit-scrollbar {
+    height: 6px !important;
+  }
+  
+  .featured-carousel-track.mobile-similar-layout::-webkit-scrollbar-track {
+    background: #f1f1f1 !important;
+    border-radius: 10px !important;
+  }
+  
+  .featured-carousel-track.mobile-similar-layout::-webkit-scrollbar-thumb {
+    background: #ccc !important;
+    border-radius: 10px !important;
+  }
+  
+  .featured-carousel-track.mobile-similar-layout::-webkit-scrollbar-thumb:hover {
+    background: #aaa !important;
   }
 }
 

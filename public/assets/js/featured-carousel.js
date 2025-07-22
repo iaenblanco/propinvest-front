@@ -20,15 +20,6 @@ class StaticPropertiesCarousel {
     this.autoPlayTimer = null;
     this.isAnimating = false;
     
-    // Variables para funcionalidad táctil
-    this.touchStartX = 0;
-    this.touchStartY = 0;
-    this.touchEndX = 0;
-    this.touchEndY = 0;
-    this.isDragging = false;
-    this.dragStartX = 0;
-    this.dragOffset = 0;
-    
     if (!this.container) {
       console.error(`Contenedor no encontrado: ${containerSelector}`);
     }
@@ -82,33 +73,65 @@ class StaticPropertiesCarousel {
 
   renderCarousel(propiedades) {
     this.totalItems = propiedades.length;
+    const isMobile = window.innerWidth <= 768;
     
-    const html = `
-      <div class="featured-properties-section">
-        <div class="featured-properties-container">
-          ${this.options.showArrows ? this.createArrows() : ''}
-          
-          <div class="featured-carousel">
-            <div class="featured-carousel-track">
-              ${propiedades.map(propiedad => this.createPropertyCard(propiedad)).join('')}
+    if (isMobile) {
+      // En mobile: usar estructura similar a "Propiedades Similares"
+      const html = `
+        <div class="featured-properties-section">
+          <div class="featured-properties-container">
+            ${this.options.showArrows ? this.createArrows() : ''}
+            
+            <div class="featured-carousel">
+              <div class="featured-carousel-track mobile-similar-layout" style="display:flex; flex-direction:row; gap:1.5rem; overflow-x: auto; padding-bottom: 1rem;">
+                ${propiedades.map(propiedad => this.createPropertyCard(propiedad)).join('')}
+              </div>
             </div>
+            
+            ${this.options.showIndicators ? this.createIndicators() : ''}
           </div>
-          
-          ${this.options.showIndicators ? this.createIndicators() : ''}
         </div>
-      </div>
-    `;
-    
-    this.container.innerHTML = html;
-    
-    // Obtener referencias a los elementos del carrusel
-    this.track = this.container.querySelector('.featured-carousel-track');
-    this.indicators = this.container.querySelectorAll('.carousel-indicator');
-    this.prevArrow = this.container.querySelector('.carousel-arrow.prev');
-    this.nextArrow = this.container.querySelector('.carousel-arrow.next');
-    
-    // Actualizar estado inicial
-    this.updateControls();
+      `;
+      
+      this.container.innerHTML = html;
+      
+      // Obtener referencias a los elementos del carrusel
+      this.track = this.container.querySelector('.featured-carousel-track');
+      this.indicators = this.container.querySelectorAll('.carousel-indicator');
+      this.prevArrow = this.container.querySelector('.carousel-arrow.prev');
+      this.nextArrow = this.container.querySelector('.carousel-arrow.next');
+      
+      // En mobile, no necesitamos actualizar controles inicialmente
+      // ya que usamos scroll horizontal natural
+    } else {
+      // En desktop: usar estructura original EXACTA
+      const html = `
+        <div class="featured-properties-section">
+          <div class="featured-properties-container">
+            ${this.options.showArrows ? this.createArrows() : ''}
+            
+            <div class="featured-carousel">
+              <div class="featured-carousel-track">
+                ${propiedades.map(propiedad => this.createPropertyCard(propiedad)).join('')}
+              </div>
+            </div>
+            
+            ${this.options.showIndicators ? this.createIndicators() : ''}
+          </div>
+        </div>
+      `;
+      
+      this.container.innerHTML = html;
+      
+      // Obtener referencias a los elementos del carrusel
+      this.track = this.container.querySelector('.featured-carousel-track');
+      this.indicators = this.container.querySelectorAll('.carousel-indicator');
+      this.prevArrow = this.container.querySelector('.carousel-arrow.prev');
+      this.nextArrow = this.container.querySelector('.carousel-arrow.next');
+      
+      // Actualizar estado inicial
+      this.updateControls();
+    }
   }
 
   createArrows() {
@@ -173,27 +196,58 @@ class StaticPropertiesCarousel {
       </span>
     ` : '';
     
-    return `
-      <div class="featured-property-card">
-        <a href="/propiedades/${datos.Slug}" class="featured-property-image-link">
-          <img src="${imagen}" alt="${datos.Titulo}" class="featured-property-image" />
-        </a>
-        <div class="featured-property-content">
-          <h3 class="featured-property-title">${datos.Titulo}</h3>
-          <div class="featured-property-location">${datos.Ubicacion}</div>
-          <div class="featured-property-price">${precio}</div>
-          <div class="featured-property-features">
-            ${dormitorios}
-            ${banos}
-            ${superficie}
-            ${m2utiles}
-          </div>
-          <a href="/propiedades/${datos.Slug}" class="featured-property-btn">
-            Ver Propiedad
+    // Detectar si estamos en mobile
+    const isMobile = window.innerWidth <= 768;
+    
+    if (isMobile) {
+      // Diseño mobile similar a "Propiedades Similares" pero con íconos de características
+      return `
+        <div class="featured-property-card mobile-similar-style">
+          <a href="/propiedades/${datos.Slug}" class="featured-property-image-link">
+            <div style="width:100%; aspect-ratio:1/1; background:#f5f5f5; display:flex; align-items:center; justify-content:center;">
+              <img src="${imagen}" alt="${datos.Titulo}" style="width:100%; height:100%; object-fit:cover; display:block;" />
+            </div>
           </a>
+          <div style="padding:1.1rem 1rem 1rem 1rem; display:flex; flex-direction:column; gap:0.3rem; align-items:flex-start;">
+            <div style="font-family:var(--font-primary); font-weight:600; font-size:1.08rem; color:var(--color-text-primary); margin-bottom:0.2rem; line-height:1.2; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; width:100%;">${datos.Titulo}</div>
+            <div style="font-size:1rem; color:var(--color-primary-accent); font-weight:600;">${precio}</div>
+            <div style="font-size:0.95rem; color:var(--color-text-secondary); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; width:100%;">${datos.Ubicacion || ''}</div>
+            <div class="featured-property-features mobile-features" style="display:flex; gap:0.5rem; margin-top:0.5rem; flex-wrap:wrap;">
+              ${dormitorios}
+              ${banos}
+              ${superficie}
+              ${m2utiles}
+            </div>
+            <a href="/propiedades/${datos.Slug}" class="featured-property-btn mobile-btn" style="margin-top:0.75rem; padding:0.5rem 1rem; font-size:0.85rem; background:rgba(255,255,255,0.95); color:#000; border:1px solid #000; text-decoration:none; border-radius:6px; text-align:center; display:inline-block; transition:all 0.3s ease;">
+              Ver Propiedad
+            </a>
+          </div>
         </div>
-      </div>
-    `;
+      `;
+    } else {
+      // Diseño desktop original - EXACTAMENTE como estaba antes
+      return `
+        <div class="featured-property-card">
+          <a href="/propiedades/${datos.Slug}" class="featured-property-image-link">
+            <img src="${imagen}" alt="${datos.Titulo}" class="featured-property-image" />
+          </a>
+          <div class="featured-property-content">
+            <h3 class="featured-property-title">${datos.Titulo}</h3>
+            <div class="featured-property-location">${datos.Ubicacion}</div>
+            <div class="featured-property-price">${precio}</div>
+            <div class="featured-property-features">
+              ${dormitorios}
+              ${banos}
+              ${superficie}
+              ${m2utiles}
+            </div>
+            <a href="/propiedades/${datos.Slug}" class="featured-property-btn">
+              Ver Propiedad
+            </a>
+          </div>
+        </div>
+      `;
+    }
   }
 
   initControls() {
@@ -217,145 +271,17 @@ class StaticPropertiesCarousel {
       this.container.addEventListener('mouseleave', () => this.resumeAutoPlay());
     }
 
+    // SOLO en mobile: detectar scroll para actualizar estado
+    if (window.innerWidth <= 768 && this.track) {
+      this.track.addEventListener('scroll', () => {
+        if (!this.isAnimating) {
+          this.updateControls();
+        }
+      });
+    }
+
     // Responsive
     window.addEventListener('resize', () => this.updateItemsPerView());
-    
-    // Inicializar eventos táctiles
-    this.initTouchEvents();
-  }
-
-  initTouchEvents() {
-    if (!this.track) return;
-    
-    // Eventos de touch para móviles
-    this.track.addEventListener('touchstart', (e) => this.handleTouchStart(e), { passive: false });
-    this.track.addEventListener('touchmove', (e) => this.handleTouchMove(e), { passive: false });
-    this.track.addEventListener('touchend', (e) => this.handleTouchEnd(e), { passive: false });
-    
-    // Eventos de mouse para desktop (drag)
-    this.track.addEventListener('mousedown', (e) => this.handleMouseDown(e));
-    this.track.addEventListener('mousemove', (e) => this.handleMouseMove(e));
-    this.track.addEventListener('mouseup', (e) => this.handleMouseUp(e));
-    this.track.addEventListener('mouseleave', (e) => this.handleMouseLeave(e));
-    
-    // Prevenir selección de texto durante el drag
-    this.track.addEventListener('selectstart', (e) => e.preventDefault());
-  }
-
-  handleTouchStart(e) {
-    e.preventDefault();
-    const touch = e.touches[0];
-    this.touchStartX = touch.clientX;
-    this.touchStartY = touch.clientY;
-    this.isDragging = true;
-    this.dragStartX = this.currentIndex;
-    this.dragOffset = 0;
-    
-    // Pausar autoplay durante el touch
-    this.pauseAutoPlay();
-  }
-
-  handleTouchMove(e) {
-    if (!this.isDragging) return;
-    e.preventDefault();
-    
-    const touch = e.touches[0];
-    const deltaX = touch.clientX - this.touchStartX;
-    const deltaY = touch.clientY - this.touchStartY;
-    
-    // Solo procesar si el movimiento horizontal es mayor que el vertical
-    if (Math.abs(deltaX) > Math.abs(deltaY)) {
-      this.dragOffset = deltaX / this.track.offsetWidth * 100;
-      this.updateCarouselWithOffset();
-    }
-  }
-
-  handleTouchEnd(e) {
-    if (!this.isDragging) return;
-    e.preventDefault();
-    
-    const touch = e.changedTouches[0];
-    this.touchEndX = touch.clientX;
-    this.touchEndY = touch.clientY;
-    
-    const deltaX = this.touchEndX - this.touchStartX;
-    const threshold = this.track.offsetWidth * 0.3; // 30% del ancho
-    
-    if (Math.abs(deltaX) > threshold) {
-      if (deltaX > 0) {
-        this.prev();
-      } else {
-        this.next();
-      }
-    } else {
-      // Volver a la posición original
-      this.updateCarousel();
-    }
-    
-    this.isDragging = false;
-    this.dragOffset = 0;
-    
-    // Reanudar autoplay
-    this.resumeAutoPlay();
-  }
-
-  handleMouseDown(e) {
-    e.preventDefault();
-    this.touchStartX = e.clientX;
-    this.touchStartY = e.clientY;
-    this.isDragging = true;
-    this.dragStartX = this.currentIndex;
-    this.dragOffset = 0;
-    
-    // Pausar autoplay durante el drag
-    this.pauseAutoPlay();
-  }
-
-  handleMouseMove(e) {
-    if (!this.isDragging) return;
-    e.preventDefault();
-    
-    const deltaX = e.clientX - this.touchStartX;
-    this.dragOffset = deltaX / this.track.offsetWidth * 100;
-    this.updateCarouselWithOffset();
-  }
-
-  handleMouseUp(e) {
-    if (!this.isDragging) return;
-    e.preventDefault();
-    
-    const deltaX = e.clientX - this.touchStartX;
-    const threshold = this.track.offsetWidth * 0.3; // 30% del ancho
-    
-    if (Math.abs(deltaX) > threshold) {
-      if (deltaX > 0) {
-        this.prev();
-      } else {
-        this.next();
-      }
-    } else {
-      // Volver a la posición original
-      this.updateCarousel();
-    }
-    
-    this.isDragging = false;
-    this.dragOffset = 0;
-    
-    // Reanudar autoplay
-    this.resumeAutoPlay();
-  }
-
-  handleMouseLeave(e) {
-    if (this.isDragging) {
-      this.handleMouseUp(e);
-    }
-  }
-
-  updateCarouselWithOffset() {
-    if (!this.track) return;
-    
-    let translateX = -(this.currentIndex * 100) + this.dragOffset;
-    this.track.style.transform = `translateX(${translateX}%)`;
   }
 
   prev() {
@@ -385,24 +311,29 @@ class StaticPropertiesCarousel {
     
     this.isAnimating = true;
     
-    // Calcular el translateX basado en el tamaño de pantalla
-    let translateX;
-    if (window.innerWidth <= 480) {
-      // En móvil muy pequeño: mover de 2 en 2 tarjetas
-      translateX = -(this.currentIndex * 100);
-    } else if (window.innerWidth <= 768) {
-      // En móvil: mover de 2 en 2 tarjetas
-      translateX = -(this.currentIndex * 100);
+    if (window.innerWidth <= 768) {
+      // En mobile: usar scroll horizontal como "Propiedades Similares"
+      const cardWidth = 300; // Ancho fijo del card en mobile
+      const gap = 24; // Gap entre cards (1.5rem = 24px)
+      const scrollPosition = this.currentIndex * (cardWidth + gap);
+      
+      this.track.scrollTo({
+        left: scrollPosition,
+        behavior: 'smooth'
+      });
+      
+      setTimeout(() => {
+        this.isAnimating = false;
+      }, 300);
     } else {
-      // En desktop: usar el cálculo original
-      translateX = -(this.currentIndex * 100);
+      // En desktop: usar el cálculo original con transform y porcentajes
+      const translateX = -(this.currentIndex * 100);
+      this.track.style.transform = `translateX(${translateX}%)`;
+      
+      setTimeout(() => {
+        this.isAnimating = false;
+      }, 300);
     }
-    
-    this.track.style.transform = `translateX(${translateX}%)`;
-    
-    setTimeout(() => {
-      this.isAnimating = false;
-    }, 300);
   }
 
   updateControls() {
@@ -439,6 +370,18 @@ class StaticPropertiesCarousel {
         this.nextArrow.style.opacity = '1';
         this.nextArrow.style.cursor = 'pointer';
         this.nextArrow.disabled = false;
+      }
+    }
+    
+    // SOLO en mobile: actualizar basado en el scroll actual
+    if (window.innerWidth <= 768 && this.track) {
+      const cardWidth = 300;
+      const gap = 24;
+      const scrollPosition = this.track.scrollLeft;
+      const currentIndexFromScroll = Math.round(scrollPosition / (cardWidth + gap));
+      
+      if (currentIndexFromScroll !== this.currentIndex) {
+        this.currentIndex = currentIndexFromScroll;
       }
     }
   }
@@ -521,7 +464,7 @@ class StaticPropertiesCarousel {
   getItemsPerView() {
     if (window.innerWidth >= 1200) return 3;
     if (window.innerWidth >= 768) return 2;
-    return 2; // Cambiado de 1 a 2 para móvil
+    return 1; // En mobile: mostrar solo 1 elemento a la vez (como "Propiedades Similares")
   }
 
   updateItemsPerView() {
@@ -586,4 +529,4 @@ window.StaticPropertiesCarousel = StaticPropertiesCarousel;
 window.cargarPropiedadesDestacadasCarousel = cargarPropiedadesDestacadasCarousel;
 window.cargarPropiedadesDestacadasArriendoCarousel = cargarPropiedadesDestacadasArriendoCarousel;
 
-console.log('✅ Carrusel estático cargado correctamente - Sin llamadas a Strapi');
+console.log('✅ Carrusel estático cargado correctamente - Sin llamadas a Strapi'); 
