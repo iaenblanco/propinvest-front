@@ -20,6 +20,15 @@ class StaticPropertiesCarousel {
     this.autoPlayTimer = null;
     this.isAnimating = false;
     
+    // Variables para funcionalidad táctil
+    this.touchStartX = 0;
+    this.touchStartY = 0;
+    this.touchEndX = 0;
+    this.touchEndY = 0;
+    this.isDragging = false;
+    this.dragStartX = 0;
+    this.dragOffset = 0;
+    
     if (!this.container) {
       console.error(`Contenedor no encontrado: ${containerSelector}`);
     }
@@ -210,6 +219,143 @@ class StaticPropertiesCarousel {
 
     // Responsive
     window.addEventListener('resize', () => this.updateItemsPerView());
+    
+    // Inicializar eventos táctiles
+    this.initTouchEvents();
+  }
+
+  initTouchEvents() {
+    if (!this.track) return;
+    
+    // Eventos de touch para móviles
+    this.track.addEventListener('touchstart', (e) => this.handleTouchStart(e), { passive: false });
+    this.track.addEventListener('touchmove', (e) => this.handleTouchMove(e), { passive: false });
+    this.track.addEventListener('touchend', (e) => this.handleTouchEnd(e), { passive: false });
+    
+    // Eventos de mouse para desktop (drag)
+    this.track.addEventListener('mousedown', (e) => this.handleMouseDown(e));
+    this.track.addEventListener('mousemove', (e) => this.handleMouseMove(e));
+    this.track.addEventListener('mouseup', (e) => this.handleMouseUp(e));
+    this.track.addEventListener('mouseleave', (e) => this.handleMouseLeave(e));
+    
+    // Prevenir selección de texto durante el drag
+    this.track.addEventListener('selectstart', (e) => e.preventDefault());
+  }
+
+  handleTouchStart(e) {
+    e.preventDefault();
+    const touch = e.touches[0];
+    this.touchStartX = touch.clientX;
+    this.touchStartY = touch.clientY;
+    this.isDragging = true;
+    this.dragStartX = this.currentIndex;
+    this.dragOffset = 0;
+    
+    // Pausar autoplay durante el touch
+    this.pauseAutoPlay();
+  }
+
+  handleTouchMove(e) {
+    if (!this.isDragging) return;
+    e.preventDefault();
+    
+    const touch = e.touches[0];
+    const deltaX = touch.clientX - this.touchStartX;
+    const deltaY = touch.clientY - this.touchStartY;
+    
+    // Solo procesar si el movimiento horizontal es mayor que el vertical
+    if (Math.abs(deltaX) > Math.abs(deltaY)) {
+      this.dragOffset = deltaX / this.track.offsetWidth * 100;
+      this.updateCarouselWithOffset();
+    }
+  }
+
+  handleTouchEnd(e) {
+    if (!this.isDragging) return;
+    e.preventDefault();
+    
+    const touch = e.changedTouches[0];
+    this.touchEndX = touch.clientX;
+    this.touchEndY = touch.clientY;
+    
+    const deltaX = this.touchEndX - this.touchStartX;
+    const threshold = this.track.offsetWidth * 0.3; // 30% del ancho
+    
+    if (Math.abs(deltaX) > threshold) {
+      if (deltaX > 0) {
+        this.prev();
+      } else {
+        this.next();
+      }
+    } else {
+      // Volver a la posición original
+      this.updateCarousel();
+    }
+    
+    this.isDragging = false;
+    this.dragOffset = 0;
+    
+    // Reanudar autoplay
+    this.resumeAutoPlay();
+  }
+
+  handleMouseDown(e) {
+    e.preventDefault();
+    this.touchStartX = e.clientX;
+    this.touchStartY = e.clientY;
+    this.isDragging = true;
+    this.dragStartX = this.currentIndex;
+    this.dragOffset = 0;
+    
+    // Pausar autoplay durante el drag
+    this.pauseAutoPlay();
+  }
+
+  handleMouseMove(e) {
+    if (!this.isDragging) return;
+    e.preventDefault();
+    
+    const deltaX = e.clientX - this.touchStartX;
+    this.dragOffset = deltaX / this.track.offsetWidth * 100;
+    this.updateCarouselWithOffset();
+  }
+
+  handleMouseUp(e) {
+    if (!this.isDragging) return;
+    e.preventDefault();
+    
+    const deltaX = e.clientX - this.touchStartX;
+    const threshold = this.track.offsetWidth * 0.3; // 30% del ancho
+    
+    if (Math.abs(deltaX) > threshold) {
+      if (deltaX > 0) {
+        this.prev();
+      } else {
+        this.next();
+      }
+    } else {
+      // Volver a la posición original
+      this.updateCarousel();
+    }
+    
+    this.isDragging = false;
+    this.dragOffset = 0;
+    
+    // Reanudar autoplay
+    this.resumeAutoPlay();
+  }
+
+  handleMouseLeave(e) {
+    if (this.isDragging) {
+      this.handleMouseUp(e);
+    }
+  }
+
+  updateCarouselWithOffset() {
+    if (!this.track) return;
+    
+    let translateX = -(this.currentIndex * 100) + this.dragOffset;
+    this.track.style.transform = `translateX(${translateX}%)`;
   }
 
   prev() {
@@ -440,4 +586,4 @@ window.StaticPropertiesCarousel = StaticPropertiesCarousel;
 window.cargarPropiedadesDestacadasCarousel = cargarPropiedadesDestacadasCarousel;
 window.cargarPropiedadesDestacadasArriendoCarousel = cargarPropiedadesDestacadasArriendoCarousel;
 
-console.log('✅ Carrusel estático cargado correctamente - Sin llamadas a Strapi'); 
+console.log('✅ Carrusel estático cargado correctamente - Sin llamadas a Strapi');

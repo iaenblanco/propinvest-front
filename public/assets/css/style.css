@@ -1750,6 +1750,16 @@ input:focus, textarea:focus {
   display: flex;
   transition: transform 0.5s ease-in-out;
   gap: 2rem;
+  user-select: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  touch-action: pan-y pinch-zoom;
+  cursor: grab;
+}
+
+.featured-carousel-track:active {
+  cursor: grabbing;
 }
 
 .featured-property-card {
