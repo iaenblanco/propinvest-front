@@ -1743,7 +1743,7 @@ input:focus, textarea:focus {
   position: relative;
   max-width: 1200px;
   margin: 0 auto;
-  padding: 0 60px; /* Espacio para las flechas */
+  padding: 0 80px; /* Aumentado de 60px a 80px para más espacio */
 }
 
 .featured-properties-title {
@@ -1770,8 +1770,9 @@ input:focus, textarea:focus {
 }
 
 .featured-property-card {
-  flex: 0 0 calc(33.333% - 1.33rem);
-  min-width: 300px;
+  flex: 0 0 320px; /* Reducido de 350px a 320px para que quepan mejor */
+  min-width: 320px;
+  max-width: 320px;
 }
 
 .featured-property-image-link {
@@ -3076,4 +3077,9 @@ img.lazy.loaded {
 
 .description-content {
   text-align: justify;
+}
+
+.featured-property-btn {
+  width: 100%;
+  box-sizing: border-box;
 }

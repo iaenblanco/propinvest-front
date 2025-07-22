@@ -1,5 +1,5 @@
 // =============================
-// CARRUSEL DE PROPIEDADES DESTACADAS - VERSION ESTÁTICA
+// CARRUSEL DE PROPIEDADES DESTACADAS - VERSION ESTÁTICA (FIXED)
 // Componente modular que trabaja solo con datos pre-cargados
 // =============================
 
@@ -35,6 +35,9 @@ class StaticPropertiesCarousel {
         this.showEmptyState();
         return;
       }
+      
+      // Guardar las propiedades originales para re-renderizar
+      this.propiedadesOriginales = propiedades;
       
       console.log(`🎠 Inicializando carrusel con ${propiedades.length} propiedades pre-cargadas`);
       
@@ -75,6 +78,10 @@ class StaticPropertiesCarousel {
     this.totalItems = propiedades.length;
     const isMobile = window.innerWidth <= 768;
     
+    // DEBUG: Verificar que tenemos las mismas propiedades en ambos casos
+    console.log(`📱 ${isMobile ? 'MOBILE' : 'DESKTOP'}: Renderizando ${propiedades.length} propiedades`);
+    console.log('Propiedades:', propiedades.map(p => p.Titulo || p.attributes?.Titulo));
+    
     if (isMobile) {
       // En mobile: usar estructura similar a "Propiedades Similares"
       const html = `
@@ -104,14 +111,14 @@ class StaticPropertiesCarousel {
       // En mobile, no necesitamos actualizar controles inicialmente
       // ya que usamos scroll horizontal natural
     } else {
-      // En desktop: usar estructura original EXACTA
+      // DESKTOP: Asegurar que TODAS las propiedades se rendericen
       const html = `
         <div class="featured-properties-section">
           <div class="featured-properties-container">
             ${this.options.showArrows ? this.createArrows() : ''}
             
-            <div class="featured-carousel">
-              <div class="featured-carousel-track">
+            <div class="featured-carousel" style="overflow: hidden; width: 100%;">
+              <div class="featured-carousel-track" style="display: flex; gap: 2rem; transition: transform 0.5s ease-in-out; will-change: transform; width: max-content;">
                 ${propiedades.map(propiedad => this.createPropertyCard(propiedad)).join('')}
               </div>
             </div>
@@ -128,6 +135,10 @@ class StaticPropertiesCarousel {
       this.indicators = this.container.querySelectorAll('.carousel-indicator');
       this.prevArrow = this.container.querySelector('.carousel-arrow.prev');
       this.nextArrow = this.container.querySelector('.carousel-arrow.next');
+      
+      // DEBUG: Verificar que las tarjetas se crearon correctamente
+      const cards = this.track.querySelectorAll('.featured-property-card');
+      console.log(`🖥️ DESKTOP: Se crearon ${cards.length} tarjetas en el DOM`);
       
       // Actualizar estado inicial
       this.updateControls();
@@ -146,8 +157,20 @@ class StaticPropertiesCarousel {
   }
 
   createIndicators() {
+    const isMobile = window.innerWidth <= 768;
+    let totalIndicators;
+    
+    if (isMobile) {
+      // En mobile, cada indicador representa un elemento
+      totalIndicators = this.totalItems;
+    } else {
+      // En desktop, cada indicador representa una "vista" que puede mostrar hasta itemsPerView elementos
+      // Pero calculamos cuántas "posiciones" diferentes puede tener el carrusel
+      const maxStartIndex = Math.max(0, this.totalItems - this.options.itemsPerView);
+      totalIndicators = maxStartIndex + 1;
+    }
+    
     const indicators = [];
-    const totalIndicators = Math.ceil(this.totalItems / this.options.itemsPerView);
     
     for (let i = 0; i < totalIndicators; i++) {
       indicators.push(`
@@ -225,9 +248,12 @@ class StaticPropertiesCarousel {
         </div>
       `;
     } else {
-      // Diseño desktop original - EXACTAMENTE como estaba antes
+      // Diseño desktop: usar un ancho fijo en píxeles para evitar problemas de cálculo
+      // Esto asegura que todas las tarjetas tengan el mismo ancho independientemente de cuántas sean
+      const cardWidth = '320px'; // Actualizado de 350px a 320px para coincidir con CSS
+      
       return `
-        <div class="featured-property-card">
+        <div class="featured-property-card" style="flex: 0 0 ${cardWidth}; min-width: ${cardWidth};">
           <a href="/propiedades/${datos.Slug}" class="featured-property-image-link">
             <img src="${imagen}" alt="${datos.Titulo}" class="featured-property-image" />
           </a>
@@ -291,14 +317,39 @@ class StaticPropertiesCarousel {
 
   next() {
     if (this.isAnimating) return;
-    const maxIndex = Math.ceil(this.totalItems / this.options.itemsPerView) - 1;
+    
+    const isMobile = window.innerWidth <= 768;
+    let maxIndex;
+    
+    if (isMobile) {
+      maxIndex = this.totalItems - 1;
+    } else {
+      // En desktop: el índice máximo es cuando ya no podemos mostrar itemsPerView completos
+      maxIndex = Math.max(0, this.totalItems - this.options.itemsPerView);
+    }
+    
     if (this.currentIndex < maxIndex) {
       this.goToSlide(this.currentIndex + 1);
+    } else {
+      // Opcional: ir al inicio al llegar al final
+      // this.goToSlide(0);
     }
   }
 
   goToSlide(index) {
     if (this.isAnimating || index === this.currentIndex) return;
+    
+    const isMobile = window.innerWidth <= 768;
+    let maxIndex;
+    
+    if (isMobile) {
+      maxIndex = this.totalItems - 1;
+    } else {
+      maxIndex = Math.max(0, this.totalItems - this.options.itemsPerView);
+    }
+    
+    // Asegurar que el índice esté en el rango válido
+    index = Math.max(0, Math.min(index, maxIndex));
     
     this.currentIndex = index;
     this.updateCarousel();
@@ -326,13 +377,21 @@ class StaticPropertiesCarousel {
         this.isAnimating = false;
       }, 300);
     } else {
-      // En desktop: usar el cálculo original con transform y porcentajes
-      const translateX = -(this.currentIndex * 100);
-      this.track.style.transform = `translateX(${translateX}%)`;
+      // DESKTOP: Usar ancho fijo de las tarjetas para cálculo preciso
+      const cardWidth = 320; // Actualizado de 350px a 320px para coincidir con CSS
+      const gap = 32; // 2rem = 32px
+      const cardWidthWithGap = cardWidth + gap;
+      
+      // Desplazar por la cantidad de elementos indicada por currentIndex
+      const translateX = -(this.currentIndex * cardWidthWithGap);
+      
+      console.log(`🖥️ Desplazando a posición ${this.currentIndex}: translateX(${translateX}px)`);
+      
+      this.track.style.transform = `translateX(${translateX}px)`;
       
       setTimeout(() => {
         this.isAnimating = false;
-      }, 300);
+      }, 500);
     }
   }
 
@@ -347,7 +406,14 @@ class StaticPropertiesCarousel {
     });
 
     // Actualizar flechas - deshabilitar completamente en extremos
-    const maxIndex = Math.ceil(this.totalItems / this.options.itemsPerView) - 1;
+    const isMobile = window.innerWidth <= 768;
+    let maxIndex;
+    
+    if (isMobile) {
+      maxIndex = this.totalItems - 1;
+    } else {
+      maxIndex = Math.max(0, this.totalItems - this.options.itemsPerView);
+    }
     
     if (this.prevArrow) {
       if (this.currentIndex === 0) {
@@ -362,7 +428,7 @@ class StaticPropertiesCarousel {
     }
     
     if (this.nextArrow) {
-      if (this.currentIndex === maxIndex) {
+      if (this.currentIndex >= maxIndex) {
         this.nextArrow.style.opacity = '0.3';
         this.nextArrow.style.cursor = 'not-allowed';
         this.nextArrow.disabled = true;
@@ -472,8 +538,18 @@ class StaticPropertiesCarousel {
     if (newItemsPerView !== this.options.itemsPerView) {
       this.options.itemsPerView = newItemsPerView;
       this.currentIndex = 0;
-      this.updateCarousel();
-      this.updateControls();
+      
+      // Re-renderizar completamente el carrusel para cambiar la estructura
+      // Guardar las propiedades originales para no perderlas
+      if (!this.propiedadesOriginales) {
+        // Esto es un fallback, idealmente las propiedades se guardan en la inicialización
+        console.warn("Propiedades originales no encontradas, re-renderizado puede fallar.");
+        return;
+      }
+      
+      this.renderCarousel(this.propiedadesOriginales);
+      this.initControls(); // Re-inicializar controles
+      this.updateControls(); // Actualizar estado inicial
     }
   }
 }
@@ -529,4 +605,4 @@ window.StaticPropertiesCarousel = StaticPropertiesCarousel;
 window.cargarPropiedadesDestacadasCarousel = cargarPropiedadesDestacadasCarousel;
 window.cargarPropiedadesDestacadasArriendoCarousel = cargarPropiedadesDestacadasArriendoCarousel;
 
-console.log('✅ Carrusel estático cargado correctamente - Sin llamadas a Strapi'); 
+console.log('✅ Carrusel estático cargado correctamente - Sin llamadas a Strapi');
