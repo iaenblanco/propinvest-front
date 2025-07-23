@@ -645,8 +645,8 @@ a:hover, a:focus {
   flex-shrink: 0;
 }
 .property-features, .featured-property-features {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
+  display: flex;
+  flex-direction: row;
   gap: 0.75rem;
   margin-bottom: 1.5rem;
   font-size: 0.85rem;
@@ -1087,7 +1087,8 @@ input:focus, textarea:focus {
   }
   
   .property-features, .featured-property-features {
-    grid-template-columns: repeat(2, 1fr);
+    display: flex;
+    flex-direction: row;
     gap: 0.5rem;
     margin-bottom: 1rem;
     font-size: 0.75rem;
@@ -1411,7 +1412,8 @@ input:focus, textarea:focus {
   }
   
   .property-features, .featured-property-features {
-    grid-template-columns: repeat(2, 1fr);
+    display: flex;
+    flex-direction: row;
     gap: 0.25rem;
     margin-bottom: 0.75rem;
     font-size: 0.7rem;
@@ -2457,7 +2459,7 @@ img.lazy.loaded {
 
 .property-key-features {
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   gap: 0.5rem;
 }
 
