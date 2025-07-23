@@ -28,8 +28,8 @@ const propiedadesValidas = Array.isArray(propiedades) ? propiedades.filter(prop 
               : `https://truthful-rhythm-e8bcafa766.strapiapp.com${prop.Imagenes?.[0]?.url || '/assets/images/propiedad-default.jpg'}`;
             const precioFormateado = prop.Precio 
               ? `UF ${prop.Precio.toLocaleString('es-CL')}` 
-              : prop.Precio_CLP 
-                ? `CLP ${prop.Precio_CLP.toLocaleString('es-CL')}` 
+                          : prop.Precio_CLP
+            ? `$${prop.Precio_CLP.toLocaleString('es-CL')}` 
                 : 'Consultar';
             return (
               <article class="property-card">

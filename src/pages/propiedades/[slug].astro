@@ -70,7 +70,7 @@ const formatearPrecioCLP = (precio) => {
     minimumFractionDigits: 0,
     maximumFractionDigits: 0
   }).format(precio);
-  return formatted.replace(/^\$/, 'CLP $');
+  return formatted;
 };
 
 let tasaUF = 37000;
@@ -233,7 +233,7 @@ const pageDescription = propiedad.Descripcion || `Propiedad en ${Ubicacion}. ${D
                             let valorDisplay = '';
                             if (item.type === 'spec' && valor) { valorDisplay = `${valor}${item.unit || ''}`; } 
                             else if (item.type === 'feature' && (valor === true || valor === 'Sí')) { valorDisplay = 'Sí'; } 
-                            else if (item.type === 'currency' && valor) { valorDisplay = formatearPrecioCLP(valor).replace('CLP ', ''); } 
+                            else if (item.type === 'currency' && valor) { valorDisplay = formatearPrecioCLP(valor); } 
                             else { return null; }
                             return (
                                 <div class="spec-row-mobile" style="display:flex; align-items:center; gap:0.6rem; font-size:0.9rem; color:var(--color-text-primary);" data-index={index}>
@@ -303,7 +303,7 @@ const pageDescription = propiedad.Descripcion || `Propiedad en ${Ubicacion}. ${D
                         let valorDisplay = '';
                         if (item.type === 'spec' && valor) { valorDisplay = `${valor}${item.unit || ''}`; }
                         else if (item.type === 'feature' && (valor === true || valor === 'Sí')) { valorDisplay = 'Sí'; }
-                        else if (item.type === 'currency' && valor) { valorDisplay = formatearPrecioCLP(valor).replace('CLP ', ''); }
+                        else if (item.type === 'currency' && valor) { valorDisplay = formatearPrecioCLP(valor); }
                         else { return null; }
                         return (
                             <div class="spec-row" style="display:flex; align-items:center; gap:0.7rem; font-size:1.08rem; color:var(--color-text-primary);" data-index={index}>
@@ -383,7 +383,7 @@ const pageDescription = propiedad.Descripcion || `Propiedad en ${Ubicacion}. ${D
                                 </div>
                                 <div style="padding:1.1rem 1rem 1rem 1rem; display:flex; flex-direction:column; gap:0.3rem; align-items:flex-start;">
                                     <div style="font-family:var(--font-primary); font-weight:600; font-size:1.08rem; color:var(--color-text-primary); margin-bottom:0.2rem; line-height:1.2; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; width:100%;">{prop.Titulo}</div>
-                                    <div style="font-size:1rem; color:var(--color-primary-accent); font-weight:600;">{prop.Precio ? formatearPrecio(prop.Precio) : (prop.Precio_CLP ? `CLP ${prop.Precio_CLP.toLocaleString('es-CL')}` : 'Consultar')}</div>
+                                    <div style="font-size:1rem; color:var(--color-primary-accent); font-weight:600;">{prop.Precio ? formatearPrecio(prop.Precio) : (prop.Precio_CLP ? `$${prop.Precio_CLP.toLocaleString('es-CL')}` : 'Consultar')}</div>
                                     <div style="font-size:0.95rem; color:var(--color-text-secondary); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; width:100%;">{prop.Ubicacion || ''}</div>
                                     {prop.Destacado && <span style="color:var(--color-primary-accent); font-size:0.85rem; font-weight:700;">★ Destacada</span>}
                                 </div>

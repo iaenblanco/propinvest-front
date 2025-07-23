@@ -502,7 +502,7 @@ class StaticPropertiesCarousel {
     if (precio) {
       return `UF ${precio.toLocaleString('es-CL')}`;
     } else if (precioCLP) {
-      return `CLP ${precioCLP.toLocaleString('es-CL')}`;
+      return `$${precioCLP.toLocaleString('es-CL')}`;
     } else {
       return 'Consultar';
     }

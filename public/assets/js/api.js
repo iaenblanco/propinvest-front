@@ -57,7 +57,7 @@ function formatearPrecioCLP(precio) {
     minimumFractionDigits: 0,
     maximumFractionDigits: 0
   }).format(precio);
-  return formatted.replace(/^\$/, 'CLP $');
+  return formatted;
 }
 
 /**
