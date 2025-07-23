@@ -2459,7 +2459,7 @@ img.lazy.loaded {
 
 .property-key-features {
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
   gap: 0.5rem;
 }
 
@@ -3084,4 +3084,11 @@ img.lazy.loaded {
 .featured-property-btn {
   width: 100%;
   box-sizing: border-box;
+}
+
+.property-features img, .property-features svg, .property-features span {
+  background: none !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  padding: 0 !important;
 }
