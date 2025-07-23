@@ -271,23 +271,29 @@ const pageDescription = propiedad.Descripcion || `Propiedad en ${Ubicacion}. ${D
                             )}
                         </div>
                     )}
-                    <div class="property-key-features" style="display:flex; flex-direction:row; gap:1rem; margin-top:0.5rem;">
-                        {Dormitorios && <span class="feature-item" style="display:flex; align-items:center; gap:0.5rem; font-size:0.95rem; color:var(--color-text-primary); font-weight:500;">
-                          <img src="/assets/icons/bed.svg" alt="Dormitorios" style="width:16px; height:16px;">
-                          {Dormitorios}
-                        </span>}
-                        {Banos && <span class="feature-item" style="display:flex; align-items:center; gap:0.5rem; font-size:0.95rem; color:var(--color-text-primary); font-weight:500;">
-                          <img src="/assets/icons/shower.svg" alt="Baños" style="width:16px; height:16px;">
-                          {Banos}
-                        </span>}
-                        {Superficie && <span class="feature-item" style="display:flex; align-items:center; gap:0.5rem; font-size:0.95rem; color:var(--color-text-primary); font-weight:500; grid-column:1/-1;">
-                          <img src="/assets/icons/mt2.svg" alt="Metros cuadrados" style="width:16px; height:16px;">
-                          {Superficie} m² totales
-                        </span>}
-                        {M2utiles && <span class="feature-item" style="display:flex; align-items:center; gap:0.5rem; font-size:0.95rem; color:var(--color-text-primary); font-weight:500; grid-column:1/-1;">
-                          <img src="/assets/icons/utiles.svg" alt="Metros cuadrados útiles" style="width:16px; height:16px;">
-                          {M2utiles} m² útiles
-                        </span>}
+                    <div class="property-key-features" style="display:flex; flex-direction:column; gap:0.8rem; margin-top:0.5rem;">
+                        <div style="display:flex; gap:1rem; align-items:center;">
+                            {Dormitorios && <span class="feature-item" style="display:flex; align-items:center; gap:0.5rem; font-size:0.95rem; color:var(--color-text-primary); font-weight:500;">
+                              <img src="/assets/icons/bed.svg" alt="Dormitorios" style="width:16px; height:16px;">
+                              {Dormitorios}
+                            </span>}
+                            {Banos && <span class="feature-item" style="display:flex; align-items:center; gap:0.5rem; font-size:0.95rem; color:var(--color-text-primary); font-weight:500;">
+                              <img src="/assets/icons/shower.svg" alt="Baños" style="width:16px; height:16px;">
+                              {Banos}
+                            </span>}
+                        </div>
+                        {Superficie && <div style="display:flex; align-items:center;">
+                            <span class="feature-item" style="display:flex; align-items:center; gap:0.5rem; font-size:0.95rem; color:var(--color-text-primary); font-weight:500;">
+                              <img src="/assets/icons/mt2.svg" alt="Metros cuadrados" style="width:16px; height:16px;">
+                              {Superficie} m² totales
+                            </span>
+                        </div>}
+                        {M2utiles && <div style="display:flex; align-items:center;">
+                            <span class="feature-item" style="display:flex; align-items:center; gap:0.5rem; font-size:0.95rem; color:var(--color-text-primary); font-weight:500;">
+                              <img src="/assets/icons/utiles.svg" alt="Metros cuadrados útiles" style="width:16px; height:16px;">
+                              {M2utiles} m² útiles
+                            </span>
+                        </div>}
                     </div>
                 </div>
             </aside>
