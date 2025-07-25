@@ -560,10 +560,39 @@ a:hover, a:focus {
 .property-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 2rem;
-  margin: 2rem 0;
+  gap: 1.5rem;
+  margin: 2rem auto;
   justify-content: start;
+  max-width: 1040px; /* Ancho similar al del carrusel (1200px - 160px de padding) */
 }
+
+@media (min-width: 1024px) {
+  .property-grid {
+    padding: 0;
+  }
+}
+
+@media (max-width: 1024px) {
+  .container {
+    width: 96%;
+  }
+  .property-grid {
+    gap: 1.5rem;
+    grid-template-columns: repeat(2, 1fr);
+    max-width: none;
+    padding: 0;
+  }
+}
+
+@media (max-width: 768px) {
+  .property-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+    max-width: none;
+    padding: 0;
+  }
+}
+
 .property-card, .featured-property-card {
   display: flex;
   flex-direction: column;
