@@ -35,38 +35,53 @@ const filteredProperties = initialType
     ))}
   </div>
   <div class="property-grid" id="filtered-properties">
-    {filteredProperties.map(prop => {
-      const imagenUrl = prop.Imagenes?.[0]?.url?.startsWith('http') 
-        ? prop.Imagenes[0].url 
-        : `https://truthful-rhythm-e8bcafa766.strapiapp.com${prop.Imagenes?.[0]?.url || '/assets/images/propiedad-default.jpg'}`;
-      
-      const precioFormateado = prop.Precio 
-        ? `UF ${prop.Precio.toLocaleString('es-CL')}` 
-        : prop.Precio_CLP 
-          ? `$${prop.Precio_CLP.toLocaleString('es-CL')}` 
-          : 'Consultar';
-
-      return (
-        <article class="property-card" data-type={prop.Tipo}>
-          <a href={`/propiedades/${prop.Slug}`} class="property-image-link">
-            <img src={imagenUrl} alt={prop.Titulo} loading="lazy" />
-          </a>
-          <div class="property-card-content">
-            <h3 class="property-title">{prop.Titulo}</h3>
-            <p class="property-location">{prop.Ubicacion}</p>
-            <p class="property-price">{precioFormateado}</p>
-            <div class="property-features">
-              <span>🛏️ {prop.Dormitorios || 0}</span>
-              <span>🚿 {prop.Banos || 0}</span>
-              <span>📏 {prop.M2utiles || 0}m²</span>
+    {filteredProperties.length > 0 ? (
+      filteredProperties.map((prop: any) => {
+        const imagenUrl = prop.Imagenes?.[0]?.url?.startsWith('http') 
+          ? prop.Imagenes[0].url 
+          : `https://truthful-rhythm-e8bcafa766.strapiapp.com${prop.Imagenes?.[0]?.url || '/assets/images/propiedad-default.jpg'}`;
+        const precioFormateado = prop.Precio 
+          ? `UF ${prop.Precio.toLocaleString('es-CL')}` 
+          : prop.Precio_CLP 
+            ? `$${prop.Precio_CLP.toLocaleString('es-CL')}` 
+            : 'Consultar';
+        return (
+          <article class="featured-property-card mobile-similar-style" data-type={prop.Tipo}>
+            <a href={`/propiedades/${prop.Slug}`} class="featured-property-image-link">
+              <img src={imagenUrl} alt={prop.Titulo} class="featured-property-image" />
+            </a>
+            <div class="featured-property-content">
+              <h2 class="featured-property-title">{prop.Titulo || 'Propiedad sin título'}</h2>
+              <div class="featured-property-location">{prop.Ubicacion || 'Sin ubicación'}</div>
+              <div class="featured-property-price">{precioFormateado}</div>
+              <div class="featured-property-features mobile-features">
+                {prop.Dormitorios && <span>
+                  <img src="/assets/icons/bed.svg" alt="Dormitorios" style="width:16px; height:16px; vertical-align:middle; margin-right:4px;">
+                  {prop.Dormitorios}
+                </span>}
+                {prop.Banos && <span>
+                  <img src="/assets/icons/shower.svg" alt="Baños" style="width:16px; height:16px; vertical-align:middle; margin-right:4px;">
+                  {prop.Banos}
+                </span>}
+                {prop.Superficie && <span>
+                  <img src="/assets/icons/mt2.svg" alt="Metros cuadrados" style="width:16px; height:16px; vertical-align:middle; margin-right:4px;">
+                  {prop.Superficie} m²
+                </span>}
+                {prop.M2utiles && <span>
+                  <img src="/assets/icons/utiles.svg" alt="Metros útiles" style="width:16px; height:16px; vertical-align:middle; margin-right:4px;">
+                  {prop.M2utiles} m²
+                </span>}
+              </div>
+              <a href={`/propiedades/${prop.Slug}`} class="featured-property-btn mobile-btn">
+                Ver Propiedad
+              </a>
             </div>
-            <div class="property-bottom">
-              <a href={`/propiedades/${prop.Slug}`} class="btn">Ver Detalles</a>
-            </div>
-          </div>
-        </article>
-      );
-    })}
+          </article>
+        )
+      })
+    ) : (
+      <p>No hay propiedades disponibles en este momento.</p>
+    )}
   </div>
 </div>
 
@@ -119,11 +134,11 @@ const filteredProperties = initialType
     }
   }
 
-  .property-card {
+  .featured-property-card {
     display: none;
   }
 
-  .property-card.visible {
+  .featured-property-card.visible {
     display: block;
   }
 </style>
