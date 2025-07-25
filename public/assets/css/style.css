@@ -763,7 +763,7 @@ a:hover, a:focus {
 @media (max-width: 480px) {
   .property-grid {
     grid-template-columns: 1fr;
-    max-width: 300px;
+    max-width: 340px;
     margin: 2rem auto;
     gap: 1.5rem;
     padding: 0;
@@ -772,12 +772,17 @@ a:hover, a:focus {
   /* Asegurarnos que las tarjetas de categorías hereden los estilos del carrusel en móvil */
   .property-grid .featured-property-card {
     width: 100%;
-    min-width: 300px;
+    min-width: 340px;
   }
-  
-  /* Ajustar el contenedor para centrar las tarjetas */
+
+  /* Ajustar el contenedor para mantener espacio con los bordes */
   .container {
-    padding: 0 1rem;
+    padding: 0 1.2rem;
+  }
+
+  /* Ajustar la altura de la imagen proporcionalmente */
+  .property-grid .featured-property-card.mobile-similar-style .featured-property-image-link img {
+    height: 220px;
   }
 }
 
