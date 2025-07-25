@@ -763,52 +763,113 @@ a:hover, a:focus {
 @media (max-width: 480px) {
   .property-grid {
     grid-template-columns: 1fr;
-    max-width: 320px;
+    max-width: 300px;
     margin: 2rem auto;
-    gap: 2rem;
+    gap: 1.5rem;
   }
   
-  /* Mantener los mismos estilos que en tablet */
   .property-card, .featured-property-card {
+    flex: 0 0 300px;
+    min-width: 300px;
+    background: var(--color-background);
+    border-radius: 14px;
+    box-shadow: 0 2px 8px var(--color-shadow);
+    border: 1px solid var(--color-border);
+    overflow: hidden;
+    text-decoration: none;
+    color: inherit;
+  }
+
+  .property-image-link, .featured-property-image-link {
+    display: block;
+    text-decoration: none;
+    color: inherit;
+  }
+
+  .property-card img, .featured-property-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
+  .property-card-content, .featured-property-content {
+    padding: 1.1rem 1rem 1rem 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+    align-items: flex-start;
+  }
+
+  .property-title, .featured-property-title {
+    font-family: var(--font-primary);
+    font-weight: 600;
+    font-size: 1.08rem;
+    color: var(--color-text-primary);
+    margin-bottom: 0.2rem;
+    line-height: 1.2;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    width: 100%;
+    display: block;
+    -webkit-line-clamp: unset;
+    -webkit-box-orient: unset;
     min-height: unset;
+  }
+
+  .property-price, .featured-property-price {
+    font-size: 1rem;
+    color: var(--color-primary-accent);
+    font-weight: 600;
+    flex-shrink: 0;
+  }
+
+  .property-location, .featured-property-location {
+    font-size: 0.95rem;
+    color: var(--color-text-secondary);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    width: 100%;
+    flex-shrink: 0;
+  }
+
+  .property-features, .featured-property-features {
+    display: flex;
+    gap: 0.5rem;
+    margin-top: 0.5rem;
+    flex-wrap: wrap;
+    flex-shrink: 0;
+  }
+
+  .property-features span, .featured-property-features span {
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+    font-size: 0.8rem;
+    color: var(--color-text-secondary);
+  }
+
+  .property-card .btn, .featured-property-btn {
+    margin-top: 0.75rem;
+    padding: 0.5rem 1rem;
+    font-size: 0.85rem;
+    background: rgba(255, 255, 255, 0.95);
+    color: #000;
+    border: 1px solid #000;
+    text-decoration: none;
+    border-radius: 6px;
+    text-align: center;
+    display: inline-block;
+    transition: all 0.3s ease;
+    flex-shrink: 0;
     width: 100%;
   }
-  
-  .property-card img, .featured-property-image {
-    height: 320px; /* Mismo ancho que la tarjeta para hacerla cuadrada */
-  }
-  
-  .property-card-content, .featured-property-content {
-    padding: 1rem;
-  }
-  
-  .property-title, .featured-property-title {
-    font-size: 1rem;
-    margin-bottom: 0.25rem;
-    min-height: unset;
-    -webkit-line-clamp: 1;
-  }
-  
-  .property-location, .featured-property-location {
-    font-size: 0.8rem;
-    margin-bottom: 0.25rem;
-  }
-  
-  .property-price, .featured-property-price {
-    font-size: 1.1rem;
-    margin-bottom: 0.5rem;
-  }
-  
-  .property-features, .featured-property-features {
-    gap: 0.75rem;
-    margin-bottom: 0.75rem;
-    font-size: 0.75rem;
-  }
-  
-  .property-card .btn, .featured-property-btn {
-    padding: 0.5rem;
-    font-size: 0.85rem;
-    margin-top: 0;
+
+  .property-card .btn:hover, .featured-property-btn:hover {
+    background: #000;
+    color: #fff;
   }
 }
 
