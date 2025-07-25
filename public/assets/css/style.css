@@ -563,34 +563,7 @@ a:hover, a:focus {
   gap: 1.5rem;
   margin: 2rem auto;
   justify-content: start;
-  max-width: 1040px; /* Ancho similar al del carrusel (1200px - 160px de padding) */
-}
-
-@media (min-width: 1024px) {
-  .property-grid {
-    padding: 0;
-  }
-}
-
-@media (max-width: 1024px) {
-  .container {
-    width: 96%;
-  }
-  .property-grid {
-    gap: 1.5rem;
-    grid-template-columns: repeat(2, 1fr);
-    max-width: none;
-    padding: 0;
-  }
-}
-
-@media (max-width: 768px) {
-  .property-grid {
-    grid-template-columns: repeat(2, 1fr);
-    gap: 1rem;
-    max-width: none;
-    padding: 0;
-  }
+  max-width: 1040px;
 }
 
 .property-card, .featured-property-card {
@@ -605,6 +578,7 @@ a:hover, a:focus {
   transition: transform 0.3s ease, box-shadow 0.3s ease;
   position: relative;
 }
+
 .property-card:hover, .featured-property-card:hover {
   transform: translateY(-8px);
   box-shadow: 0 16px 48px rgba(0, 0, 0, 0.15);
@@ -629,6 +603,7 @@ a:hover, a:focus {
   background: linear-gradient(45deg, #f0f0f0, #e0e0e0);
   flex-shrink: 0;
 }
+
 .property-card-content, .featured-property-content {
   flex: 1 1 auto;
   display: flex;
@@ -637,6 +612,7 @@ a:hover, a:focus {
   padding: 1.5rem;
   align-items: flex-start;
 }
+
 .property-title, .featured-property-title {
   font-size: 1.25rem;
   font-weight: 600;
@@ -652,6 +628,7 @@ a:hover, a:focus {
   min-height: 2.6em;
   max-height: 2.6em;
 }
+
 .property-location, .featured-property-location {
   color: var(--color-text-secondary);
   font-size: 0.9rem;
@@ -665,6 +642,7 @@ a:hover, a:focus {
   min-height: 1.3em;
   max-height: 1.3em;
 }
+
 .property-price, .featured-property-price {
   font-size: 1.5rem;
   font-weight: 700;
@@ -673,6 +651,7 @@ a:hover, a:focus {
   margin-bottom: 1rem;
   flex-shrink: 0;
 }
+
 .property-features, .featured-property-features {
   display: flex;
   flex-direction: row;
@@ -682,6 +661,7 @@ a:hover, a:focus {
   color: var(--color-text-secondary);
   flex-shrink: 0;
 }
+
 .property-features span, .featured-property-features span {
   display: flex;
   align-items: center;
@@ -714,6 +694,118 @@ a:hover, a:focus {
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+@media (min-width: 1024px) {
+  .property-grid {
+    padding: 0;
+  }
+}
+
+@media (max-width: 1024px) {
+  .container {
+    width: 96%;
+  }
+  .property-grid {
+    gap: 1.5rem;
+    grid-template-columns: repeat(2, 1fr);
+    max-width: none;
+    padding: 0;
+  }
+}
+
+@media (max-width: 768px) {
+  .property-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+    max-width: none;
+    padding: 0;
+  }
+  
+  .property-card, .featured-property-card {
+    min-height: unset;
+  }
+  
+  .property-card img, .featured-property-image {
+    height: 160px;
+  }
+  
+  .property-card-content, .featured-property-content {
+    padding: 0.75rem;
+  }
+  
+  .property-title, .featured-property-title {
+    font-size: 1rem;
+  }
+  
+  .property-location, .featured-property-location {
+    font-size: 0.8rem;
+    margin-bottom: 0.5rem;
+  }
+  
+  .property-price, .featured-property-price {
+    font-size: 1.1rem;
+    margin-bottom: 0.5rem;
+  }
+  
+  .property-features, .featured-property-features {
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+    font-size: 0.75rem;
+  }
+  
+  .property-card .btn, .featured-property-btn {
+    padding: 0.5rem 1rem;
+    font-size: 0.85rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .property-grid {
+    grid-template-columns: 1fr;
+    max-width: 320px;
+    margin: 2rem auto;
+    gap: 1rem;
+  }
+  
+  /* Mantener los mismos estilos que en tablet */
+  .property-card, .featured-property-card {
+    min-height: unset;
+    width: 100%;
+  }
+  
+  .property-card img, .featured-property-image {
+    height: 160px;
+  }
+  
+  .property-card-content, .featured-property-content {
+    padding: 0.75rem;
+  }
+  
+  .property-title, .featured-property-title {
+    font-size: 1rem;
+  }
+  
+  .property-location, .featured-property-location {
+    font-size: 0.8rem;
+    margin-bottom: 0.5rem;
+  }
+  
+  .property-price, .featured-property-price {
+    font-size: 1.1rem;
+    margin-bottom: 0.5rem;
+  }
+  
+  .property-features, .featured-property-features {
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+    font-size: 0.75rem;
+  }
+  
+  .property-card .btn, .featured-property-btn {
+    padding: 0.5rem 1rem;
+    font-size: 0.85rem;
+  }
 }
 
 /* =============================
