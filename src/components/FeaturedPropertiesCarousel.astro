@@ -1,0 +1,126 @@
+---
+interface Property {
+  id: string;
+  Titulo: string;
+  Slug: string;
+  Precio: number;
+  Precio_CLP?: number;
+  Ubicacion: string;
+  Dormitorios?: number;
+  Banos?: number;
+  Superficie?: number;
+  M2utiles?: number;
+  Objetivo: 'Venta' | 'Arriendo';
+  Destacado: boolean;
+  Imagenes: Array<{url: string}>;
+}
+
+interface Props {
+  propiedadesVenta: Property[];
+  propiedadesArriendo: Property[];
+}
+
+const { propiedadesVenta, propiedadesArriendo } = Astro.props;
+---
+
+<section class="container" style="margin-top:4rem;">
+  <div class="section-title">Propiedades Destacadas</div>
+  <div class="section-subtitle">Descubre una selección de residencias únicas y exclusivas.</div>
+  
+  <div class="featured-properties-tabs">
+    <button class="tab-button active" data-tipo="venta">En Venta</button>
+    <button class="tab-button" data-tipo="arriendo">En Arriendo</button>
+  </div>
+
+  <div class="featured-properties-carousel" data-active="true">
+    {/* El carrusel de venta se llenará con JavaScript */}
+  </div>
+  
+  <div class="featured-rental-properties-carousel" data-active="false" style="display:none;">
+    {/* El carrusel de arriendo se llenará con JavaScript */}
+  </div>
+</section>
+
+<style>
+  .featured-properties-tabs {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    margin-bottom: 2rem;
+  }
+
+  .tab-button {
+    padding: 0.75rem 2rem;
+    font-family: var(--font-primary);
+    font-size: 1rem;
+    font-weight: 500;
+    color: var(--color-text-secondary);
+    background: transparent;
+    border: 1px solid var(--color-border);
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+  }
+
+  .tab-button.active {
+    color: var(--color-text-primary);
+    border-color: var(--color-primary-accent);
+    background: rgba(var(--color-primary-accent-rgb), 0.05);
+  }
+
+  .tab-button:hover:not(.active) {
+    border-color: var(--color-primary-accent);
+  }
+
+  @media (max-width: 768px) {
+    .tab-button {
+      padding: 0.6rem 1.5rem;
+      font-size: 0.95rem;
+    }
+  }
+</style>
+
+<script define:vars={{ propiedadesVenta, propiedadesArriendo }}>
+  document.addEventListener('DOMContentLoaded', () => {
+    const tabButtons = document.querySelectorAll('.tab-button');
+    const carouselVenta = document.querySelector('.featured-properties-carousel');
+    const carouselArriendo = document.querySelector('.featured-rental-properties-carousel');
+    
+    // Inicializar carruseles
+    if (typeof cargarPropiedadesDestacadasCarousel === 'function') {
+      if (propiedadesVenta && propiedadesVenta.length > 0) {
+        cargarPropiedadesDestacadasCarousel('.featured-properties-carousel', propiedadesVenta, { autoPlay: false });
+      }
+    }
+    
+    if (typeof cargarPropiedadesDestacadasArriendoCarousel === 'function') {
+      if (propiedadesArriendo && propiedadesArriendo.length > 0) {
+        cargarPropiedadesDestacadasArriendoCarousel('.featured-rental-properties-carousel', propiedadesArriendo, { autoPlay: false });
+      }
+    }
+
+    // Manejar cambios de tab
+    tabButtons.forEach(button => {
+      button.addEventListener('click', () => {
+        const tipo = button.dataset.tipo;
+        
+        // Actualizar estado activo de los botones
+        tabButtons.forEach(btn => btn.classList.remove('active'));
+        button.classList.add('active');
+        
+        // Mostrar/ocultar carruseles
+        if (tipo === 'venta') {
+          carouselVenta.style.display = '';
+          carouselVenta.dataset.active = 'true';
+          carouselArriendo.style.display = 'none';
+          carouselArriendo.dataset.active = 'false';
+        } else {
+          carouselVenta.style.display = 'none';
+          carouselVenta.dataset.active = 'false';
+          carouselArriendo.style.display = '';
+          carouselArriendo.dataset.active = 'true';
+        }
+      });
+    });
+  });
+</script> 

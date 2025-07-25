@@ -1,5 +1,6 @@
 ---
 import Layout from '../layouts/Layout.astro';
+import FeaturedPropertiesCarousel from '../components/FeaturedPropertiesCarousel.astro';
 
 // Inicializamos las variables como arreglos vacíos por seguridad
 let propiedadesVenta: any[] = [];
@@ -75,8 +76,6 @@ try {
           })) || []
         };
       });
-      
-
     }
   } else {
     console.error('❌ Error al obtener propiedades destacadas:', response.statusText);
@@ -143,21 +142,10 @@ try {
       </div>
     </section>
 
-    <section class="container" style="margin-top:4rem;">
-      <div class="section-title">Propiedades Destacadas en Venta</div>
-      <div class="section-subtitle">Descubre una selección de residencias únicas y exclusivas en venta.</div>
-      <div class="featured-properties-carousel">
-        {/* El carrusel se llenará con JavaScript */}
-      </div>
-    </section>
-
-    <section class="container" style="margin-top:4rem;">
-      <div class="section-title">Propiedades Destacadas en Arriendo</div>
-      <div class="section-subtitle">Descubre residencias exclusivas disponibles para arriendo.</div>
-      <div class="featured-rental-properties-carousel">
-        {/* El carrusel se llenará con JavaScript */}
-      </div>
-    </section>
+    <FeaturedPropertiesCarousel 
+      propiedadesVenta={propiedadesVenta}
+      propiedadesArriendo={propiedadesArriendo}
+    />
 
     <section class="container" style="margin-bottom:4rem;">
       <div class="section-title">Lo que dicen nuestros clientes</div>
@@ -176,20 +164,4 @@ try {
       </div>
     </section>
   </main>
-
-  <script define:vars={{ propiedadesVenta, propiedadesArriendo }}>
-    document.addEventListener('DOMContentLoaded', () => {
-      if (typeof cargarPropiedadesDestacadasCarousel === 'function') {
-        if (propiedadesVenta && propiedadesVenta.length > 0) {
-          cargarPropiedadesDestacadasCarousel('.featured-properties-carousel', propiedadesVenta, { autoPlay: false });
-        }
-      }
-      
-      if (typeof cargarPropiedadesDestacadasArriendoCarousel === 'function') {
-        if (propiedadesArriendo && propiedadesArriendo.length > 0) {
-          cargarPropiedadesDestacadasArriendoCarousel('.featured-rental-properties-carousel', propiedadesArriendo, { autoPlay: false });
-        }
-      }
-    });
-  </script>
 </Layout>
