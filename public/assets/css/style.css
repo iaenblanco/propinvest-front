@@ -765,7 +765,7 @@ a:hover, a:focus {
     grid-template-columns: 1fr;
     max-width: 320px;
     margin: 2rem auto;
-    gap: 1.5rem;
+    gap: 2rem;
   }
   
   /* Mantener los mismos estilos que en tablet */
@@ -775,11 +775,11 @@ a:hover, a:focus {
   }
   
   .property-card img, .featured-property-image {
-    height: 200px;
+    height: 320px; /* Mismo ancho que la tarjeta para hacerla cuadrada */
   }
   
   .property-card-content, .featured-property-content {
-    padding: 0.75rem;
+    padding: 1rem;
   }
   
   .property-title, .featured-property-title {
