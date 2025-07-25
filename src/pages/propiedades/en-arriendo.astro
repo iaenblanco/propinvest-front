@@ -1,6 +1,7 @@
 ---
 // src/pages/propiedades/en-arriendo.astro
 import Layout from '../../layouts/Layout.astro';
+import PropertyTypeFilter from '../../components/PropertyTypeFilter.astro';
 
 const API_URL = 'https://truthful-rhythm-e8bcafa766.strapiapp.com/api';
 const response = await fetch(`${API_URL}/propiedads?populate=*&filters[Publicado][$eq]=true&filters[Objetivo][$eq]=Arriendo`);
@@ -19,56 +20,8 @@ const propiedadesValidas = Array.isArray(propiedades) ? propiedades.filter(prop 
     <section class="container" style="margin-top:3rem;">
       <div class="section-title">Propiedades en Arriendo</div>
       <div class="section-subtitle"></div>
-      <div class="property-grid">
-        {propiedadesValidas.length > 0 ? (
-          propiedadesValidas.map(prop => {
-            // CORREGIDO: Acceso directo a las propiedades, no prop.attributes
-            const imagenUrl = prop.Imagenes?.[0]?.url?.startsWith('http') 
-              ? prop.Imagenes[0].url 
-              : `https://truthful-rhythm-e8bcafa766.strapiapp.com${prop.Imagenes?.[0]?.url || '/assets/images/propiedad-default.jpg'}`;
-            const precioFormateado = prop.Precio 
-              ? `UF ${prop.Precio.toLocaleString('es-CL')}` 
-                          : prop.Precio_CLP
-            ? `$${prop.Precio_CLP.toLocaleString('es-CL')}` 
-                : 'Consultar';
-            return (
-              <article class="featured-property-card mobile-similar-style">
-                <a href={`/propiedades/${prop.Slug}`} class="featured-property-image-link">
-                  <img src={imagenUrl} alt={prop.Titulo} class="featured-property-image" />
-                </a>
-                <div class="featured-property-content">
-                  <h2 class="featured-property-title">{prop.Titulo || 'Propiedad sin título'}</h2>
-                  <div class="featured-property-location">{prop.Ubicacion || 'Sin ubicación'}</div>
-                  <div class="featured-property-price">{precioFormateado}</div>
-                  <div class="featured-property-features mobile-features">
-                    {prop.Dormitorios && <span>
-                      <img src="/assets/icons/bed.svg" alt="Dormitorios" style="width:16px; height:16px; vertical-align:middle; margin-right:4px;">
-                      {prop.Dormitorios}
-                    </span>}
-                    {prop.Banos && <span>
-                      <img src="/assets/icons/shower.svg" alt="Baños" style="width:16px; height:16px; vertical-align:middle; margin-right:4px;">
-                      {prop.Banos}
-                    </span>}
-                    {prop.Superficie && <span>
-                      <img src="/assets/icons/mt2.svg" alt="Metros cuadrados" style="width:16px; height:16px; vertical-align:middle; margin-right:4px;">
-                      {prop.Superficie} m²
-                    </span>}
-                    {prop.M2utiles && <span>
-                      <img src="/assets/icons/utiles.svg" alt="Metros útiles" style="width:16px; height:16px; vertical-align:middle; margin-right:4px;">
-                      {prop.M2utiles} m²
-                    </span>}
-                  </div>
-                  <a href={`/propiedades/${prop.Slug}`} class="featured-property-btn mobile-btn">
-                    Ver Propiedad
-                  </a>
-                </div>
-              </article>
-            )
-          })
-        ) : (
-          <p>No hay propiedades en arriendo disponibles en este momento.</p>
-        )}
-      </div>
+      
+      <PropertyTypeFilter properties={propiedadesValidas} />
     </section>
   </main>
 </Layout>

@@ -1,0 +1,173 @@
+---
+interface Props {
+  properties: any[];
+  initialType?: string;
+}
+
+const { properties, initialType = '' } = Astro.props;
+
+// Obtener tipos únicos de propiedades
+const propertyTypes = [...new Set(properties.map(prop => prop.Tipo))].filter(Boolean);
+
+// Filtrar propiedades por tipo
+const filteredProperties = initialType 
+  ? properties.filter(prop => prop.Tipo === initialType)
+  : properties;
+---
+
+<div class="property-type-filter">
+  <div class="filter-buttons">
+    <button
+      class={`filter-btn ${!initialType ? 'active' : ''}`}
+      data-type=""
+      aria-label="Ver todas las propiedades"
+    >
+      🏘️ Todas
+    </button>
+    {propertyTypes.map(type => (
+      <button
+        class={`filter-btn ${type === initialType ? 'active' : ''}`}
+        data-type={type}
+        aria-label={`Ver solo ${type.toLowerCase()}s`}
+      >
+        {type === 'Casa' ? '🏠' : '🏢'} {type}
+      </button>
+    ))}
+  </div>
+  <div class="property-grid" id="filtered-properties">
+    {filteredProperties.map(prop => {
+      const imagenUrl = prop.Imagenes?.[0]?.url?.startsWith('http') 
+        ? prop.Imagenes[0].url 
+        : `https://truthful-rhythm-e8bcafa766.strapiapp.com${prop.Imagenes?.[0]?.url || '/assets/images/propiedad-default.jpg'}`;
+      
+      const precioFormateado = prop.Precio 
+        ? `UF ${prop.Precio.toLocaleString('es-CL')}` 
+        : prop.Precio_CLP 
+          ? `$${prop.Precio_CLP.toLocaleString('es-CL')}` 
+          : 'Consultar';
+
+      return (
+        <article class="property-card" data-type={prop.Tipo}>
+          <a href={`/propiedades/${prop.Slug}`} class="property-image-link">
+            <img src={imagenUrl} alt={prop.Titulo} loading="lazy" />
+          </a>
+          <div class="property-card-content">
+            <h3 class="property-title">{prop.Titulo}</h3>
+            <p class="property-location">{prop.Ubicacion}</p>
+            <p class="property-price">{precioFormateado}</p>
+            <div class="property-features">
+              <span>🛏️ {prop.Dormitorios || 0}</span>
+              <span>🚿 {prop.Banos || 0}</span>
+              <span>📏 {prop.M2utiles || 0}m²</span>
+            </div>
+            <div class="property-bottom">
+              <a href={`/propiedades/${prop.Slug}`} class="btn">Ver Detalles</a>
+            </div>
+          </div>
+        </article>
+      );
+    })}
+  </div>
+</div>
+
+<style>
+  .property-type-filter {
+    margin-bottom: 2rem;
+  }
+
+  .filter-buttons {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 2rem;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .filter-btn {
+    background: var(--color-background);
+    border: 1px solid var(--color-border);
+    color: var(--color-text-secondary);
+    padding: 0.75rem 1.5rem;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-family: var(--font-primary);
+    font-size: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .filter-btn:hover {
+    border-color: var(--color-primary-accent);
+  }
+
+  .filter-btn.active {
+    color: var(--color-text-primary);
+    border-color: var(--color-primary-accent);
+    background: rgba(0, 0, 0, 0.05);
+  }
+
+  @media (max-width: 768px) {
+    .filter-buttons {
+      gap: 0.5rem;
+    }
+
+    .filter-btn {
+      padding: 0.5rem 1rem;
+      font-size: 0.9rem;
+    }
+  }
+
+  .property-card {
+    display: none;
+  }
+
+  .property-card.visible {
+    display: block;
+  }
+</style>
+
+<script>
+  function initializeFilter() {
+    const filterButtons = document.querySelectorAll('.filter-btn');
+    const propertyGrid = document.getElementById('filtered-properties');
+    const allProperties = Array.from(propertyGrid?.children || []);
+
+    filterButtons.forEach(button => {
+      button.addEventListener('click', () => {
+        // Actualizar estado activo de los botones
+        filterButtons.forEach(btn => btn.classList.remove('active'));
+        button.classList.add('active');
+
+        const selectedType = button.getAttribute('data-type');
+
+        // Mostrar/ocultar propiedades según el tipo seleccionado
+        allProperties.forEach(property => {
+          if (property instanceof HTMLElement) {
+            const propertyType = property.getAttribute('data-type');
+            property.classList.toggle('visible', !selectedType || propertyType === selectedType);
+          }
+        });
+
+        // Actualizar layout de la grilla
+        propertyGrid?.classList.remove('filtered');
+        void propertyGrid?.offsetWidth;
+        propertyGrid?.classList.add('filtered');
+      });
+    });
+
+    // Mostrar todas las propiedades inicialmente
+    allProperties.forEach(property => {
+      if (property instanceof HTMLElement) {
+        property.classList.add('visible');
+      }
+    });
+  }
+
+  // Inicializar cuando el DOM esté listo
+  document.addEventListener('DOMContentLoaded', initializeFilter);
+
+  // Reinicializar cuando cambie el contenido dinámicamente (para Astro View Transitions)
+  document.addEventListener('astro:page-load', initializeFilter);
+</script> 
