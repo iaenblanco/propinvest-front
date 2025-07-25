@@ -766,6 +766,27 @@ a:hover, a:focus {
     max-width: 300px;
     margin: 2rem auto;
     gap: 1.5rem;
+    padding: 0;
+  }
+  
+  /* Asegurarnos que las tarjetas de categorías hereden los estilos del carrusel en móvil */
+  .property-grid .featured-property-card {
+    width: 100%;
+    min-width: 300px;
+  }
+  
+  /* Ajustar el contenedor para centrar las tarjetas */
+  .container {
+    padding: 0 1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .property-grid {
+    grid-template-columns: 1fr;
+    max-width: 300px;
+    margin: 2rem auto;
+    gap: 1.5rem;
   }
   
   .property-card, .featured-property-card {

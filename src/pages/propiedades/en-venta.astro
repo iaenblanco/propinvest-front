@@ -31,7 +31,7 @@ const propiedadesValidas = Array.isArray(propiedades) ? propiedades.filter(prop 
             ? `$${prop.Precio_CLP.toLocaleString('es-CL')}` 
                 : 'Consultar';
             return (
-              <article class="featured-property-card">
+              <article class="featured-property-card mobile-similar-style">
                 <a href={`/propiedades/${prop.Slug}`} class="featured-property-image-link">
                   <img src={imagenUrl} alt={prop.Titulo} class="featured-property-image" />
                 </a>
@@ -39,7 +39,7 @@ const propiedadesValidas = Array.isArray(propiedades) ? propiedades.filter(prop 
                   <h2 class="featured-property-title">{prop.Titulo || 'Propiedad sin título'}</h2>
                   <div class="featured-property-location">{prop.Ubicacion || 'Sin ubicación'}</div>
                   <div class="featured-property-price">{precioFormateado}</div>
-                  <div class="featured-property-features">
+                  <div class="featured-property-features mobile-features">
                     {prop.Dormitorios && <span>
                       <img src="/assets/icons/bed.svg" alt="Dormitorios" style="width:16px; height:16px; vertical-align:middle; margin-right:4px;">
                       {prop.Dormitorios}
@@ -57,7 +57,7 @@ const propiedadesValidas = Array.isArray(propiedades) ? propiedades.filter(prop 
                       {prop.M2utiles} m²
                     </span>}
                   </div>
-                  <a href={`/propiedades/${prop.Slug}`} class="featured-property-btn">
+                  <a href={`/propiedades/${prop.Slug}`} class="featured-property-btn mobile-btn">
                     Ver Propiedad
                   </a>
                 </div>
