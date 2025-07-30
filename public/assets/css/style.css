@@ -1822,6 +1822,28 @@ input:focus, textarea:focus {
   text-align: center;
   letter-spacing: 0.01em;
 }
+
+/* Estilos para títulos con imagen de fondo */
+.section-title-with-bg {
+  position: relative;
+  background: linear-gradient(rgba(255, 255, 255, 0.5), rgba(255, 255, 255, 0.5)),
+              url('/assets/images/hero-banner.jpg');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  padding: 1.5rem 1rem;
+  border-radius: 12px;
+  margin-bottom: 2rem;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+}
+
+.section-title-with-bg .section-title {
+  margin-bottom: 0.5rem;
+  color: var(--color-primary-accent);
+  text-shadow: 0 1px 2px rgba(255, 255, 255, 0.8);
+}
+
+
 .section-subtitle {
   font-family: var(--font-secondary);
   font-size: 1.2rem;
@@ -3126,6 +3148,17 @@ img.lazy.loaded {
   .section-title {
     font-size: 1.5rem;
   }
+  
+  .section-title-with-bg {
+    padding: 1.5rem 0.8rem;
+    margin-bottom: 1.5rem;
+  }
+  
+  .section-title-with-bg .section-title {
+    font-size: 1.4rem;
+  }
+  
+
 }
 
 @media (max-width: 480px) {
