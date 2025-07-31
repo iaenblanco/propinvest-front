@@ -20,36 +20,31 @@ const filteredProperties = initialType
 
 <div class="property-type-filter">
   <div class="filter-section">
-    <div class="filter-buttons">
-      <button
-        class={`filter-btn ${!initialType ? 'active' : ''}`}
-        data-type=""
-        aria-label="Ver todas las propiedades"
-      >
-        🏘️ Todas
-      </button>
-      {propertyTypes.map(type => (
-        <button
-          class={`filter-btn ${type === initialType ? 'active' : ''}`}
-          data-type={type}
-          aria-label={`Ver solo ${String(type).toLowerCase()}s`}
-        >
-                  {type === 'Casa' ? '🏠' : '🏢'} {type}
-      </button>
-    ))}
-  </div>
-  
-  <div class="comuna-filter">
-         <label for="comuna-select" class="comuna-label">
-       Buscar por comuna
-     </label>
-    <select id="comuna-select" class="comuna-select" aria-label="Filtrar por comuna">
-      <option value="">Todas las comunas</option>
-      {comunas.map((comuna: string) => (
-        <option value={comuna}>{comuna}</option>
-      ))}
-    </select>
-  </div>
+    <div class="filter-controls">
+      <div class="filter-group">
+        <label for="type-select" class="filter-label">
+          Buscar por tipo
+        </label>
+        <select id="type-select" class="filter-select" aria-label="Filtrar por tipo de propiedad">
+          <option value="">Todos los tipos</option>
+          {propertyTypes.map((type: string) => (
+            <option value={type} selected={type === initialType}>{type}</option>
+          ))}
+        </select>
+      </div>
+      
+      <div class="filter-group">
+        <label for="comuna-select" class="filter-label">
+          Buscar por comuna
+        </label>
+        <select id="comuna-select" class="filter-select" aria-label="Filtrar por comuna">
+          <option value="">Todas las comunas</option>
+          {comunas.map((comuna: string) => (
+            <option value={comuna}>{comuna}</option>
+          ))}
+        </select>
+      </div>
+    </div>
   </div>
   
   <div class="property-grid" id="filtered-properties">
@@ -112,56 +107,52 @@ const filteredProperties = initialType
     margin-bottom: 2rem;
   }
 
-  .filter-buttons {
-    display: flex;
-    gap: 1rem;
-    margin-bottom: 1.5rem;
-    flex-wrap: wrap;
-    justify-content: center;
-    align-items: center;
-  }
-
-  .comuna-filter {
+  .filter-controls {
     display: flex;
     flex-direction: column;
+    gap: 1.5rem;
     align-items: center;
-    gap: 0.5rem;
-    margin-bottom: 1rem;
   }
 
-  /* Desktop: Filtro de comuna a la derecha */
+  .filter-group {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 0.75rem;
+    width: 100%;
+    max-width: 350px;
+  }
+
+  /* Desktop: Filtros en línea */
   @media (min-width: 769px) {
-    .filter-buttons {
-      margin-bottom: 0;
-    }
-
-    .comuna-filter {
-      margin-bottom: 0;
-      margin-left: 2rem;
+    .filter-controls {
       flex-direction: row;
-      align-items: center;
-      gap: 0.75rem;
+      justify-content: center;
+      gap: 2rem;
     }
 
-    .filter-section {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      flex-wrap: wrap;
-      gap: 1rem;
+    .filter-group {
+      max-width: 300px;
+    }
+
+    .filter-group:last-child .filter-select {
+      min-width: 220px;
+      max-width: 300px;
     }
   }
 
-  .comuna-label {
+  .filter-label {
     display: flex;
     align-items: center;
     font-family: var(--font-primary);
     font-size: 1rem;
     color: var(--color-text-secondary);
     font-weight: 500;
+    white-space: nowrap;
+    min-width: fit-content;
   }
 
-  .comuna-select {
+  .filter-select {
     background: var(--color-background);
     border: 1px solid var(--color-border);
     color: var(--color-text-secondary);
@@ -171,64 +162,44 @@ const filteredProperties = initialType
     transition: all 0.3s ease;
     font-family: var(--font-primary);
     font-size: 1rem;
-    min-width: 200px;
-    max-width: 300px;
+    width: 100%;
+    min-width: 180px;
+    max-width: 250px;
   }
 
-  .comuna-select:hover {
+  .filter-select:hover {
     border-color: var(--color-primary-accent);
   }
 
-  .comuna-select:focus {
+  .filter-select:focus {
     outline: none;
     border-color: var(--color-primary-accent);
     box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.1);
   }
 
-  .filter-btn {
-    background: var(--color-background);
-    border: 1px solid var(--color-border);
-    color: var(--color-text-secondary);
-    padding: 0.75rem 1.5rem;
-    border-radius: 8px;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    font-family: var(--font-primary);
-    font-size: 1rem;
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-  }
-
-  .filter-btn:hover {
-    border-color: var(--color-primary-accent);
-  }
-
-  .filter-btn.active {
-    color: var(--color-text-primary);
-    border-color: var(--color-primary-accent);
-    background: rgba(0, 0, 0, 0.05);
-  }
-
   @media (max-width: 768px) {
-    .filter-buttons {
-      gap: 0.5rem;
+    .filter-controls {
+      gap: 1rem;
     }
 
-    .filter-btn {
-      padding: 0.5rem 1rem;
-      font-size: 0.9rem;
+    .filter-group {
+      max-width: 100%;
+      gap: 0.75rem;
+      justify-content: flex-start;
     }
 
-    .comuna-select {
-      min-width: 180px;
-      max-width: 250px;
+    .filter-select {
+      min-width: 160px;
+      max-width: 220px;
       padding: 0.6rem 0.8rem;
       font-size: 0.9rem;
+      flex: 1;
     }
 
-    .comuna-label {
+    .filter-label {
       font-size: 0.9rem;
+      min-width: 100px;
+      flex-shrink: 0;
     }
   }
 
@@ -243,7 +214,7 @@ const filteredProperties = initialType
 
 <script>
   function initializeFilter() {
-    const filterButtons = document.querySelectorAll('.filter-btn');
+    const typeSelect = document.getElementById('type-select');
     const comunaSelect = document.getElementById('comuna-select');
     const propertyGrid = document.getElementById('filtered-properties');
     const allProperties = Array.from(propertyGrid?.children || []);
@@ -270,17 +241,13 @@ const filteredProperties = initialType
       propertyGrid?.classList.add('filtered');
     }
 
-    // Manejar filtros de tipo
-    filterButtons.forEach(button => {
-      button.addEventListener('click', () => {
-        // Actualizar estado activo de los botones
-        filterButtons.forEach(btn => btn.classList.remove('active'));
-        button.classList.add('active');
-
-        selectedType = button.getAttribute('data-type') || '';
+    // Manejar filtro de tipo
+    if (typeSelect) {
+      typeSelect.addEventListener('change', () => {
+        selectedType = (typeSelect as HTMLSelectElement).value;
         applyFilters();
       });
-    });
+    }
 
     // Manejar filtro de comuna
     if (comunaSelect) {
