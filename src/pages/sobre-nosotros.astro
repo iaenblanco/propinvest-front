@@ -7,16 +7,16 @@ import Layout from '../layouts/Layout.astro';
 >
   <main>
     <section class="container" style="margin-top:3rem;">
-      <div class="section-title">Nuestra Historia</div>
-      <div class="section-subtitle">Más de una década redefiniendo el lujo inmobiliario en Chile.</div>
+      <div class="section-title">Nosotros</div>
+      <div class="section-subtitle"></div>
       <p style="max-width:700px; margin:0 auto 2.5rem auto; text-align:center; color:var(--color-text-secondary); font-family:var(--font-secondary);">
-        Fundada en 2008, PropInvest nació con la visión de ofrecer un servicio inmobiliario exclusivo, transparente y personalizado para clientes de alto patrimonio. Nuestra pasión por la excelencia y la confianza de nuestros clientes nos han posicionado como referentes en el mercado de propiedades de lujo.
+        PropInvest nació con el objetivo de ofrecer oportunidades inmobiliarias de manera exclusiva, transparente y personalizada a personas con menor conocimiento del rubro e inversionistas con mayor experiencia que buscan rentabilizar su dinero. Contamos con años de experiencia vendiendo propiedades de bancos y clientes particulares asesorando en todo el proceso, desde la gestión de un crédito hipotecario hasta el cierre del negocio.
       </p>
     </section>
 
     <section class="container" style="margin-bottom:3rem;">
       <div style="display:flex; flex-wrap:wrap; gap:2rem; justify-content:center;">
-        <div class="info-box" style="max-width:400px;">
+        <div class="info-box-mision-vision" style="max-width:400px; min-height:200px;">
           <div class="info-icon">
             <svg width="48" height="48" fill="none" stroke="#000000" stroke-width="1.5" viewBox="0 0 24 24">
               <circle cx="12" cy="12" r="10"/>
@@ -25,10 +25,10 @@ import Layout from '../layouts/Layout.astro';
           </div>
           <div class="info-content">
             <div class="info-title">Misión</div>
-            <div class="info-text">Brindar asesoría inmobiliaria de excelencia, conectando a nuestros clientes con oportunidades únicas y seguras.</div>
+            <div class="info-text">Ser una empresa reconocida por su excelencia en el servicio, innovación en sus procesos y compromiso con la confianza y satisfacción de nuestros clientes. Además de brindar asesoría inmobiliaria conectando a nuestros clientes con oportunidades únicas y seguras.</div>
           </div>
         </div>
-        <div class="info-box" style="max-width:400px;">
+        <div class="info-box-mision-vision" style="max-width:400px; min-height:200px;">
           <div class="info-icon">
             <svg width="48" height="48" fill="none" stroke="#000000" stroke-width="1.5" viewBox="0 0 24 24">
               <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
@@ -36,7 +36,7 @@ import Layout from '../layouts/Layout.astro';
           </div>
           <div class="info-content">
             <div class="info-title">Visión</div>
-            <div class="info-text">Ser la inmobiliaria de lujo más confiable y recomendada de Chile y Latinoamérica.</div>
+            <div class="info-text">Ser una empresa líder en el mercado inmobiliario, donde los clientes aseguren una inversión que cumpla siempre con sus expectativas, mejorando las rentabilidades que ofrece el mercado.</div>
           </div>
         </div>
       </div>
@@ -45,63 +45,41 @@ import Layout from '../layouts/Layout.astro';
     <section class="stats-section">
       <div class="stats-grid">
         <div class="stat">
-          <div class="stat-number" id="casas-vendidas">0</div>
-          <div class="stat-label">Casas Vendidas</div>
+          <div class="stat-number" id="anos-experiencia">0</div>
+          <div class="stat-label">Años de nuestro equipo trabajando en el rubro</div>
         </div>
         <div class="stat">
-          <div class="stat-number" id="casas-arrendadas">0</div>
-          <div class="stat-label">Casas Arrendadas</div>
-        </div>
-        <div class="stat">
-          <div class="stat-number" id="clientes-satisfechos">0</div>
-          <div class="stat-label">Clientes Satisfechos</div>
+          <div class="stat-number" id="negocios-realizados">0</div>
+          <div class="stat-label">Negocios realizados</div>
         </div>
       </div>
     </section>
 
-    <section class="container" style="margin:4rem auto 3rem auto;">
-      <div class="section-title">Nuestro Equipo</div>
-      <div class="section-subtitle">Profesionales apasionados por el lujo y la excelencia.</div>
-      <div style="display:flex; flex-wrap:wrap; gap:2.5rem; justify-content:center;">
-        <div class="testimonial-card">
-          <img src="/assets/images/agent-1.jpg" alt="Foto de Cristobal Olivares, CEO" class="testimonial-photo" />
-          <div class="testimonial-name">Cristobal Olivares</div>
-          <div class="testimonial-text">CEO & Fundador<br>"La confianza y la excelencia son nuestro mayor patrimonio."</div>
-        </div>
-        <div class="testimonial-card">
-          <img src="/assets/images/agent-1.jpg" alt="Foto de Hugo Pumarino, Director Comercial" class="testimonial-photo" />
-          <div class="testimonial-name">Hugo Pumarino</div>
-          <div class="testimonial-text">Director Comercial<br>"Cada cliente es único, cada inversión también."</div>
-        </div>
-      </div>
-    </section>
+
   </main>
 
   <script>
     document.addEventListener('DOMContentLoaded', function() {
-      const casasVendidas = document.getElementById('casas-vendidas');
-      const casasArrendadas = document.getElementById('casas-arrendadas');
-      const clientes = document.getElementById('clientes-satisfechos');
+      const anosExperiencia = document.getElementById('anos-experiencia');
+      const negociosRealizados = document.getElementById('negocios-realizados');
       let animado = false;
       
       function animarStats(entries, observer) {
         entries.forEach(entry => {
           if (entry.isIntersecting && !animado) {
             animado = true;
-            // Animar los tres contadores con los valores especificados
-            window.animarContador(casasVendidas, 150);
-            window.animarContador(casasArrendadas, 435);
-            window.animarContador(clientes, 500);
+            // Animar los dos contadores con los valores especificados
+            window.animarContador(anosExperiencia, 8);
+            window.animarContador(negociosRealizados, 70);
             observer.disconnect();
           }
         });
       }
       
       const observer = new IntersectionObserver(animarStats, { threshold: 0.5 });
-      if (casasVendidas && casasArrendadas && clientes) {
-        observer.observe(casasVendidas);
-        observer.observe(casasArrendadas);
-        observer.observe(clientes);
+      if (anosExperiencia && negociosRealizados) {
+        observer.observe(anosExperiencia);
+        observer.observe(negociosRealizados);
       }
     });
   </script>

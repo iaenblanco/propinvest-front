@@ -1201,6 +1201,7 @@ input:focus, textarea:focus {
   .stats-grid {
     flex-direction: column;
     gap: 2rem;
+    padding: 0 1.5rem;
   }
   
   .mobile-nav-overlay {
@@ -1577,6 +1578,15 @@ input:focus, textarea:focus {
 }
 
 @media (max-width: 480px) {
+  .stats-section {
+    padding: 3rem 1rem;
+  }
+  
+  .stats-grid {
+    padding: 0 1rem;
+    gap: 1.5rem;
+  }
+  
   .property-grid {
     grid-template-columns: 1fr;
   }
@@ -3396,4 +3406,93 @@ img.lazy.loaded {
   border-radius: 0 !important;
   box-shadow: none !important;
   padding: 0 !important;
+}
+
+/* =============================
+   CUADROS DE MISIÓN Y VISIÓN
+============================= */
+.info-box-mision-vision {
+  background: #fff;
+  border-radius: 14px;
+  box-shadow: 0 2px 8px var(--color-shadow);
+  padding: 1.5rem 1.2rem;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 1.2rem;
+  margin-bottom: 1.5rem;
+  height: 100%;
+}
+
+.info-box-mision-vision .info-icon {
+  flex: 0 0 48px;
+  width: 48px;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2rem;
+  color: var(--color-primary-accent);
+  align-self: center;
+}
+
+.info-box-mision-vision .info-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.info-box-mision-vision .info-title {
+  font-family: var(--font-primary);
+  font-weight: 600;
+  font-size: 1.1rem;
+  margin-bottom: 0.8rem;
+  text-align: center;
+  color: var(--color-primary-accent);
+}
+
+.info-box-mision-vision .info-text {
+  font-family: var(--font-secondary);
+  color: var(--color-text-secondary);
+  font-size: 1rem;
+  line-height: 1.6;
+  text-align: justify;
+  flex: 1;
+}
+
+@media (max-width: 768px) {
+  .info-box-mision-vision {
+    min-height: auto;
+    padding: 1.2rem 1rem;
+  }
+  
+  .info-box-mision-vision .info-title {
+    font-size: 1rem;
+    margin-bottom: 0.6rem;
+  }
+  
+  .info-box-mision-vision .info-text {
+    font-size: 0.95rem;
+    line-height: 1.5;
+  }
+}
+
+@media (max-width: 480px) {
+  .info-box-mision-vision {
+    padding: 1rem 0.8rem;
+  }
+  
+  .info-box-mision-vision .info-icon {
+    width: 40px;
+    height: 40px;
+  }
+  
+  .info-box-mision-vision .info-title {
+    font-size: 0.95rem;
+  }
+  
+  .info-box-mision-vision .info-text {
+    font-size: 0.9rem;
+  }
 }
