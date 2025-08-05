@@ -1837,9 +1837,9 @@ input:focus, textarea:focus {
 .section-title-with-bg {
   position: relative;
   background: linear-gradient(rgba(255, 255, 255, 0.5), rgba(255, 255, 255, 0.5)),
-              url('/assets/images/hero-banner.jpg');
+              url('/assets/images/hero-banner-2.jpg');
   background-size: cover;
-  background-position: center bottom;
+  background-position: center;
   background-repeat: no-repeat;
   padding: 1.5rem 1rem;
   border-radius: 12px;
