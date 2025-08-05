@@ -198,7 +198,7 @@ const pageDescription = propiedad.Descripcion || `Propiedad en ${Ubicacion}. ${D
                         {Precio && <div class="price-uf-mobile" style="font-size:1.4rem; font-weight:700; color:var(--color-primary-accent); text-align:right; flex-shrink:0;">{precioUF}</div>}
                     </div>
                     <div style="display:flex; justify-content:space-between; align-items:center; gap:1rem;">
-                        <h1 class="property-main-title-mobile" style="font-size:1.2rem; margin:0; line-height:1.2; color:var(--color-text-primary); font-weight:600; flex:1;">{Titulo}</h1>
+                        <h1 class="property-main-title-mobile" style="font-size:1.2rem; margin:0; line-height:1.2; color:var(--color-text-primary); font-weight:600; flex:1; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; text-overflow: ellipsis; word-break: break-word; min-height: min-content;">{Titulo}</h1>
                         {precioCLP && <div class="price-clp-mobile" style="font-size:0.9rem; color:var(--color-text-secondary); text-align:right; flex-shrink:0;">{precioCLP}</div>}
                     </div>
                     {Ubicacion && <div class="property-location-mobile" style="font-size:0.85rem; color:var(--color-text-secondary); flex:1; display:flex; align-items:center; gap:0.3rem; overflow-wrap:break-word; word-wrap:break-word; word-break:break-word; padding:1rem 0;"><img src="/assets/icons/ubicacion.svg" alt="Ubicación" style="width:32px; height:32px; flex-shrink:0;"> <span style="flex:1; line-height:1.3;">{Ubicacion}</span></div>}
@@ -254,7 +254,7 @@ const pageDescription = propiedad.Descripcion || `Propiedad en ${Ubicacion}. ${D
             <aside class="detalle-sidebar" style="flex:1; min-width:320px; max-width:400px; display:flex; flex-direction:column; gap:2.5rem; margin-top:0;">
                 <div class="info-box" style="background:var(--color-background); border:1px solid var(--color-text-primary); border-radius:14px; box-shadow:0 2px 8px var(--color-shadow); padding:2rem; display:flex; flex-direction:column; gap:1.5rem; height:470px; margin-top:0;">
                     {Tipo && Objetivo && <div class="property-type" style="font-size:0.9rem; color:var(--color-text-secondary); font-weight:500; margin:0; text-transform:capitalize;">{Tipo} en {Objetivo}</div>}
-                    <h1 class="property-main-title" style="font-size:1.6rem; margin:0; line-height:1.2; color:var(--color-text-primary);">{Titulo}</h1>
+                    <h1 class="property-main-title" style="font-size:1.6rem; margin:0; line-height:1.2; color:var(--color-text-primary); display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; text-overflow: ellipsis; word-break: break-word; min-height: min-content;">{Titulo}</h1>
                     {Ubicacion && <div class="property-location" style="font-size:1rem; color:var(--color-text-secondary); margin:0; display:flex; align-items:center; gap:0.3rem; overflow-wrap:break-word; word-wrap:break-word; word-break:break-word; min-height:48px; padding:1.2rem 0;"><img src="/assets/icons/ubicacion.svg" alt="Ubicación" style="width:32px; height:32px; flex-shrink:0;"> <span style="flex:1; line-height:1.4;">{Ubicacion}</span></div>}
                     {(Precio || Precio_CLP) && (
                         <div class="property-price" style="margin:0;">
