@@ -1515,7 +1515,7 @@ input:focus, textarea:focus {
     
     /* Asegurar que el botón de desktop tenga el mismo estilo que móvil */
     .ver-mas-btn {
-      display: inline-flex !important;
+      /* No forzar display en desktop; lo controla JS según cantidad */
       align-items: center;
       justify-content: center;
       gap: 0.5rem;
@@ -1558,7 +1558,7 @@ input:focus, textarea:focus {
     }
     
     .ficha-desktop .ver-mas-btn {
-      display: inline-flex !important;
+      /* No forzar display para permitir ocultar con JS */
       margin: 0 auto !important;
     }
   }
@@ -3321,7 +3321,7 @@ img.lazy.loaded {
 /* Elimina reglas específicas para desktop que sobrescriban el estilo unificado */
 @media (min-width: 1024px) {
   .ficha-desktop .ver-mas-btn {
-    display: block !important;
+    /* No forzar display en desktop; dejar que el inline style/JS lo controle */
     margin: 0 auto !important;
     background: transparent !important;
     border: 1.5px solid var(--color-text-primary) !important;
