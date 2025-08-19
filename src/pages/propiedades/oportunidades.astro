@@ -12,6 +12,13 @@ const { data: propiedades } = await response.json();
 
 // CORREGIDO: Los datos vienen directamente, no en prop.attributes
 const propiedadesValidas = Array.isArray(propiedades) ? propiedades.filter(prop => prop && prop.Oportunidades === true) : [];
+
+// ORDENAR POR REGIÓN DE A-Z
+const propiedadesOrdenadas = propiedadesValidas.sort((a, b) => {
+  const regionA = (a.Region || '').toLowerCase();
+  const regionB = (b.Region || '').toLowerCase();
+  return regionA.localeCompare(regionB, 'es');
+});
 ---
 <Layout
   title="Oportunidades Inmobiliarias | PropInvest"
@@ -22,7 +29,7 @@ const propiedadesValidas = Array.isArray(propiedades) ? propiedades.filter(prop 
       <div class="section-title">Oportunidades Inmobiliarias</div>
       <div class="section-subtitle"></div>
       
-      <PropertyTypeFilter properties={propiedadesValidas} />
+      <PropertyTypeFilter properties={propiedadesOrdenadas} />
     </section>
   </main>
 </Layout>
