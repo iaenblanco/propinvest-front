@@ -217,7 +217,7 @@ function configurarWhatsApp(nombrePropiedad) {
   const mensaje = `Hola, quiero más información de esta propiedad: ${nombrePropiedad}. Enlace: ${currentUrl}`;
   
   whatsappButtons.forEach(button => {
-    button.href = `https://wa.me/56974954413?text=${encodeURIComponent(mensaje)}`;
+    button.href = `https://wa.me/56979856078?text=${encodeURIComponent(mensaje)}`;
   });
 }
 
