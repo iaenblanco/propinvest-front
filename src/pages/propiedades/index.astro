@@ -1,10 +1,12 @@
 ---
 import Layout from '../../layouts/Layout.astro';
 import PropertyTypeFilter from '../../components/PropertyTypeFilter.astro';
+import { fetchAllPropiedades } from '../../lib/strapi';
 
-const API_URL = 'https://truthful-rhythm-e8bcafa766.strapiapp.com/api';
-const response = await fetch(`${API_URL}/propiedads?populate=*&filters[Publicado][$eq]=true`);
-const { data: propiedades } = await response.json();
+const propiedades = await fetchAllPropiedades({
+  populate: '*',
+  'filters[Publicado][$eq]': true,
+});
 
 // CORREGIDO: Los datos vienen directamente, no en prop.attributes
 const propiedadesValidas = Array.isArray(propiedades) ? propiedades.filter(prop => prop && prop.Publicado === true) : [];

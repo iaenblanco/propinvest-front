@@ -2,11 +2,15 @@
 // src/pages/propiedades/en-venta.astro
 import Layout from '../../layouts/Layout.astro';
 import PropertyTypeFilter from '../../components/PropertyTypeFilter.astro';
+import { fetchAllPropiedades } from '../../lib/strapi';
 
-const API_URL = 'https://truthful-rhythm-e8bcafa766.strapiapp.com/api';
 // LA ÚNICA DIFERENCIA: Añadimos un filtro para Objetivo=Venta
-const response = await fetch(`${API_URL}/propiedads?populate=*&filters[Publicado][$eq]=true&filters[Objetivo][$eq]=Venta`);
-const { data: propiedades } = await response.json();
+const propiedades = await fetchAllPropiedades({
+  populate: '*',
+  'filters[Publicado][$eq]': true,
+  'filters[Objetivo][$eq]': 'Venta',
+  'pagination[pageSize]': 100,
+});
 
 // CORREGIDO: Los datos vienen directamente, no en prop.attributes
 const propiedadesValidas = Array.isArray(propiedades) ? propiedades.filter(prop => prop && prop.Objetivo === 'Venta' && prop.Publicado === true) : [];

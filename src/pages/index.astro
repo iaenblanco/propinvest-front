@@ -1,20 +1,20 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import FeaturedPropertiesCarousel from '../components/FeaturedPropertiesCarousel.astro';
+import { fetchAllPropiedades } from '../lib/strapi';
 
 // Inicializamos las variables como arreglos vacíos por seguridad
 let propiedadesVenta: any[] = [];
 let propiedadesArriendo: any[] = [];
 
 try {
-  const API_URL = 'https://truthful-rhythm-e8bcafa766.strapiapp.com/api';
-  const response = await fetch(`${API_URL}/propiedads?populate=*&filters[Destacado][$eq]=true&filters[Publicado][$eq]=true`);
+  const todasDestacadas = await fetchAllPropiedades({
+    populate: '*',
+    'filters[Destacado][$eq]': true,
+    'filters[Publicado][$eq]': true,
+  });
   
-  if (response.ok) {
-    const responseData = await response.json();
-    console.log('📦 Respuesta completa de Strapi:', JSON.stringify(responseData, null, 2));
 
-    const { data: todasDestacadas } = responseData;
     console.log('📦 Propiedades destacadas obtenidas:', todasDestacadas?.length || 0);
 
     // Verificamos que 'todasDestacadas' sea un arreglo antes de filtrarlo
@@ -79,9 +79,6 @@ try {
         };
       });
     }
-  } else {
-    console.error('❌ Error al obtener propiedades destacadas:', response.statusText);
-  }
 } catch (error) {
   console.error('❌ Error en el fetch de propiedades destacadas:', error);
 }

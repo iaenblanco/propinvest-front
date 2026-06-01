@@ -3,14 +3,22 @@
 import Layout from '../../layouts/Layout.astro';
 import CTAButton from '../../components/CTAButton.astro';
 import CTABanner from '../../components/CTABanner.astro';
+import { fetchAllPropiedades } from '../../lib/strapi';
 
 // 1. getStaticPaths: Fetch de datos y definición de rutas (sin cambios)
 export async function getStaticPaths() {
-  const response = await fetch('https://truthful-rhythm-e8bcafa766.strapiapp.com/api/propiedads?populate=*');
-  const json = await response.json();
-  const properties = json.data;
+  const properties = await fetchAllPropiedades({
+    populate: '*',
+    'filters[Publicado][$eq]': true,
+  });
 
-  const validProperties = properties.filter(prop => prop && prop.Slug);
+  const validProperties = properties.filter(prop => prop && prop.Publicado === true && prop.Slug);
+  const slugs = validProperties.map(prop => prop.Slug);
+
+  console.log(`[build:propiedades/[slug]] generated ${validProperties.length} property paths`);
+  console.log(`[build:propiedades/[slug]] sample slugs: ${slugs.slice(0, 5).join(', ')}`);
+  console.log(`[build:propiedades/[slug]] has 506013: ${slugs.includes('precio-rebajado-casa-venta-de-3-dorm-y-1-bano-camino-melipilla-maipu-506013')}`);
+  console.log(`[build:propiedades/[slug]] has 510853: ${slugs.includes('oportunidad-de-inversion-depto-1d-1b-en-estacion-central-condominio-mirador-souper-510853')}`);
 
   return validProperties.map(prop => {
     return {
@@ -110,9 +118,10 @@ const imagenes = getTodasImagenes(propiedad);
 
 let propiedadesSimilares = [];
 try {
-    const allPropsResponse = await fetch('https://truthful-rhythm-e8bcafa766.strapiapp.com/api/propiedads?populate=*');
-    const allPropsJson = await allPropsResponse.json();
-    const todasLasPropiedades = allPropsJson.data;
+    const todasLasPropiedades = await fetchAllPropiedades({
+        populate: '*',
+        'filters[Publicado][$eq]': true,
+    });
 
     let filtradas = todasLasPropiedades.filter(p => p.id !== propiedad.id && p.Objetivo === propiedad.Objetivo && p.Tipo === propiedad.Tipo);
     if (filtradas.length === 0) {
