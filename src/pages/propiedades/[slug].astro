@@ -68,7 +68,11 @@ const {
 
 const formatearPrecio = (precio) => {
   if (!precio) return 'UF 0';
-  return `UF ${precio.toLocaleString('es-CL')}`;
+  const numero = Number(precio);
+  const precioFormateado = Number.isFinite(numero)
+    ? new Intl.NumberFormat('es-CL', { maximumFractionDigits: 0 }).format(numero)
+    : String(precio);
+  return `UF ${precioFormateado}`;
 };
 
 const formatearPrecioCLP = (precio) => {
@@ -399,7 +403,7 @@ const pageDescription = propiedad.Descripcion || `Propiedad en ${Ubicacion}. ${D
                                 </div>
                                 <div style="padding:1.1rem 1rem 1rem 1rem; display:flex; flex-direction:column; gap:0.3rem; align-items:flex-start;">
                                     <div style="font-family:var(--font-primary); font-weight:600; font-size:1.08rem; color:var(--color-text-primary); margin-bottom:0.2rem; line-height:1.2; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; width:100%;">{prop.Titulo}</div>
-                                    <div style="font-size:1rem; color:var(--color-primary-accent); font-weight:600;">{prop.Precio ? formatearPrecio(prop.Precio) : (prop.Precio_CLP ? `$${prop.Precio_CLP.toLocaleString('es-CL')}` : 'Consultar')}</div>
+                                    <div style="font-size:1rem; color:var(--color-primary-accent); font-weight:600;">{prop.Precio ? formatearPrecio(prop.Precio) : (prop.Precio_CLP ? formatearPrecioCLP(prop.Precio_CLP) : 'Consultar')}</div>
                                     <div style="font-size:0.95rem; color:var(--color-text-secondary); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; width:100%;">{prop.Ubicacion || ''}</div>
                                     {prop.Destacado && <span style="color:var(--color-primary-accent); font-size:0.85rem; font-weight:700;">★ Destacada</span>}
                                 </div>

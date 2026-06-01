@@ -16,6 +16,20 @@ const comunas = [...new Set(properties.map(prop => prop.Comuna))].filter(Boolean
 const filteredProperties = initialType 
   ? properties.filter(prop => prop.Tipo === initialType)
   : properties;
+
+const formatNumberCL = (value: unknown) => {
+  const numberValue = Number(value);
+  if (!Number.isFinite(numberValue)) return String(value ?? '');
+  return new Intl.NumberFormat('es-CL', {
+    maximumFractionDigits: 0,
+  }).format(numberValue);
+};
+
+const formatPropertyPrice = (precio: unknown, precioCLP: unknown) => {
+  if (precio) return `UF ${formatNumberCL(precio)}`;
+  if (precioCLP) return `$${formatNumberCL(precioCLP)}`;
+  return 'Consultar';
+};
 ---
 
 <div class="property-type-filter">
@@ -53,11 +67,7 @@ const filteredProperties = initialType
         const imagenUrl = prop.Imagenes?.[0]?.url?.startsWith('http') 
           ? prop.Imagenes[0].url 
           : `https://truthful-rhythm-e8bcafa766.strapiapp.com${prop.Imagenes?.[0]?.url || '/assets/images/propiedad-default.jpg'}`;
-        const precioFormateado = prop.Precio 
-          ? `UF ${prop.Precio.toLocaleString('es-CL')}` 
-          : prop.Precio_CLP 
-            ? `$${prop.Precio_CLP.toLocaleString('es-CL')}` 
-            : 'Consultar';
+        const precioFormateado = formatPropertyPrice(prop.Precio, prop.Precio_CLP);
         return (
           <article class="featured-property-card mobile-similar-style" data-type={prop.Tipo} data-comuna={prop.Comuna}>
             <a href={`/propiedades/${prop.Slug}`} class="featured-property-image-link">

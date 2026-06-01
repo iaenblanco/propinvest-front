@@ -499,10 +499,18 @@ class StaticPropertiesCarousel {
   }
 
   formatearPrecio(precio, precioCLP) {
+    const formatearNumero = (valor) => {
+      const numero = Number(valor);
+      if (!Number.isFinite(numero)) return String(valor || '');
+      return new Intl.NumberFormat('es-CL', {
+        maximumFractionDigits: 0
+      }).format(numero);
+    };
+
     if (precio) {
-      return `UF ${precio.toLocaleString('es-CL')}`;
+      return `UF ${formatearNumero(precio)}`;
     } else if (precioCLP) {
-      return `$${precioCLP.toLocaleString('es-CL')}`;
+      return `$${formatearNumero(precioCLP)}`;
     } else {
       return 'Consultar';
     }

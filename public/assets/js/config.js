@@ -32,7 +32,11 @@ function getStrapiImageUrl(imageUrl, size = 'medium') {
  */
 function formatearPrecio(precio) {
   if (!precio) return 'UF 0';
-  return `UF ${precio.toLocaleString('es-CL')}`;
+  const numero = Number(precio);
+  const precioFormateado = Number.isFinite(numero)
+    ? new Intl.NumberFormat('es-CL', { maximumFractionDigits: 0 }).format(numero)
+    : String(precio);
+  return `UF ${precioFormateado}`;
 }
 
 /**
@@ -90,7 +94,9 @@ function getTodasImagenes(propiedad) {
  */
 function formatearNumero(numero) {
   if (!numero) return '0';
-  return numero.toLocaleString('es-CL');
+  const numeroNormalizado = Number(numero);
+  if (!Number.isFinite(numeroNormalizado)) return String(numero);
+  return new Intl.NumberFormat('es-CL', { maximumFractionDigits: 0 }).format(numeroNormalizado);
 }
 
 /**
