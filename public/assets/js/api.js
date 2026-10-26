@@ -8,25 +8,33 @@
  * ya que la UF debe actualizarse en tiempo real.
  * @returns {Promise<number>} Valor actual de la UF
  */
+let solicitudUF;
 async function obtenerTasaUF() {
-  try {
-    console.log('🪙 Obteniendo tasa UF actualizada...');
-    const response = await fetch('https://mindicador.cl/api/uf');
-    
-    if (!response.ok) {
-      throw new Error(`Error en la API de UF: ${response.status}`);
-    }
-    
-    const data = await response.json();
-    const tasaUF = data.serie && data.serie[0] ? data.serie[0].valor : 37000;
-    
-    console.log('✅ Tasa UF obtenida:', tasaUF);
-    return tasaUF;
-  } catch (error) {
-    console.error('Error al obtener tasa UF:', error);
-    // Valor por defecto en caso de error
-    return 37000;
+  if (!solicitudUF) {
+    solicitudUF = (async () => {
+      const controller = new AbortController();
+      const timer = setTimeout(() => controller.abort(), 8000);
+      try {
+        const fuentes = [
+          { url: 'https://mindicador.cl/api/uf', valor: data => data?.serie?.[0]?.valor },
+          { url: 'https://api.gael.cloud/general/public/monedas/UF', valor: data => Number(String(data?.Valor || '').replace(',', '.')) },
+        ];
+        return await Promise.any(fuentes.map(async fuente => {
+          const response = await fetch(fuente.url, { signal: controller.signal });
+          if (!response.ok) throw new Error(`API UF: ${response.status}`);
+          const valor = fuente.valor(await response.json());
+          if (typeof valor !== 'number' || !Number.isFinite(valor) || valor <= 0) {
+            throw new Error('Respuesta UF inválida');
+          }
+          return valor;
+        }));
+      } finally {
+        clearTimeout(timer);
+        controller.abort();
+      }
+    })();
   }
+  return solicitudUF;
 }
 
 /**
@@ -41,7 +49,7 @@ async function actualizarBarraUF() {
     ufBarra.textContent = `UF: $${tasaUF.toLocaleString('es-CL')}`;
   } catch (error) {
     console.error('Error al actualizar barra UF:', error);
-    ufBarra.textContent = 'UF: $37.000';
+    ufBarra.textContent = 'UF: no disponible';
   }
 }
 
@@ -274,11 +282,25 @@ window.configurarWhatsApp = configurarWhatsApp;
 window.getPrimeraImagen = getPrimeraImagen;
 window.getTodasImagenes = getTodasImagenes;
 
-// Inicializar barra UF cuando se carga la página
-document.addEventListener('DOMContentLoaded', () => {
-  if (typeof actualizarBarraUF === 'function') {
-    actualizarBarraUF();
+// La conversión es informativa: no depende de ella la publicación del sitio.
+async function inicializarUF() {
+  actualizarBarraUF();
+  const precios = document.querySelectorAll('[data-precio-uf]');
+  if (!precios.length) return;
+  try {
+    const tasa = await obtenerTasaUF();
+    precios.forEach(element => {
+      const precio = Number(element.dataset.precioUf);
+      if (Number.isFinite(precio) && precio > 0) {
+        element.textContent = `${formatearPrecioCLP(precio * tasa)} aprox.`;
+      }
+    });
+  } catch (error) {
+    precios.forEach(element => { element.textContent = 'Equivalente en pesos no disponible'; });
   }
-});
-
-console.log('✅ API estática cargada correctamente - Solo UF en tiempo real')
+}
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', inicializarUF, { once: true });
+} else {
+  inicializarUF();
+}

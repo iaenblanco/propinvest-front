@@ -88,20 +88,7 @@ const formatearPrecioCLP = (precio) => {
   return formatted;
 };
 
-let tasaUF = 37000;
-let precioCLP = '';
-try {
-  const ufResponse = await fetch('https://mindicador.cl/api/uf');
-  const ufData = await ufResponse.json();
-  if (ufData?.serie?.[0]) {
-    tasaUF = ufData.serie[0].valor;
-  }
-} catch (error) {
-  console.error('Error al obtener tasa UF:', error);
-}
-if (Precio) {
-  precioCLP = formatearPrecioCLP(Precio * tasaUF);
-}
+const precioCLP = 'Calculando equivalente en pesos…';
 const precioUF = formatearPrecio(Precio);
 
 const getTodasImagenes = (prop) => {
@@ -221,7 +208,7 @@ const pageDescription = propiedad.Descripcion || `Propiedad en ${Ubicacion}. ${D
                     </div>
                     <div style="display:flex; justify-content:space-between; align-items:center; gap:1rem;">
                         <h1 class="property-main-title-mobile" style="font-size:1.2rem; margin:0; line-height:1.2; color:var(--color-text-primary); font-weight:600; flex:1; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; text-overflow: ellipsis; word-break: break-word; min-height: min-content;">{Titulo}</h1>
-                        {Precio && precioCLP && <div class="price-clp-mobile" style="font-size:0.9rem; color:var(--color-text-secondary); text-align:right; flex-shrink:0;">{precioCLP}</div>}
+                        {Precio && precioCLP && <div data-precio-uf={Precio} class="price-clp-mobile" style="font-size:0.9rem; color:var(--color-text-secondary); text-align:right; flex-shrink:0;">{precioCLP}</div>}
                     </div>
                     {Ubicacion && <div class="property-location-mobile" style="font-size:0.85rem; color:var(--color-text-secondary); flex:1; display:flex; align-items:center; gap:0.3rem; overflow-wrap:break-word; word-wrap:break-word; word-break:break-word; padding:1rem 0;"><img src="/assets/icons/ubicacion.svg" alt="Ubicación" style="width:32px; height:32px; flex-shrink:0;"> <span style="flex:1; line-height:1.3;">{Ubicacion}</span></div>}
                     <div class="property-key-features-mobile" style="display:grid; grid-template-columns:repeat(4, 1fr); gap:0.5rem; margin-top:0.5rem;">
@@ -283,7 +270,7 @@ const pageDescription = propiedad.Descripcion || `Propiedad en ${Ubicacion}. ${D
                             {Precio ? (
                                 <>
                                     <div class="price-uf" style="font-size:2rem; font-weight:700; color:var(--color-primary-accent); margin:0;">{precioUF}</div>
-                                    {precioCLP && <div class="price-clp" style="font-size:1.1rem; color:var(--color-text-secondary); margin-top:0.1rem;">{precioCLP}</div>}
+                                    {precioCLP && <div data-precio-uf={Precio} class="price-clp" style="font-size:1.1rem; color:var(--color-text-secondary); margin-top:0.1rem;">{precioCLP}</div>}
                                 </>
                             ) : (
                                 <div class="price-clp-main" style="font-size:2rem; font-weight:700; color:var(--color-primary-accent); margin:0;">{formatearPrecioCLP(Precio_CLP)}</div>
